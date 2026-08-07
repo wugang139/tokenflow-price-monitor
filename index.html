@@ -148,15 +148,19 @@ body {
 }
 .mc-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
 .mc-left-top { display: flex; align-items: center; gap: 8px; }
-.mc-left-bottom { display: flex; align-items: center; gap: 6px; padding-left: 0; }
+.mc-left-bottom { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .vendor-badge {
   font-size: 10px; font-weight: 700;
   padding: 2px 6px; border-radius: 4px;
   white-space: nowrap;
 }
-.model-name {
+.model-family {
   font-size: 14px; font-weight: 600;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.model-version {
+  font-size: 12px; font-weight: 500; color: var(--text-dim);
+  white-space: nowrap;
 }
 .model-tier {
   font-size: 10px; color: var(--text-dim);
@@ -7425,6 +7429,11 @@ function renderModel(model) {
   const cardClass = isNew ? 'model-card is-new' : 'model-card';
   const newBadge = isNew ? '<span class="new-badge">NEW</span>' : '';
 
+  // Split model ID into family name and version
+  var dashIdx = model.id.indexOf('-');
+  var familyName = dashIdx >= 0 ? model.id.substring(0, dashIdx) : model.id;
+  var versionName = dashIdx >= 0 ? model.id.substring(dashIdx + 1) : '';
+
   // Find best platform
   const best = findBestPlatform(model);
   const bestHtml = best ? '' +
@@ -7475,11 +7484,12 @@ function renderModel(model) {
           '<div class="mc-left">' +
             '<div class="mc-left-top">' +
               '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
-              '<span class="model-name">' + model.id + '</span>' +
+              '<span class="model-family">' + familyName + '</span>' +
               newBadge +
             '</div>' +
             '<div class="mc-left-bottom">' +
               '<span class="model-tier">' + model.tier + '</span>' +
+              '<span class="model-version">' + versionName + '</span>' +
             '</div>' +
           '</div>' +
           '<div class="mc-right">' +
@@ -7506,6 +7516,11 @@ function renderWatchModel(model, idx) {
   const isNew = model._is_new === true;
   const cardClass = isNew ? 'model-card watch-list is-new' : 'model-card watch-list';
   const newBadge = isNew ? '<span class="new-badge">NEW</span>' : '';
+
+  // Split model ID into family name and version
+  var dashIdx = model.id.indexOf('-');
+  var familyName = dashIdx >= 0 ? model.id.substring(0, dashIdx) : model.id;
+  var versionName = dashIdx >= 0 ? model.id.substring(dashIdx + 1) : '';
 
   // Calculate watch days
   const addDate = model._added_to_watch || model._added_date || DATA.update_time.split(' ')[0];
@@ -7556,11 +7571,12 @@ function renderWatchModel(model, idx) {
           '<div class="mc-left">' +
             '<div class="mc-left-top">' +
               '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
-              '<span class="model-name">' + model.id + '</span>' +
+              '<span class="model-family">' + familyName + '</span>' +
               newBadge +
             '</div>' +
             '<div class="mc-left-bottom">' +
               '<span class="model-tier">' + model.tier + '</span>' +
+              '<span class="model-version">' + versionName + '</span>' +
               '<span class="watch-badge">👁️ 观察中</span>' +
             '</div>' +
           '</div>' +
