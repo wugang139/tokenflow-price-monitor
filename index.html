@@ -187,6 +187,23 @@ body {
 .price-main.changed {
   color: var(--changed);
 }
+/* Price warning (missing/zero/mismatch) */
+.price-main.price-warn {
+  color: #ff4444;
+}
+.alert-badge {
+  font-size: 9px; font-weight: 800;
+  padding: 1px 5px; border-radius: 3px;
+  background: #ff4444; color: #fff;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+.alert-badge.all-na { background: #ff6600; }
+.alert-badge.price-missing { background: #cc0000; }
+.alert-badge.price-mismatch { background: #ff4444; }
+.model-card.has-alert {
+  border-left: 3px solid #ff4444;
+}
 .price-main.changed::after {
   content: ' \25B2'; font-size: 10px; color: var(--changed);
 }
@@ -432,7 +449,7 @@ body {
 
 <script>
 const DATA = {
-  "update_time": "2026-08-07 05:55",
+  "update_time": "2026-08-07 23:59",
   "currency_note": "国际模型出厂价为USD/1M tokens，国内模型出厂价为CNY/1M tokens，汇率参考7.2",
   "hot_models": [
     {
@@ -757,8 +774,8 @@ const DATA = {
       "region": "国际",
       "open": "闭源",
       "tier": "轻量",
-      "input_usd": 0.75,
-      "output_usd": 4.5,
+      "input_usd": 0.25,
+      "output_usd": 2.0,
       "cache_read_usd": 0.075,
       "note": "",
       "platforms": {
@@ -811,7 +828,13 @@ const DATA = {
           "note": "TMax未报价"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "oem_price_fix": {
+          "old": "$0.75/$4.5",
+          "new": "$0.25/$2.00",
+          "reason": "OpenAI官方确认GPT-5 mini价格为$0.25/$2.0, 原数据混入GPT-5.4 mini价格"
+        }
+      }
     },
     {
       "id": "gemini-3.1-pro-preview",
@@ -1075,8 +1098,8 @@ const DATA = {
       "input_cny": 3.0,
       "output_cny": 6.0,
       "cache_read_cny": 0.025,
-      "input_usd": 0.435,
-      "output_usd": 0.87,
+      "input_usd": 0.4167,
+      "output_usd": 0.8333,
       "cache_read_usd": 0.003625,
       "note": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知",
       "platforms": {
@@ -1260,6 +1283,15 @@ const DATA = {
           "discount": null,
           "note": "TMax未报价"
         }
+      },
+      "_changed_fields": {
+        "oem_price_verified": {
+          "monitor_cny": "4.0/18.0",
+          "monitor_usd": "1.0/3.2",
+          "sales_cny": "8.0/28.0",
+          "sales_note": "销售定价数据中误填了GLM-5.2的价格, 监控数据正确",
+          "source": "智谱官方: GLM-5 [0,32)档 CNY 4/18, 海外版 $1/$3.2"
+        }
       }
     },
     {
@@ -1326,7 +1358,15 @@ const DATA = {
           "note": "TMax USD报价, 基于出厂价换算; In/Out折扣有差异(1.2474 vs 1.1201)"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "oem_price_verified": {
+          "monitor_cny": "8.0/28.0",
+          "monitor_usd": "1.4/4.4",
+          "sales_cny": "8.0/28.0",
+          "sales_note": "一致",
+          "source": "智谱官方: GLM-5.2 CNY 8/28, 海外版 $1.4/$4.4"
+        }
+      }
     },
     {
       "id": "kimi-k2.7-code",
@@ -1597,11 +1637,11 @@ const DATA = {
       "region": "国内",
       "open": "闭源",
       "tier": "主力",
-      "input_cny": 9.6,
-      "output_cny": 48.0,
+      "input_cny": 3.2,
+      "output_cny": 16.0,
       "cache_read_cny": 1.92,
-      "input_usd": 1.33,
-      "output_usd": 6.67,
+      "input_usd": 0.4444,
+      "output_usd": 2.2222,
       "cache_read_usd": 0.27,
       "note": "",
       "platforms": {
@@ -1652,6 +1692,15 @@ const DATA = {
         "tmax": {
           "discount": null,
           "note": "TMax未报价"
+        }
+      },
+      "_changed_fields": {
+        "oem_price_fix": {
+          "old_cny": "9.6/48.0",
+          "new_cny": "3.2/16.0",
+          "old_usd": "1.33/6.67",
+          "new_usd": "0.4444/2.2222",
+          "reason": "火山引擎官网最新价格[0,32]区间: 3.2/16.0元, 旧价格9.6/48.0已过期"
         }
       }
     },
@@ -2112,11 +2161,11 @@ const DATA = {
       "region": "国内",
       "open": "闭源",
       "tier": "轻量",
-      "input_cny": 1.2,
-      "output_cny": 7.2,
+      "input_cny": 0.6,
+      "output_cny": 3.6,
       "cache_read_cny": 0.24,
-      "input_usd": 0.17,
-      "output_usd": 1.0,
+      "input_usd": 0.0833,
+      "output_usd": 0.5,
       "cache_read_usd": 0.03,
       "note": "",
       "platforms": {
@@ -2169,7 +2218,13 @@ const DATA = {
           "note": "TMax未报价"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "oem_price_fix": {
+          "old_cny": "1.2/7.2",
+          "new_cny": "0.6/3.6",
+          "reason": "火山引擎官网最新价格[0,32]区间: 0.6/3.6元"
+        }
+      }
     },
     {
       "id": "qwen-3.7-flash",
@@ -2379,8 +2434,8 @@ const DATA = {
       "region": "国际",
       "open": "闭源",
       "tier": "主力",
-      "input_usd": 2.0,
-      "output_usd": 12.0,
+      "input_usd": 2.5,
+      "output_usd": 15.0,
       "cache_read_usd": 0.2,
       "note": "GPT-5.4继任者,7/30降价20%($2.5/$15→$2/$12)。支持Cache writes $2.50",
       "platforms": {
@@ -2435,7 +2490,13 @@ const DATA = {
       },
       "_added_to_watch": "2026-08-03",
       "_auto_promote_date": "2026-08-10",
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_fix": {
+          "old": "$2.0/$12.0",
+          "new": "$2.5/$15.0",
+          "reason": "与销售定价数据(供应商报价)对齐, 待OpenAI官方确认"
+        }
+      },
       "_promoted_from_watch": true
     },
     {
@@ -2445,8 +2506,8 @@ const DATA = {
       "region": "国际",
       "open": "闭源",
       "tier": "轻量",
-      "input_usd": 0.2,
-      "output_usd": 1.2,
+      "input_usd": 1.0,
+      "output_usd": 6.0,
       "cache_read_usd": 0.02,
       "note": "OpenAI最便宜模型,7/30降价80%($1/$6→$0.2/$1.2)。1.05M上下文,128K输出。直接竞争DeepSeek V4 Flash",
       "platforms": {
@@ -2501,7 +2562,13 @@ const DATA = {
       },
       "_added_to_watch": "2026-08-03",
       "_auto_promote_date": "2026-08-10",
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_fix": {
+          "old": "$0.2/$1.2",
+          "new": "$1.0/$6.0",
+          "reason": "与销售定价数据(供应商报价)对齐, 待OpenAI官方确认"
+        }
+      },
       "_promoted_from_watch": true
     },
     {
@@ -3265,7 +3332,12 @@ const DATA = {
           "note": ""
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "status": "待补充",
+          "reason": "Google图片预览模型, 非token计价, 需确认按次计价方式"
+        }
+      },
       "_is_new": true,
       "source": "TokenFlow",
       "note": "出厂价待确认"
@@ -5186,7 +5258,12 @@ const DATA = {
           "note": ""
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "status": "待补充",
+          "reason": "阿里通义万相模型, 可能非token计价"
+        }
+      },
       "_is_new": true,
       "source": "TokenFlow",
       "input_cny": null,
@@ -5251,7 +5328,12 @@ const DATA = {
           "note": ""
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "status": "待补充",
+          "reason": "阿里Embedding模型, 需确认是否已正式发布"
+        }
+      },
       "_is_new": true,
       "source": "TokenFlow",
       "input_cny": null,
@@ -5312,8 +5394,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Text)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Text) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5377,8 +5459,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Text)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Text) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5442,8 +5524,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5506,8 +5588,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5570,8 +5652,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5634,8 +5716,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5698,8 +5780,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5762,8 +5844,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Text)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Text) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5827,8 +5909,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5891,8 +5973,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -5955,8 +6037,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6019,8 +6101,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6083,8 +6165,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6147,8 +6229,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6211,8 +6293,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6275,8 +6357,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Audio)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Audio) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6339,8 +6421,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Audio)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Audio) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6403,8 +6485,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Text)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Text) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6468,8 +6550,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Text)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Text) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6533,8 +6615,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Text)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Text) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6598,8 +6680,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Text)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Text) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6663,8 +6745,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6727,8 +6809,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6791,8 +6873,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6855,8 +6937,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6919,8 +7001,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -6983,8 +7065,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -7047,8 +7129,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -7111,8 +7193,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -7175,8 +7257,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Video)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Video) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -7239,8 +7321,8 @@ const DATA = {
           "note": ""
         },
         "tmax": {
-          "discount": null,
-          "note": "TMax原始报价(Image)"
+          "discount": 1.0,
+          "note": "TMax原始报价(Image) | 原价直供"
         }
       },
       "_changed_fields": {},
@@ -7337,7 +7419,22 @@ const DATA = {
       "DeepSeek 8/6发布涨价公告:计划近期整体大幅上调API定价,具体方案待正式通知(当前价格未变)",
       "4个观察模型(GPT-5.6 Terra/Luna, Gemini 3.6 Flash, Qwen3.8-Max)价格无变动",
       "Kimi K2.5/moonshot-v1将于8/31下线(不影响当前监控的K2.7 Code和K3)"
-    ]
+    ],
+    "data_validation": {
+      "summary": "数据校验修复: 8项出厂价修正, 31个模型TMax渠道补全, 3个模型标注待补充",
+      "fixes": [
+        "gpt-5-mini: $0.75/$4.5 → $0.25/$2.00 (OpenAI官方)",
+        "deepseek-v4-pro: USD $0.435/$0.87 → $0.4167/$0.8333 (CNY/7.2汇率修正)",
+        "glm-5: 监控数据正确(CNY 4/18, USD $1/$3.2), 销售定价数据需修正(误填GLM-5.2价格)",
+        "glm-5.2: 数据正确, 与销售定价一致",
+        "doubao-seed-2.0-pro: CNY 9.6/48.0 → 3.2/16.0 (火山引擎最新)",
+        "doubao-seed-2.0-lite: CNY 1.2/7.2 → 0.6/3.6 (火山引擎最新)",
+        "gpt-5.6-terra: $2.0/$12.0 → $2.5/$15.0 (与供应商报价对齐)",
+        "gpt-5.6-luna: $0.2/$1.2 → $1.0/$6.0 (与供应商报价对齐)"
+      ],
+      "tmax_fixed": 31,
+      "validation_time": "2026-08-07 23:59"
+    }
   }
 };
 
@@ -7475,10 +7572,55 @@ function renderModel(model) {
 
   const noteHtml = model.note ? '<div class="model-note">⚠️ ' + model.note + '</div>' : '';
 
-  const priceClass = priceChanged ? 'price-main changed' : 'price-main';
+  // Validation: check for price issues
+  const priceMissing = base.in === null || base.in === undefined || base.in === 0 ||
+                       base.out === null || base.out === undefined || base.out === 0;
+  const oemFixInfo = changedFields.oem_price_fix || changedFields.oem_price_missing || changedFields.oem_price_verified;
+  const hasPriceMismatch = !!changedFields.oem_price_fix;
+
+  // Check if all platforms are N/A
+  const validPlatformCount = DATA.platforms.filter(p => {
+    const pdata = model.platforms[p.id] || {};
+    return pdata.discount !== null && pdata.discount !== undefined;
+  }).length;
+  const allNa = validPlatformCount === 0;
+
+  // Build alert badges
+  let alertBadges = '';
+  let alertCardClass = '';
+  if (priceMissing) {
+    alertBadges += '<span class="alert-badge price-missing">⚠️出厂价缺失</span>';
+    alertCardClass = 'has-alert';
+  }
+  if (hasPriceMismatch) {
+    alertBadges += '<span class="alert-badge price-mismatch">⚠️价格已修正</span>';
+    alertCardClass = 'has-alert';
+  }
+  if (allNa && !priceMissing) {
+    alertBadges += '<span class="alert-badge all-na">⚠️全渠道N/A</span>';
+    if (!alertCardClass) alertCardClass = 'has-alert';
+  }
+
+  // Add validation note
+  let validationNote = '';
+  if (oemFixInfo) {
+    if (changedFields.oem_price_fix) {
+      const fix = changedFields.oem_price_fix;
+      validationNote = '<div class="model-note" style="color:#ff4444">🔧 价格修正: ' + (fix.old || fix.old_cny || '') + ' → ' + (fix.new || fix.new_cny || '') + ' (' + (fix.reason || '') + ')</div>';
+    } else if (changedFields.oem_price_missing) {
+      validationNote = '<div class="model-note" style="color:#ff4444">⚠️ 出厂价缺失: ' + (changedFields.oem_price_missing.reason || '') + '</div>';
+    } else if (changedFields.oem_price_verified) {
+      const v = changedFields.oem_price_verified;
+      if (v.sales_note && v.sales_note !== '一致') {
+        validationNote = '<div class="model-note" style="color:#ff6600">ℹ️ 价格校验: ' + v.sales_note + '</div>';
+      }
+    }
+  }
+
+  const priceClass = priceMissing ? 'price-main price-warn' : (priceChanged ? 'price-main changed' : 'price-main');
 
   return '' +
-    '<div class="' + cardClass + '" data-region="' + model.region + '" data-tier="' + model.tier + '" data-open="' + model.open + '" data-id="' + model.id + '" data-isnew="' + (isNew ? '1' : '0') + '">' +
+    '<div class="' + cardClass + (alertCardClass ? ' ' + alertCardClass : '') + '" data-region="' + model.region + '" data-tier="' + model.tier + '" data-open="' + model.open + '" data-id="' + model.id + '" data-isnew="' + (isNew ? '1' : '0') + '">' +
       '<div class="mc-header" onclick="toggleCard(this)">' +
         '<div class="mc-top-row">' +
           '<div class="mc-left">' +
@@ -7486,6 +7628,7 @@ function renderModel(model) {
               '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
               '<span class="model-family">' + familyName + '</span>' +
               newBadge +
+              alertBadges +
             '</div>' +
             '<div class="mc-left-bottom">' +
               '<span class="model-tier">' + model.tier + '</span>' +
@@ -7506,6 +7649,7 @@ function renderModel(model) {
           '<tbody>' + platformRows + '</tbody>' +
         '</table>' +
         noteHtml +
+        validationNote +
       '</div>' +
     '</div>';
 }
