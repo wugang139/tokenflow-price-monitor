@@ -146,7 +146,9 @@ body {
 .mc-top-row {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
 }
-.mc-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.mc-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.mc-left-top { display: flex; align-items: center; gap: 8px; }
+.mc-left-bottom { display: flex; align-items: center; gap: 6px; padding-left: 0; }
 .vendor-badge {
   font-size: 10px; font-weight: 700;
   padding: 2px 6px; border-radius: 4px;
@@ -157,8 +159,8 @@ body {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .model-tier {
-  font-size: 10px; color: var(--text-muted);
-  margin-left: 2px;
+  font-size: 10px; color: var(--text-dim);
+  white-space: nowrap;
 }
 .new-badge {
   font-size: 9px; font-weight: 800;
@@ -7471,10 +7473,14 @@ function renderModel(model) {
       '<div class="mc-header" onclick="toggleCard(this)">' +
         '<div class="mc-top-row">' +
           '<div class="mc-left">' +
-            '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
-            '<span class="model-name">' + model.id + '</span>' +
-            '<span class="model-tier">' + model.tier + '</span>' +
-            newBadge +
+            '<div class="mc-left-top">' +
+              '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
+              '<span class="model-name">' + model.id + '</span>' +
+              newBadge +
+            '</div>' +
+            '<div class="mc-left-bottom">' +
+              '<span class="model-tier">' + model.tier + '</span>' +
+            '</div>' +
           '</div>' +
           '<div class="mc-right">' +
             '<div class="' + priceClass + '">' + base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out) + '</div>' +
@@ -7548,11 +7554,15 @@ function renderWatchModel(model, idx) {
       '<div class="mc-header" onclick="toggleCard(this)">' +
         '<div class="mc-top-row">' +
           '<div class="mc-left">' +
-            '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
-            '<span class="model-name">' + model.id + '</span>' +
-            '<span class="model-tier">' + model.tier + '</span>' +
-            newBadge +
-            '<span class="watch-badge">👁️ 观察中</span>' +
+            '<div class="mc-left-top">' +
+              '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
+              '<span class="model-name">' + model.id + '</span>' +
+              newBadge +
+            '</div>' +
+            '<div class="mc-left-bottom">' +
+              '<span class="model-tier">' + model.tier + '</span>' +
+              '<span class="watch-badge">👁️ 观察中</span>' +
+            '</div>' +
           '</div>' +
           '<div class="mc-right">' +
             '<div class="price-main">' + base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out) + '</div>' +
