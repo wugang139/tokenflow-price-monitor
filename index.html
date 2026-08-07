@@ -449,7 +449,7 @@ body {
 
 <script>
 const DATA = {
-  "update_time": "2026-08-07 23:59",
+  "update_time": "2026-08-08 05:58",
   "currency_note": "国际模型出厂价为USD/1M tokens，国内模型出厂价为CNY/1M tokens，汇率参考7.2",
   "hot_models": [
     {
@@ -462,7 +462,7 @@ const DATA = {
       "input_usd": 2.0,
       "output_usd": 10.0,
       "cache_read_usd": 0.2,
-      "note": "活动价$2/$10至8.31, 9.1起$3/$15。Opus 5已发布(同价$5/$25), Fable 5 $10/$50",
+      "note": "官方标准价$3/$15, 限时活动价$2/$10至8.31。Opus 5已发布(同价$5/$25), Fable/Mythos 5 $10/$50",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -513,7 +513,13 @@ const DATA = {
           "note": "TMax未报价"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "note": {
+          "old": "活动价$2/$10至8.31, 9.1起$3/$15。Opus 5已发布(同价$5/$25), Fable 5 $10/$50",
+          "new": "官方标准价$3/$15, 限时活动价$2/$10至8.31。Opus 5已发布(同价$5/$25), Fable/Mythos 5 $10/$50",
+          "source": "Anthropic官方模型页(platform.claude.com/docs/en/about-claude/models)"
+        }
+      }
     },
     {
       "id": "claude-opus-5",
@@ -525,7 +531,7 @@ const DATA = {
       "input_usd": 5.0,
       "output_usd": 25.0,
       "cache_read_usd": 0.5,
-      "note": "Opus 5最新版(取代Opus 4.8/4.5), 同价$5/$25。Opus 5 vs Opus 4.8: 法律+17%, 数据分析+11%",
+      "note": "Opus 5最新版(取代Opus 4.8/4.5), 官方定价$5/$25",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -576,7 +582,13 @@ const DATA = {
           "note": "TMax未报价"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "note": {
+          "old": "Opus 5最新版(取代Opus 4.8/4.5), 同价$5/$25。Opus 5 vs Opus 4.8: 法律+17%, 数据分析+11%",
+          "new": "Opus 5最新版(取代Opus 4.8/4.5), 官方定价$5/$25",
+          "source": "Anthropic官方模型页"
+        }
+      }
     },
     {
       "id": "claude-haiku-4-5",
@@ -588,7 +600,7 @@ const DATA = {
       "input_usd": 1.0,
       "output_usd": 5.0,
       "cache_read_usd": 0.1,
-      "note": "Anthropic最新官方定价已确认",
+      "note": "Anthropic官方定价已确认$1/$5",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -639,7 +651,13 @@ const DATA = {
           "note": "TMax未报价"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "note": {
+          "old": "Anthropic最新官方定价已确认",
+          "new": "Anthropic官方定价已确认$1/$5",
+          "source": "Anthropic官方模型页"
+        }
+      }
     },
     {
       "id": "gpt-5.4",
@@ -1101,7 +1119,7 @@ const DATA = {
       "input_usd": 0.4167,
       "output_usd": 0.8333,
       "cache_read_usd": 0.003625,
-      "note": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知",
+      "note": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -1152,7 +1170,13 @@ const DATA = {
           "note": "TMax USD报价, 基于出厂价换算"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "note": {
+          "old": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知",
+          "new": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
+          "source": "DeepSeek官方定价页(api-docs.deepseek.com)"
+        }
+      }
     },
     {
       "id": "deepseek-v4-flash",
@@ -1167,7 +1191,7 @@ const DATA = {
       "input_usd": 0.14,
       "output_usd": 0.28,
       "cache_read_usd": 0.0028,
-      "note": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输出4元),尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知",
+      "note": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输出4元),尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -1218,7 +1242,13 @@ const DATA = {
           "note": "TMax USD报价, 基于出厂价换算"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "note": {
+          "old": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输出4元),尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知",
+          "new": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输出4元),尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
+          "source": "DeepSeek官方定价页(api-docs.deepseek.com)"
+        }
+      }
     },
     {
       "id": "glm-5",
@@ -1286,11 +1316,10 @@ const DATA = {
       },
       "_changed_fields": {
         "oem_price_verified": {
-          "monitor_cny": "4.0/18.0",
-          "monitor_usd": "1.0/3.2",
-          "sales_cny": "8.0/28.0",
-          "sales_note": "销售定价数据中误填了GLM-5.2的价格, 监控数据正确",
-          "source": "智谱官方: GLM-5 [0,32)档 CNY 4/18, 海外版 $1/$3.2"
+          "monitor": "¥4.0/¥18.0",
+          "sales": "¥8.0/¥28.0",
+          "sales_note": "价格不一致: 输入: 供应商=¥8.0, 监控=¥4.0; 输出: 供应商=¥28.0, 监控=¥18.0",
+          "source": "销售定价数据_20260805.json"
         }
       }
     },
@@ -1563,7 +1592,8 @@ const DATA = {
           "discount": 1.485,
           "note": "TMax USD报价, 基于出厂价换算"
         }
-      }
+      },
+      "_changed_fields": {}
     },
     {
       "id": "qwen-3.7-plus",
@@ -1628,7 +1658,8 @@ const DATA = {
           "discount": 1.4256,
           "note": "TMax USD报价, 基于出厂价换算"
         }
-      }
+      },
+      "_changed_fields": {}
     },
     {
       "id": "doubao-seed-2.0-pro",
@@ -2434,10 +2465,10 @@ const DATA = {
       "region": "国际",
       "open": "闭源",
       "tier": "主力",
-      "input_usd": 2.5,
-      "output_usd": 15.0,
+      "input_usd": 2.0,
+      "output_usd": 12.0,
       "cache_read_usd": 0.2,
-      "note": "GPT-5.4继任者,7/30降价20%($2.5/$15→$2/$12)。支持Cache writes $2.50",
+      "note": "GPT-5.4继任者,官方定价$2/$12(7/30降价20%),Cache writes $2.50",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -2495,6 +2526,21 @@ const DATA = {
           "old": "$2.0/$12.0",
           "new": "$2.5/$15.0",
           "reason": "与销售定价数据(供应商报价)对齐, 待OpenAI官方确认"
+        },
+        "input_usd": {
+          "old": 2.5,
+          "new": 2.0,
+          "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+        },
+        "output_usd": {
+          "old": 15.0,
+          "new": 12.0,
+          "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+        },
+        "note": {
+          "old": "GPT-5.4继任者,7/30降价20%($2.5/$15→$2/$12)。支持Cache writes $2.50",
+          "new": "GPT-5.4继任者,官方定价$2/$12(7/30降价20%),Cache writes $2.50",
+          "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
         }
       },
       "_promoted_from_watch": true
@@ -2506,10 +2552,10 @@ const DATA = {
       "region": "国际",
       "open": "闭源",
       "tier": "轻量",
-      "input_usd": 1.0,
-      "output_usd": 6.0,
+      "input_usd": 0.2,
+      "output_usd": 1.2,
       "cache_read_usd": 0.02,
-      "note": "OpenAI最便宜模型,7/30降价80%($1/$6→$0.2/$1.2)。1.05M上下文,128K输出。直接竞争DeepSeek V4 Flash",
+      "note": "OpenAI最便宜模型,官方定价$0.2/$1.2,1.05M上下文,直接竞争DeepSeek V4 Flash",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -2567,6 +2613,21 @@ const DATA = {
           "old": "$0.2/$1.2",
           "new": "$1.0/$6.0",
           "reason": "与销售定价数据(供应商报价)对齐, 待OpenAI官方确认"
+        },
+        "input_usd": {
+          "old": 1.0,
+          "new": 0.2,
+          "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+        },
+        "output_usd": {
+          "old": 6.0,
+          "new": 1.2,
+          "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+        },
+        "note": {
+          "old": "OpenAI最便宜模型,7/30降价80%($1/$6→$0.2/$1.2)。1.05M上下文,128K输出。直接竞争DeepSeek V4 Flash",
+          "new": "OpenAI最便宜模型,官方定价$0.2/$1.2,1.05M上下文,直接竞争DeepSeek V4 Flash",
+          "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
         }
       },
       "_promoted_from_watch": true
@@ -3334,8 +3395,7 @@ const DATA = {
       },
       "_changed_fields": {
         "oem_price_missing": {
-          "status": "待补充",
-          "reason": "Google图片预览模型, 非token计价, 需确认按次计价方式"
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
         }
       },
       "_is_new": true,
@@ -5260,8 +5320,7 @@ const DATA = {
       },
       "_changed_fields": {
         "oem_price_missing": {
-          "status": "待补充",
-          "reason": "阿里通义万相模型, 可能非token计价"
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
         }
       },
       "_is_new": true,
@@ -5330,8 +5389,10 @@ const DATA = {
       },
       "_changed_fields": {
         "oem_price_missing": {
-          "status": "待补充",
-          "reason": "阿里Embedding模型, 需确认是否已正式发布"
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        },
+        "all_na_alert": {
+          "reason": "12个平台渠道discount全部为null，且无TMax原始报价"
         }
       },
       "_is_new": true,
@@ -5528,7 +5589,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -5592,7 +5657,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -5656,7 +5725,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -5720,7 +5793,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -5784,7 +5861,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -5913,7 +5994,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -5977,7 +6062,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -6041,7 +6130,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -6105,7 +6198,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -6169,7 +6266,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -6233,7 +6334,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -6297,7 +6402,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -6361,7 +6470,11 @@ const DATA = {
           "note": "TMax原始报价(Audio) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Audio)",
       "note": "出厂价(TMax报价), 计价单位: USD/万字符"
@@ -6425,7 +6538,11 @@ const DATA = {
           "note": "TMax原始报价(Audio) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Audio)",
       "note": "出厂价(TMax报价), 计价单位: USD/万字符"
@@ -6749,7 +6866,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -6813,7 +6934,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -6877,7 +7002,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -6941,7 +7070,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -7005,7 +7138,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -7069,7 +7206,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -7133,7 +7274,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -7197,7 +7342,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -7261,7 +7410,11 @@ const DATA = {
           "note": "TMax原始报价(Video) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Video)",
       "note": "出厂价(TMax报价), 计价单位: USD/秒"
@@ -7325,7 +7478,11 @@ const DATA = {
           "note": "TMax原始报价(Image) | 原价直供"
         }
       },
-      "_changed_fields": {},
+      "_changed_fields": {
+        "oem_price_missing": {
+          "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+        }
+      },
       "_is_new": true,
       "source": "TMax (Image)",
       "note": "出厂价(TMax报价), 计价单位: USD/张"
@@ -7408,32 +7565,723 @@ const DATA = {
   "watch_list_models": [],
   "changes": {
     "update_type": "每日价格更新",
-    "summary": "本次更新：0项价格变动，0项折扣变动。新增1条待关注事项(DeepSeek涨价公告)",
-    "new_models": [],
+    "summary": "本次更新：39项字段变更，74个新模型",
+    "new_models": [
+      "mimo-v2.5",
+      "hy3",
+      "claude-fable-5",
+      "claude-haiku-4-5-20251001",
+      "claude-opus-4-5",
+      "claude-opus-4-6",
+      "claude-opus-4-7",
+      "claude-opus-4-8",
+      "claude-sonnet-4-5",
+      "claude-sonnet-4-6",
+      "gemini-2.5-pro",
+      "gemini-3.1-flash-image-preview",
+      "gemini-3.1-flash-lite-image",
+      "gemini-3-flash-preview",
+      "gemini-3-pro-image-preview",
+      "gemini-3-pro-preview",
+      "gpt-5",
+      "gpt-5.1",
+      "gpt-5.1-chat",
+      "gpt-5.2",
+      "gpt-5.3-chat",
+      "gpt-5.3-codex",
+      "gpt-5.4-mini",
+      "gpt-5.4-nano",
+      "gpt-5.6-sol",
+      "gpt-image-2",
+      "doubao-seed-2.0-code",
+      "doubao-seed-2.0-mini",
+      "doubao-seed-2.1-pro",
+      "deepseek-v3.2",
+      "minimax-m2.5",
+      "minimax-m2.7",
+      "minimax-m2.1",
+      "kimi-k2.5",
+      "kimi-k2.6",
+      "kimi-k2.7-coder",
+      "qwen3.5-plus",
+      "qwen3.6-plus",
+      "qwen3-max",
+      "glm-4.7",
+      "glm-5.1",
+      "happyhorse-1.1",
+      "text-embedding-v4",
+      "doubao-seed-2-1-turbo-260628",
+      "doubao-seed-evolving",
+      "doubao-seedance-2.0",
+      "doubao-seedance-2.0-fast",
+      "doubao-seedance-2.0-mini",
+      "doubao-seedream-5.0-lite",
+      "doubao-seedream-5.0-pro",
+      "glm-5.2-fast-preview",
+      "happyhorse-1.1-i2v",
+      "happyhorse-1.1-r2v",
+      "happyhorse-1.1-t2v",
+      "kling-v3-omni-i2v/t2v",
+      "kling-v3-t2v/i2v",
+      "qwen-image-2.0",
+      "qwen-image-2.0-pro",
+      "qwen3-tts-flash",
+      "qwen3-tts-instruct-flash",
+      "qwen3.6-27b",
+      "qwen3.6-flash",
+      "qwen3.6-max-preview",
+      "qwen3.7-max-preview",
+      "qwen_image_edit-_spicy",
+      "wan-animate",
+      "wan-face-swap",
+      "wan-head-swap",
+      "wan2.2-i2v-spicy",
+      "wan2.6-i2v",
+      "wan2.6-t2v",
+      "wan2.7-i2v",
+      "wan2.7-i2v-spicy",
+      "zimage_spicy"
+    ],
     "new_platforms": [],
-    "changed_models": [],
+    "changed_models": [
+      {
+        "id": "claude-sonnet-5",
+        "vendor": "Anthropic",
+        "fields": [
+          "note"
+        ],
+        "detail": {
+          "note": {
+            "old": "活动价$2/$10至8.31, 9.1起$3/$15。Opus 5已发布(同价$5/$25), Fable 5 $10/$50",
+            "new": "官方标准价$3/$15, 限时活动价$2/$10至8.31。Opus 5已发布(同价$5/$25), Fable/Mythos 5 $10/$50",
+            "source": "Anthropic官方模型页(platform.claude.com/docs/en/about-claude/models)"
+          }
+        }
+      },
+      {
+        "id": "claude-opus-5",
+        "vendor": "Anthropic",
+        "fields": [
+          "note"
+        ],
+        "detail": {
+          "note": {
+            "old": "Opus 5最新版(取代Opus 4.8/4.5), 同价$5/$25。Opus 5 vs Opus 4.8: 法律+17%, 数据分析+11%",
+            "new": "Opus 5最新版(取代Opus 4.8/4.5), 官方定价$5/$25",
+            "source": "Anthropic官方模型页"
+          }
+        }
+      },
+      {
+        "id": "claude-haiku-4-5",
+        "vendor": "Anthropic",
+        "fields": [
+          "note"
+        ],
+        "detail": {
+          "note": {
+            "old": "Anthropic最新官方定价已确认",
+            "new": "Anthropic官方定价已确认$1/$5",
+            "source": "Anthropic官方模型页"
+          }
+        }
+      },
+      {
+        "id": "gpt-5-mini",
+        "vendor": "OpenAI",
+        "fields": [
+          "oem_price_fix"
+        ],
+        "detail": {
+          "oem_price_fix": {
+            "old": "$0.75/$4.5",
+            "new": "$0.25/$2.00",
+            "reason": "OpenAI官方确认GPT-5 mini价格为$0.25/$2.0, 原数据混入GPT-5.4 mini价格"
+          }
+        }
+      },
+      {
+        "id": "deepseek-v4-pro",
+        "vendor": "深度求索",
+        "fields": [
+          "note"
+        ],
+        "detail": {
+          "note": {
+            "old": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知",
+            "new": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
+            "source": "DeepSeek官方定价页(api-docs.deepseek.com)"
+          }
+        }
+      },
+      {
+        "id": "deepseek-v4-flash",
+        "vendor": "深度求索",
+        "fields": [
+          "note"
+        ],
+        "detail": {
+          "note": {
+            "old": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输出4元),尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知",
+            "new": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输出4元),尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
+            "source": "DeepSeek官方定价页(api-docs.deepseek.com)"
+          }
+        }
+      },
+      {
+        "id": "glm-5",
+        "vendor": "智谱",
+        "fields": [
+          "oem_price_verified"
+        ],
+        "detail": {
+          "oem_price_verified": {
+            "monitor": "¥4.0/¥18.0",
+            "sales": "¥8.0/¥28.0",
+            "sales_note": "价格不一致: 输入: 供应商=¥8.0, 监控=¥4.0; 输出: 供应商=¥28.0, 监控=¥18.0",
+            "source": "销售定价数据_20260805.json"
+          }
+        }
+      },
+      {
+        "id": "glm-5.2",
+        "vendor": "智谱",
+        "fields": [
+          "oem_price_verified"
+        ],
+        "detail": {
+          "oem_price_verified": {
+            "monitor_cny": "8.0/28.0",
+            "monitor_usd": "1.4/4.4",
+            "sales_cny": "8.0/28.0",
+            "sales_note": "一致",
+            "source": "智谱官方: GLM-5.2 CNY 8/28, 海外版 $1.4/$4.4"
+          }
+        }
+      },
+      {
+        "id": "doubao-seed-2.0-pro",
+        "vendor": "字节跳动",
+        "fields": [
+          "oem_price_fix"
+        ],
+        "detail": {
+          "oem_price_fix": {
+            "old_cny": "9.6/48.0",
+            "new_cny": "3.2/16.0",
+            "old_usd": "1.33/6.67",
+            "new_usd": "0.4444/2.2222",
+            "reason": "火山引擎官网最新价格[0,32]区间: 3.2/16.0元, 旧价格9.6/48.0已过期"
+          }
+        }
+      },
+      {
+        "id": "doubao-seed-2.0-lite",
+        "vendor": "字节跳动",
+        "fields": [
+          "oem_price_fix"
+        ],
+        "detail": {
+          "oem_price_fix": {
+            "old_cny": "1.2/7.2",
+            "new_cny": "0.6/3.6",
+            "reason": "火山引擎官网最新价格[0,32]区间: 0.6/3.6元"
+          }
+        }
+      },
+      {
+        "id": "gpt-5.6-terra",
+        "vendor": "OpenAI",
+        "fields": [
+          "oem_price_fix",
+          "input_usd",
+          "output_usd",
+          "note"
+        ],
+        "detail": {
+          "oem_price_fix": {
+            "old": "$2.0/$12.0",
+            "new": "$2.5/$15.0",
+            "reason": "与销售定价数据(供应商报价)对齐, 待OpenAI官方确认"
+          },
+          "input_usd": {
+            "old": 2.5,
+            "new": 2.0,
+            "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+          },
+          "output_usd": {
+            "old": 15.0,
+            "new": 12.0,
+            "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+          },
+          "note": {
+            "old": "GPT-5.4继任者,7/30降价20%($2.5/$15→$2/$12)。支持Cache writes $2.50",
+            "new": "GPT-5.4继任者,官方定价$2/$12(7/30降价20%),Cache writes $2.50",
+            "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+          }
+        }
+      },
+      {
+        "id": "gpt-5.6-luna",
+        "vendor": "OpenAI",
+        "fields": [
+          "oem_price_fix",
+          "input_usd",
+          "output_usd",
+          "note"
+        ],
+        "detail": {
+          "oem_price_fix": {
+            "old": "$0.2/$1.2",
+            "new": "$1.0/$6.0",
+            "reason": "与销售定价数据(供应商报价)对齐, 待OpenAI官方确认"
+          },
+          "input_usd": {
+            "old": 1.0,
+            "new": 0.2,
+            "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+          },
+          "output_usd": {
+            "old": 6.0,
+            "new": 1.2,
+            "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+          },
+          "note": {
+            "old": "OpenAI最便宜模型,7/30降价80%($1/$6→$0.2/$1.2)。1.05M上下文,128K输出。直接竞争DeepSeek V4 Flash",
+            "new": "OpenAI最便宜模型,官方定价$0.2/$1.2,1.05M上下文,直接竞争DeepSeek V4 Flash",
+            "source": "OpenAI官方定价页(platform.openai.com/docs/pricing)"
+          }
+        }
+      },
+      {
+        "id": "gemini-3.1-flash-image-preview",
+        "vendor": "Google",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "happyhorse-1.1",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "text-embedding-v4",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing",
+          "all_na_alert"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          },
+          "all_na_alert": {
+            "reason": "12个平台渠道discount全部为null，且无TMax原始报价"
+          }
+        }
+      },
+      {
+        "id": "doubao-seedance-2.0",
+        "vendor": "字节跳动",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "doubao-seedance-2.0-fast",
+        "vendor": "字节跳动",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "doubao-seedance-2.0-mini",
+        "vendor": "字节跳动",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "doubao-seedream-5.0-lite",
+        "vendor": "字节跳动",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "doubao-seedream-5.0-pro",
+        "vendor": "字节跳动",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "happyhorse-1.1-i2v",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "happyhorse-1.1-r2v",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "happyhorse-1.1-t2v",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "kling-v3-omni-i2v/t2v",
+        "vendor": "快手",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "kling-v3-t2v/i2v",
+        "vendor": "快手",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "qwen-image-2.0",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "qwen-image-2.0-pro",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "qwen3-tts-flash",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "qwen3-tts-instruct-flash",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "qwen_image_edit-_spicy",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan-animate",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan-face-swap",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan-head-swap",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan2.2-i2v-spicy",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan2.6-i2v",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan2.6-t2v",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan2.7-i2v",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "wan2.7-i2v-spicy",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      },
+      {
+        "id": "zimage_spicy",
+        "vendor": "阿里",
+        "fields": [
+          "oem_price_missing"
+        ],
+        "detail": {
+          "oem_price_missing": {
+            "reason": "出厂价(input/output)均为null/0，需补充官方定价"
+          }
+        }
+      }
+    ],
     "watch_list_updates": 1,
-    "update_time": "2026-08-07 05:55",
+    "update_time": "2026-08-08 05:58",
     "details": [
-      "30个热门模型出厂价及11个平台渠道折扣均无变动，市场稳定",
-      "DeepSeek 8/6发布涨价公告:计划近期整体大幅上调API定价,具体方案待正式通知(当前价格未变)",
-      "4个观察模型(GPT-5.6 Terra/Luna, Gemini 3.6 Flash, Qwen3.8-Max)价格无变动",
-      "Kimi K2.5/moonshot-v1将于8/31下线(不影响当前监控的K2.7 Code和K3)"
+      "Anthropic claude-sonnet-5: note更新",
+      "Anthropic claude-opus-5: note更新",
+      "Anthropic claude-haiku-4-5: note更新",
+      "OpenAI gpt-5-mini: oem_price_fix",
+      "深度求索 deepseek-v4-pro: note更新",
+      "深度求索 deepseek-v4-flash: note更新",
+      "智谱 glm-5: ℹ️出厂价与销售数据不一致",
+      "智谱 glm-5.2: ℹ️出厂价与销售数据不一致",
+      "字节跳动 doubao-seed-2.0-pro: oem_price_fix",
+      "字节跳动 doubao-seed-2.0-lite: oem_price_fix",
+      "OpenAI gpt-5.6-terra: 出厂价 $2.5/$15.0 → $2.0/$12.0; note更新",
+      "OpenAI gpt-5.6-luna: 出厂价 $1.0/$6.0 → $0.2/$1.2; note更新",
+      "Google gemini-3.1-flash-image-preview: ⚠️出厂价缺失",
+      "阿里 happyhorse-1.1: ⚠️出厂价缺失",
+      "阿里 text-embedding-v4: ⚠️出厂价缺失; ⚠️全渠道N/A",
+      "字节跳动 doubao-seedance-2.0: ⚠️出厂价缺失",
+      "字节跳动 doubao-seedance-2.0-fast: ⚠️出厂价缺失",
+      "字节跳动 doubao-seedance-2.0-mini: ⚠️出厂价缺失",
+      "字节跳动 doubao-seedream-5.0-lite: ⚠️出厂价缺失",
+      "字节跳动 doubao-seedream-5.0-pro: ⚠️出厂价缺失",
+      "阿里 happyhorse-1.1-i2v: ⚠️出厂价缺失",
+      "阿里 happyhorse-1.1-r2v: ⚠️出厂价缺失",
+      "阿里 happyhorse-1.1-t2v: ⚠️出厂价缺失",
+      "快手 kling-v3-omni-i2v/t2v: ⚠️出厂价缺失",
+      "快手 kling-v3-t2v/i2v: ⚠️出厂价缺失",
+      "阿里 qwen-image-2.0: ⚠️出厂价缺失",
+      "阿里 qwen-image-2.0-pro: ⚠️出厂价缺失",
+      "阿里 qwen3-tts-flash: ⚠️出厂价缺失",
+      "阿里 qwen3-tts-instruct-flash: ⚠️出厂价缺失",
+      "阿里 qwen_image_edit-_spicy: ⚠️出厂价缺失",
+      "阿里 wan-animate: ⚠️出厂价缺失",
+      "阿里 wan-face-swap: ⚠️出厂价缺失",
+      "阿里 wan-head-swap: ⚠️出厂价缺失",
+      "阿里 wan2.2-i2v-spicy: ⚠️出厂价缺失",
+      "阿里 wan2.6-i2v: ⚠️出厂价缺失",
+      "阿里 wan2.6-t2v: ⚠️出厂价缺失",
+      "阿里 wan2.7-i2v: ⚠️出厂价缺失",
+      "阿里 wan2.7-i2v-spicy: ⚠️出厂价缺失",
+      "阿里 zimage_spicy: ⚠️出厂价缺失"
     ],
     "data_validation": {
-      "summary": "数据校验修复: 8项出厂价修正, 31个模型TMax渠道补全, 3个模型标注待补充",
-      "fixes": [
-        "gpt-5-mini: $0.75/$4.5 → $0.25/$2.00 (OpenAI官方)",
-        "deepseek-v4-pro: USD $0.435/$0.87 → $0.4167/$0.8333 (CNY/7.2汇率修正)",
-        "glm-5: 监控数据正确(CNY 4/18, USD $1/$3.2), 销售定价数据需修正(误填GLM-5.2价格)",
-        "glm-5.2: 数据正确, 与销售定价一致",
-        "doubao-seed-2.0-pro: CNY 9.6/48.0 → 3.2/16.0 (火山引擎最新)",
-        "doubao-seed-2.0-lite: CNY 1.2/7.2 → 0.6/3.6 (火山引擎最新)",
-        "gpt-5.6-terra: $2.0/$12.0 → $2.5/$15.0 (与供应商报价对齐)",
-        "gpt-5.6-luna: $0.2/$1.2 → $1.0/$6.0 (与供应商报价对齐)"
+      "summary": "出厂价缺失 27 个；出厂价与销售数据不一致 3 个；全渠道N/A报警 1 个",
+      "oem_missing": [
+        "gemini-3.1-flash-image-preview",
+        "happyhorse-1.1",
+        "text-embedding-v4",
+        "doubao-seedance-2.0",
+        "doubao-seedance-2.0-fast",
+        "doubao-seedance-2.0-mini",
+        "doubao-seedream-5.0-lite",
+        "doubao-seedream-5.0-pro",
+        "happyhorse-1.1-i2v",
+        "happyhorse-1.1-r2v",
+        "happyhorse-1.1-t2v",
+        "kling-v3-omni-i2v/t2v",
+        "kling-v3-t2v/i2v",
+        "qwen-image-2.0",
+        "qwen-image-2.0-pro",
+        "qwen3-tts-flash",
+        "qwen3-tts-instruct-flash",
+        "qwen_image_edit-_spicy",
+        "wan-animate",
+        "wan-face-swap",
+        "wan-head-swap",
+        "wan2.2-i2v-spicy",
+        "wan2.6-i2v",
+        "wan2.6-t2v",
+        "wan2.7-i2v",
+        "wan2.7-i2v-spicy",
+        "zimage_spicy"
       ],
-      "tmax_fixed": 31,
-      "validation_time": "2026-08-07 23:59"
+      "oem_mismatch": [
+        {
+          "id": "glm-5",
+          "monitor": "¥4.0/¥18.0",
+          "sales": "¥8.0/¥28.0",
+          "note": "价格不一致: 输入: 供应商=¥8.0, 监控=¥4.0; 输出: 供应商=¥28.0, 监控=¥18.0"
+        },
+        {
+          "id": "gpt-5.6-terra",
+          "monitor": "$2.0/$12.0",
+          "sales": "$2.5/$15.0",
+          "note": "价格不一致: 输入: 供应商=$2.5, 监控=$2.0; 输出: 供应商=$15.0, 监控=$12.0"
+        },
+        {
+          "id": "gpt-5.6-luna",
+          "monitor": "$0.2/$1.2",
+          "sales": "$1.0/$6.0",
+          "note": "价格不一致: 输入: 供应商=$1.0, 监控=$0.2; 输出: 供应商=$6.0, 监控=$1.2"
+        }
+      ],
+      "tmax_fixed": [],
+      "all_na_alert": [
+        "text-embedding-v4"
+      ],
+      "fixes": [],
+      "validation_time": "2026-08-08 05:58"
     }
   }
 };
