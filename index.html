@@ -1811,15 +1811,7 @@ const DATA = {
           "note": "TMax未报价"
         }
       },
-      "_changed_fields": {
-        "oem_price_verified": {
-          "monitor": "15.0/60.0",
-          "sales": "5.0/30.0",
-          "sales_currency": "$",
-          "sales_note": "价格不一致: 输入: 销售=5.0, 监控=15.0, 输出: 销售=30.0, 监控=60.0",
-          "source": "销售定价数据_20260805.json"
-        }
-      }
+      "_changed_fields": {}
     },
     {
       "id": "ernie-5.0",
@@ -2501,11 +2493,10 @@ const DATA = {
     "tokenflow_changes": [],
     "web_fetch_changes": [],
     "validation": {
-      "summary": "出厂价缺失 0 个, 出厂价不一致 3 个, 全渠道N/A 0 个",
+      "summary": "出厂价缺失 0 个, 出厂价不一致 2 个, 全渠道N/A 0 个",
       "oem_price_missing": [],
       "oem_price_mismatch": [
         "glm-5",
-        "gpt-5.5-o3",
         "gpt-5.6-luna"
       ],
       "all_na_alert": [],
