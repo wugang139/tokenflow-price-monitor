@@ -449,7 +449,7 @@ body {
 
 <script>
 const DATA = {
-  "update_time": "2026-08-12 06:00",
+  "update_time": "2026-08-16 05:59",
   "currency_note": "国际模型出厂价为USD/1M tokens，国内模型出厂价为CNY/1M tokens，汇率参考7.2",
   "hot_models": [
     {
@@ -516,6 +516,75 @@ const DATA = {
       "_changed_fields": {}
     },
     {
+      "id": "claude-opus-5",
+      "vendor": "Anthropic",
+      "vendor_cn": "Anthropic",
+      "region": "国际",
+      "open": "闭源",
+      "tier": "旗舰",
+      "input_usd": 5.0,
+      "output_usd": 25.0,
+      "cache_read_usd": 0.5,
+      "note": "Anthropic 7/24发布,同价$5/$25取代Opus 4.5和Opus 4.8。1M上下文+128K输出,thinking默认开启,AA Intelligence Index~61 #1。批量价$2.50/$12.50",
+      "platforms": {
+        "openrouter": {
+          "discount": 1.055,
+          "note": "+5.5%信用费"
+        },
+        "siliconflow": {
+          "discount": null,
+          "note": "/"
+        },
+        "smartapi": {
+          "discount": 0.62,
+          "note": ""
+        },
+        "算能": {
+          "discount": 0.62,
+          "note": ""
+        },
+        "阿里云百炼": {
+          "discount": null,
+          "note": "/"
+        },
+        "together-ai": {
+          "discount": null,
+          "note": "/"
+        },
+        "groq": {
+          "discount": null,
+          "note": "/"
+        },
+        "volcengine": {
+          "discount": null,
+          "note": "/"
+        },
+        "baidu-qianfan": {
+          "discount": null,
+          "note": "/"
+        },
+        "tencent-cloud-ti": {
+          "discount": null,
+          "note": "/"
+        },
+        "tokenflow": {
+          "discount": 0.65,
+          "note": ""
+        },
+        "tmax": {
+          "discount": null,
+          "note": "TMax未报价"
+        }
+      },
+      "_changed_fields": {
+        "is_new_addition": {
+          "monitor": "added this week",
+          "note": "本周新增 - Opus 4.5继任者"
+        }
+      },
+      "_is_new": true
+    },
+    {
       "id": "claude-haiku-4-5",
       "vendor": "Anthropic",
       "vendor_cn": "Anthropic",
@@ -579,20 +648,20 @@ const DATA = {
       "_changed_fields": {}
     },
     {
-      "id": "gpt-5.4",
+      "id": "gpt-5.6-terra",
       "vendor": "OpenAI",
       "vendor_cn": "OpenAI",
       "region": "国际",
       "open": "闭源",
-      "tier": "主力",
+      "tier": "旗舰",
       "input_usd": 2.5,
       "output_usd": 15.0,
       "cache_read_usd": 0.25,
-      "note": "",
+      "note": "GPT-5.6系列平衡型,7/9发布,标准价$2.50/$15。OpenRouter与OpenAI联合50% off促销(8月底前),促销价$1/$6。同价定位于GPT-5.6 Sol($5/$30)和Luna($0.2/$1.2)之间,1.05M上下文",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
-          "note": "+5.5%信用费"
+          "note": "+5.5%信用费 (50% off促销到8月底)"
         },
         "siliconflow": {
           "discount": null,
@@ -603,7 +672,7 @@ const DATA = {
           "note": ""
         },
         "算能": {
-          "discount": 0.65,
+          "discount": 0.62,
           "note": ""
         },
         "阿里云百炼": {
@@ -631,15 +700,21 @@ const DATA = {
           "note": "/"
         },
         "tokenflow": {
-          "discount": 0.65,
+          "discount": 0.53,
           "note": ""
         },
         "tmax": {
-          "discount": 0.583,
-          "note": "TMax USD报价, 基于出厂价换算"
+          "discount": null,
+          "note": "TMax未报价"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "is_new_addition": {
+          "monitor": "added this week",
+          "note": "本周新增 - GPT-5.4继任者"
+        }
+      },
+      "_is_new": true
     },
     {
       "id": "gpt-5-mini",
@@ -969,7 +1044,7 @@ const DATA = {
       "input_usd": 0.4167,
       "output_usd": 0.8333,
       "cache_read_usd": 0.003625,
-      "note": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-12/14-18)翻倍,尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
+      "note": "DeepSeek官方API ¥3/¥6($0.435/$0.87)。⚠️ 8/16 16:00 UTC 起实施峰谷定价: 峰时段USD $1.32/$3.96(约3倍涨价), 谷时段USD $0.66/$1.98; 峰时段UTC 01:00-04:00/06:00-10:00, 其余谷时段。生效后监控价将大幅上调, 客户报价需相应调整。",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -1035,7 +1110,7 @@ const DATA = {
       "input_usd": 0.14,
       "output_usd": 0.28,
       "cache_read_usd": 0.0028,
-      "note": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输出4元),尚未生效。8/6公告计划近期整体大幅涨价,具体方案待通知 8/6公告计划近期整体大幅涨价,具体方案待正式通知(当前价格未变)",
+      "note": "DeepSeek官方API ¥1/¥2($0.14/$0.28)。⚠️ 8/16 16:00 UTC 起实施峰谷定价: 峰时段USD $0.44/$1.32(约3-4倍涨价), 谷时段USD $0.22/$0.66; 峰时段UTC 01:00-04:00/06:00-10:00, 其余谷时段。生效后监控价将大幅上调, 客户报价需相应调整。",
       "platforms": {
         "openrouter": {
           "discount": 1.055,
@@ -1156,8 +1231,7 @@ const DATA = {
         "oem_price_verified": {
           "monitor": "4.0/18.0",
           "sales": "8.0/28.0",
-          "sales_currency": "¥",
-          "sales_note": "价格不一致: 输入: 销售=8.0, 监控=4.0, 输出: 销售=28.0, 监控=18.0",
+          "sales_note": "价格不一致: 输入: 供应商=8.0, 监控=4.0; 输出: 供应商=28.0, 监控=18.0",
           "source": "销售定价数据_20260805.json"
         }
       }
@@ -1614,7 +1688,7 @@ const DATA = {
           "note": "需确认"
         },
         "tokenflow": {
-          "discount": 0.73,
+          "discount": 0.65,
           "note": ""
         },
         "tmax": {
@@ -1811,7 +1885,14 @@ const DATA = {
           "note": "TMax未报价"
         }
       },
-      "_changed_fields": {}
+      "_changed_fields": {
+        "oem_price_verified": {
+          "monitor": "15.0/60.0",
+          "sales": "5.0/30.0",
+          "sales_note": "价格不一致: 输入: 供应商=5.0, 监控=15.0; 输出: 供应商=30.0, 监控=60.0",
+          "source": "销售定价数据_20260805.json"
+        }
+      }
     },
     {
       "id": "ernie-5.0",
@@ -2275,8 +2356,7 @@ const DATA = {
         "oem_price_verified": {
           "monitor": "0.2/1.2",
           "sales": "1.0/6.0",
-          "sales_currency": "$",
-          "sales_note": "价格不一致: 输入: 销售=1.0, 监控=0.2, 输出: 销售=6.0, 监控=1.2",
+          "sales_note": "价格不一致: 输入: 供应商=1.0, 监控=0.2; 输出: 供应商=6.0, 监控=1.2",
           "source": "销售定价数据_20260805.json"
         }
       }
@@ -2346,68 +2426,6 @@ const DATA = {
         }
       },
       "_changed_fields": {}
-    },
-    {
-      "id": "claude-opus-4-5",
-      "vendor": "Anthropic",
-      "vendor_cn": "Anthropic",
-      "region": "国际",
-      "tier": "旗舰",
-      "open": "闭源",
-      "input_usd": 5.0,
-      "output_usd": 25.0,
-      "platforms": {
-        "openrouter": {
-          "discount": null,
-          "note": ""
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": ""
-        },
-        "smartapi": {
-          "discount": null,
-          "note": ""
-        },
-        "算能": {
-          "discount": null,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": ""
-        },
-        "together-ai": {
-          "discount": null,
-          "note": ""
-        },
-        "groq": {
-          "discount": null,
-          "note": ""
-        },
-        "volcengine": {
-          "discount": null,
-          "note": ""
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": ""
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": ""
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": "TokenFlow销售定价"
-        },
-        "tmax": {
-          "discount": null,
-          "note": ""
-        }
-      },
-      "_changed_fields": {},
-      "source": "TokenFlow"
     }
   ],
   "platforms": [
@@ -2486,17 +2504,54 @@ const DATA = {
   ],
   "watch_list_models": [],
   "changes": {
-    "update_type": "每日价格更新",
-    "summary": "本次价格无变动。WebFetch核验DeepSeek/OpenAI/Anthropic/Google价格均无变化。",
+    "update_type": "每日价格更新 + DeepSeek 8/16 峰谷价预警",
+    "summary": "WebFetch 核验 DeepSeek V4 Pro/Flash 价格 8/16 16:00 UTC 起将实施峰谷定价(当前 USD V4 Pro $0.435/$0.87, V4 Flash $0.14/$0.28 暂未生效;生效后峰时段V4 Pro USD $1.32/$3.96, V4 Flash USD $0.44/$1.32, 约 3 倍涨价),已在两个模型 note 中预警。OpenAI GPT-5.6 / Anthropic Claude / Google Gemini / xAI Grok 价格均无变动。",
     "new_models": [],
     "changed_models": [],
-    "tokenflow_changes": [],
-    "web_fetch_changes": [],
+    "tokenflow_changes": [
+      {
+        "model": "gpt-5.6-terra",
+        "old": 0.65,
+        "new": 0.53
+      },
+      {
+        "model": "minimax-m3",
+        "old": 0.73,
+        "new": 0.65
+      }
+    ],
+    "web_fetch_changes": [
+      {
+        "model": "deepseek-v4-pro",
+        "type": "note",
+        "old": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-1...",
+        "new": "DeepSeek官方API ¥3/¥6($0.435/$0...."
+      },
+      {
+        "model": "deepseek-v4-flash",
+        "type": "note",
+        "old": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输...",
+        "new": "DeepSeek官方API ¥1/¥2($0.14/$0.2..."
+      }
+    ],
+    "note_updates": [
+      {
+        "model": "deepseek-v4-pro",
+        "type": "note预警更新",
+        "key_info": "8/16峰谷价预警"
+      },
+      {
+        "model": "deepseek-v4-flash",
+        "type": "note预警更新",
+        "key_info": "8/16峰谷价预警"
+      }
+    ],
     "validation": {
-      "summary": "出厂价缺失 0 个, 出厂价不一致 2 个, 全渠道N/A 0 个",
+      "summary": "出厂价缺失 0 个, 出厂价不一致 3 个, 全渠道N/A 0 个",
       "oem_price_missing": [],
       "oem_price_mismatch": [
         "glm-5",
+        "gpt-5.5-o3",
         "gpt-5.6-luna"
       ],
       "all_na_alert": [],
