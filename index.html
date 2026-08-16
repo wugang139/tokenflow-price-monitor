@@ -449,7 +449,7 @@ body {
 
 <script>
 const DATA = {
-  "update_time": "2026-08-16 05:59",
+  "update_time": "2026-08-17 00:22",
   "currency_note": "国际模型出厂价为USD/1M tokens，国内模型出厂价为CNY/1M tokens，汇率参考7.2",
   "hot_models": [
     {
@@ -2502,50 +2502,87 @@ const DATA = {
       "note": "渠道商报价(USD绝对金额), 按出厂价换算为折扣率; 国内模型按汇率7.2转CNY"
     }
   ],
-  "watch_list_models": [],
+  "watch_list_models": [
+    {
+      "id": "glm-5.3",
+      "vendor": "Zhipu",
+      "vendor_cn": "智谱",
+      "region": "国内",
+      "open": "分阶段开源",
+      "tier": "新版",
+      "input_cny": 8.0,
+      "output_cny": 28.0,
+      "cache_read_cny": 2.0,
+      "input_usd": 1.4,
+      "output_usd": 4.4,
+      "cache_read_usd": 0.26,
+      "note": "Z.ai 8/14发布,与GLM-5.2同基座(约743B)+大幅后训练,Terminal-Bench 3.0从4.6→28.3。定价与GLM-5.2同价$1.40/$4.40(¥8/¥28),多方来源一致(lobehub模型目录已录入CNY 8/28),官方按Token API分阶段开放中。权重约8/28放出。",
+      "platforms": {
+        "openrouter": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "siliconflow": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "smartapi": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "算能": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "阿里云百炼": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "together-ai": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "groq": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "volcengine": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "baidu-qianfan": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "tencent-cloud-ti": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "tokenflow": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        },
+        "tmax": {
+          "discount": null,
+          "note": "新发布,渠道未上架"
+        }
+      },
+      "_is_new": true,
+      "_added_to_watch": "2026-08-17",
+      "_auto_promote_date": "2026-08-23"
+    }
+  ],
   "changes": {
-    "update_type": "每日价格更新 + DeepSeek 8/16 峰谷价预警",
-    "summary": "WebFetch 核验 DeepSeek V4 Pro/Flash 价格 8/16 16:00 UTC 起将实施峰谷定价(当前 USD V4 Pro $0.435/$0.87, V4 Flash $0.14/$0.28 暂未生效;生效后峰时段V4 Pro USD $1.32/$3.96, V4 Flash USD $0.44/$1.32, 约 3 倍涨价),已在两个模型 note 中预警。OpenAI GPT-5.6 / Anthropic Claude / Google Gemini / xAI Grok 价格均无变动。",
+    "update_type": "人工核查补录:新模型发布监控盲区修复",
+    "summary": "刚哥核查发现两个新发布模型未被监控:GLM-5.3(智谱8/14发布,与5.2同价$1.40/$4.40)已纳入观察列表,8/23周更时评估纳入正式清单;MiniMax-H3(7/31发布,视频生成模型,按秒计费2K 0.8元/秒)因计费单位与Token监控体系不同,记录于watch_list.json待关注事项,未纳入价格表。原因为周更检索词仅覆盖调用量排行,新发布2天内未上榜的模型会被漏检,已在两个自动化中增补新模型发布监控检索词。",
     "new_models": [],
+    "watch_list_additions": [
+      {
+        "model": "glm-5.3",
+        "reason": "8/14发布,定价已双源验证,API分阶段开放中"
+      }
+    ],
     "changed_models": [],
-    "tokenflow_changes": [
-      {
-        "model": "gpt-5.6-terra",
-        "old": 0.65,
-        "new": 0.53
-      },
-      {
-        "model": "minimax-m3",
-        "old": 0.73,
-        "new": 0.65
-      }
-    ],
-    "web_fetch_changes": [
-      {
-        "model": "deepseek-v4-pro",
-        "type": "note",
-        "old": "75%折扣已永久化(原价1/4)。峰谷定价:高峰时段(9-1...",
-        "new": "DeepSeek官方API ¥3/¥6($0.435/$0...."
-      },
-      {
-        "model": "deepseek-v4-flash",
-        "type": "note",
-        "old": "峰谷定价:高峰时段(9-12/14-18)翻倍(输入2元/输...",
-        "new": "DeepSeek官方API ¥1/¥2($0.14/$0.2..."
-      }
-    ],
-    "note_updates": [
-      {
-        "model": "deepseek-v4-pro",
-        "type": "note预警更新",
-        "key_info": "8/16峰谷价预警"
-      },
-      {
-        "model": "deepseek-v4-flash",
-        "type": "note预警更新",
-        "key_info": "8/16峰谷价预警"
-      }
-    ],
     "validation": {
       "summary": "出厂价缺失 0 个, 出厂价不一致 3 个, 全渠道N/A 0 个",
       "oem_price_missing": [],
