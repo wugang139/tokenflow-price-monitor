@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" "black-translucent">
 <title>TokenFlow 热门模型价格监控</title>
 <style>
 :root {
@@ -28,6 +28,19 @@
   --changed-bg: rgba(248,81,73,0.08);
   --changed-border: rgba(248,81,73,0.35);
   --new-badge: #f85149;
+  /* Category colors */
+  --cat-coding: #58a6ff;
+  --cat-coding-bg: rgba(88,166,255,0.15);
+  --cat-video: #f778ba;
+  --cat-video-bg: rgba(247,120,186,0.18);
+  --cat-reasoning: #bc8cff;
+  --cat-reasoning-bg: rgba(188,140,255,0.15);
+  --cat-multimodal: #39d0d8;
+  --cat-multimodal-bg: rgba(57,208,216,0.15);
+  --cat-audio: #fb923c;
+  --cat-audio-bg: rgba(251,146,60,0.15);
+  --cat-open: #3fb950;
+  --cat-open-bg: rgba(63,185,80,0.15);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
@@ -101,6 +114,38 @@ body {
   background: var(--accent); color: #fff; border-color: var(--accent);
 }
 .tab .tab-count { font-size: 10px; opacity: 0.7; margin-left: 2px; }
+.tab.tab-coding.active { background: var(--cat-coding); border-color: var(--cat-coding); }
+.tab.tab-video.active { background: var(--cat-video); border-color: var(--cat-video); }
+
+/* Category explainer banner */
+.category-explainer {
+  margin: 6px 12px;
+  padding: 10px 12px;
+  background: rgba(88,166,255,0.06);
+  border: 1px dashed rgba(88,166,255,0.25);
+  border-radius: 10px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.category-explainer .ce-title {
+  font-size: 12px; font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.category-explainer .ce-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 6px;
+}
+.category-explainer .ce-sort {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(88,166,255,0.1);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.category-explainer .ce-sort b { color: var(--text-dim); font-weight: 600; }
 
 /* Section title */
 .section-title {
@@ -139,6 +184,14 @@ body {
   border-radius: 12px 12px 0 0;
 }
 
+/* Video card variant */
+.model-card.is-video {
+  border-color: rgba(247,120,186,0.25);
+}
+.model-card.is-video.is-new::before {
+  background: linear-gradient(90deg, var(--cat-video), var(--purple));
+}
+
 .mc-header {
   padding: 10px 14px;
   cursor: pointer;
@@ -147,8 +200,8 @@ body {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
 }
 .mc-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-.mc-left-top { display: flex; align-items: center; gap: 8px; }
-.mc-left-bottom { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mc-left-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mc-left-bottom { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 2px;}
 .vendor-badge {
   font-size: 10px; font-weight: 700;
   padding: 2px 6px; border-radius: 4px;
@@ -174,6 +227,22 @@ body {
   animation: blink 2s infinite;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+/* Category badges */
+.cat-badge {
+  font-size: 9px; font-weight: 700;
+  padding: 1px 6px; border-radius: 8px;
+  cursor: help;
+  display: inline-flex; align-items: center; gap: 2px;
+  white-space: nowrap;
+}
+.cat-badge.cat-coding { background: var(--cat-coding-bg); color: var(--cat-coding); border: 1px solid rgba(88,166,255,0.3); }
+.cat-badge.cat-video { background: var(--cat-video-bg); color: var(--cat-video); border: 1px solid rgba(247,120,186,0.3); }
+.cat-badge.cat-reasoning { background: var(--cat-reasoning-bg); color: var(--cat-reasoning); border: 1px solid rgba(188,140,255,0.3); }
+.cat-badge.cat-multimodal { background: var(--cat-multimodal-bg); color: var(--cat-multimodal); border: 1px solid rgba(57,208,216,0.3); }
+.cat-badge.cat-audio { background: var(--cat-audio-bg); color: var(--cat-audio); border: 1px solid rgba(251,146,60,0.3); }
+.cat-badge.cat-open { background: var(--cat-open-bg); color: var(--cat-open); border: 1px solid rgba(63,185,80,0.3); }
+
 .mc-right {
   display: flex; flex-direction: column; align-items: flex-end; gap: 1px;
 }
@@ -181,7 +250,7 @@ body {
   font-size: 15px; font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.price-unit { font-size: 10px; color: var(--text-muted); }
+.price-unit { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
 
 /* Changed price highlight */
 .price-main.changed {
@@ -243,6 +312,42 @@ body {
   border-top: 1px solid var(--border);
 }
 .model-card.expanded .mc-body { display: block; }
+
+/* Category reason block (inside expanded card) */
+.cat-reason {
+  margin: 8px 0 6px;
+  padding: 6px 10px;
+  background: rgba(88,166,255,0.05);
+  border-left: 2px solid var(--accent);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+.cat-reason .cr-label {
+  font-size: 10px; font-weight: 700;
+  color: var(--accent);
+  margin-right: 4px;
+}
+
+/* Video tier table */
+.video-tier-table {
+  width: 100%; margin-top: 6px;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.video-tier-table th {
+  text-align: left; font-weight: 600;
+  color: var(--text-dim); padding: 4px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+}
+.video-tier-table td {
+  padding: 4px;
+  border-bottom: 1px solid rgba(48,54,61,0.5);
+  font-variant-numeric: tabular-nums;
+}
+.video-tier-table tr:last-child td { border-bottom: none; }
 
 /* Price detail table */
 .price-table {
@@ -337,6 +442,8 @@ body {
 .v-Alibaba { background: rgba(255,125,0,0.15); color: var(--orange); }
 .v-ByteDance { background: rgba(255,45,85,0.15); color: #ff2d55; }
 .v-MiniMax { background: rgba(57,208,216,0.15); color: var(--teal); }
+.v-Tencent { background: rgba(35,188,238,0.2); color: #23bcee; }
+.v-Kuaishou { background: rgba(255,87,34,0.2); color: #ff5722; }
 
 /* Vendor colors - new */
 .v-Meta { background: rgba(8,131,230,0.2); color: #0883e6; }
@@ -346,6 +453,7 @@ body {
 .v-Baidu { background: rgba(37,99,235,0.2); color: #2563eb; }
 .v-iFlytek { background: rgba(234,88,12,0.2); color: #ea580c; }
 .v-Baichuan { background: rgba(220,38,38,0.2); color: #dc2626; }
+.v-Xiaomi { background: rgba(255,82,82,0.2); color: #ff5252; }
 
 /* Expand arrow */
 .expand-arrow {
@@ -401,6 +509,15 @@ body {
 }
 .watch-days .countdown { color: var(--accent); font-weight: 700; }
 .watch-days .auto-promote { color: var(--green); font-size: 9px; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.empty-state .emoji { font-size: 32px; opacity: 0.4; margin-bottom: 12px; }
 </style>
 </head>
 <body>
@@ -426,9 +543,13 @@ body {
   <div class="tab" data-filter="旗舰">旗舰</div>
   <div class="tab" data-filter="闭源">闭源</div>
   <div class="tab" data-filter="开源">开源</div>
+  <div class="tab tab-coding" data-filter="coding">💻 Coding</div>
+  <div class="tab tab-video" data-filter="video">🎬 视频</div>
   <div class="tab" data-filter="new">🆕 新增</div>
   <div class="tab" data-filter="watch">👁️ 待观察</div>
 </div>
+
+<div id="categoryExplainerContainer"></div>
 
 <div id="modelList"></div>
 
@@ -448,2154 +569,44 @@ body {
 </div>
 
 <script>
-const DATA = {
-  "update_time": "2026-08-17 00:22",
-  "currency_note": "国际模型出厂价为USD/1M tokens，国内模型出厂价为CNY/1M tokens，汇率参考7.2",
-  "hot_models": [
-    {
-      "id": "claude-sonnet-5",
-      "vendor": "Anthropic",
-      "vendor_cn": "Anthropic",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_usd": 2.0,
-      "output_usd": 10.0,
-      "cache_read_usd": 0.2,
-      "note": "官方标准价$3/$15, 限时活动价$2/$10至8.31。Opus 5已发布(同价$5/$25), Fable/Mythos 5 $10/$50",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": null,
-          "note": "/"
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "claude-opus-5",
-      "vendor": "Anthropic",
-      "vendor_cn": "Anthropic",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_usd": 5.0,
-      "output_usd": 25.0,
-      "cache_read_usd": 0.5,
-      "note": "Anthropic 7/24发布,同价$5/$25取代Opus 4.5和Opus 4.8。1M上下文+128K输出,thinking默认开启,AA Intelligence Index~61 #1。批量价$2.50/$12.50",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {
-        "is_new_addition": {
-          "monitor": "added this week",
-          "note": "本周新增 - Opus 4.5继任者"
-        }
-      },
-      "_is_new": true
-    },
-    {
-      "id": "claude-haiku-4-5",
-      "vendor": "Anthropic",
-      "vendor_cn": "Anthropic",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "轻量",
-      "input_usd": 1.0,
-      "output_usd": 5.0,
-      "cache_read_usd": 0.1,
-      "note": "Anthropic官方定价已确认$1/$5",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.55,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": 1.0,
-          "note": ""
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "gpt-5.6-terra",
-      "vendor": "OpenAI",
-      "vendor_cn": "OpenAI",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_usd": 2.5,
-      "output_usd": 15.0,
-      "cache_read_usd": 0.25,
-      "note": "GPT-5.6系列平衡型,7/9发布,标准价$2.50/$15。OpenRouter与OpenAI联合50% off促销(8月底前),促销价$1/$6。同价定位于GPT-5.6 Sol($5/$30)和Luna($0.2/$1.2)之间,1.05M上下文",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费 (50% off促销到8月底)"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.53,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {
-        "is_new_addition": {
-          "monitor": "added this week",
-          "note": "本周新增 - GPT-5.4继任者"
-        }
-      },
-      "_is_new": true
-    },
-    {
-      "id": "gpt-5-mini",
-      "vendor": "OpenAI",
-      "vendor_cn": "OpenAI",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "轻量",
-      "input_usd": 0.25,
-      "output_usd": 2.0,
-      "cache_read_usd": 0.075,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.5,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "gemini-3.1-pro-preview",
-      "vendor": "Google",
-      "vendor_cn": "Google",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_usd": 2.0,
-      "output_usd": 12.0,
-      "cache_read_usd": 0.2,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 0.803,
-          "note": "TMax USD报价, 基于出厂价换算"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "gemini-2.5-flash",
-      "vendor": "Google",
-      "vendor_cn": "Google",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "轻量",
-      "input_usd": 0.3,
-      "output_usd": 2.5,
-      "cache_read_usd": 0.03,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "gemini-3.5-flash",
-      "vendor": "Google",
-      "vendor_cn": "Google",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "中端",
-      "input_usd": 1.5,
-      "output_usd": 9.0,
-      "cache_read_usd": 0.15,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": null,
-          "note": "/"
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 0.803,
-          "note": "TMax USD报价, 基于出厂价换算"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "grok-4.5",
-      "vendor": "xAI",
-      "vendor_cn": "xAI",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_usd": 2.0,
-      "output_usd": 6.0,
-      "cache_read_usd": 0.3,
-      "note": "原厂$2/$6",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": null,
-          "note": "/"
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "deepseek-v4-pro",
-      "vendor": "DeepSeek",
-      "vendor_cn": "深度求索",
-      "region": "国内",
-      "open": "开源",
-      "tier": "旗舰",
-      "input_cny": 3.0,
-      "output_cny": 6.0,
-      "cache_read_cny": 0.025,
-      "input_usd": 0.4167,
-      "output_usd": 0.8333,
-      "cache_read_usd": 0.003625,
-      "note": "DeepSeek官方API ¥3/¥6($0.435/$0.87)。⚠️ 8/16 16:00 UTC 起实施峰谷定价: 峰时段USD $1.32/$3.96(约3倍涨价), 谷时段USD $0.66/$1.98; 峰时段UTC 01:00-04:00/06:00-10:00, 其余谷时段。生效后监控价将大幅上调, 客户报价需相应调整。",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": 0.7,
-          "note": "阿里云折扣0.5"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 1.0,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": 0.5,
-          "note": ""
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 5.0688,
-          "note": "TMax USD报价, 基于出厂价换算"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "deepseek-v4-flash",
-      "vendor": "DeepSeek",
-      "vendor_cn": "深度求索",
-      "region": "国内",
-      "open": "开源",
-      "tier": "轻量",
-      "input_cny": 1.0,
-      "output_cny": 2.0,
-      "cache_read_cny": 0.02,
-      "input_usd": 0.14,
-      "output_usd": 0.28,
-      "cache_read_usd": 0.0028,
-      "note": "DeepSeek官方API ¥1/¥2($0.14/$0.28)。⚠️ 8/16 16:00 UTC 起实施峰谷定价: 峰时段USD $0.44/$1.32(约3-4倍涨价), 谷时段USD $0.22/$0.66; 峰时段UTC 01:00-04:00/06:00-10:00, 其余谷时段。生效后监控价将大幅上调, 客户报价需相应调整。",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 1.2672,
-          "note": "TMax USD报价, 基于出厂价换算"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "glm-5",
-      "vendor": "Zhipu",
-      "vendor_cn": "智谱",
-      "region": "国内",
-      "open": "开源",
-      "tier": "主力",
-      "input_cny": 4.0,
-      "output_cny": 18.0,
-      "cache_read_cny": 1.0,
-      "input_usd": 1.0,
-      "output_usd": 3.2,
-      "cache_read_usd": 0.2,
-      "note": "分段计价0-32768/32769+",
-      "platforms": {
-        "openrouter": {
-          "discount": 0.6,
-          "note": "Z.ai渠道40%折扣"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.55,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.53,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {
-        "oem_price_verified": {
-          "monitor": "4.0/18.0",
-          "sales": "8.0/28.0",
-          "sales_note": "价格不一致: 输入: 供应商=8.0, 监控=4.0; 输出: 供应商=28.0, 监控=18.0",
-          "source": "销售定价数据_20260805.json"
-        }
-      }
-    },
-    {
-      "id": "glm-5.2",
-      "vendor": "Zhipu",
-      "vendor_cn": "智谱",
-      "region": "国内",
-      "open": "开源",
-      "tier": "新版",
-      "input_cny": 8.0,
-      "output_cny": 28.0,
-      "cache_read_cny": 2.0,
-      "input_usd": 1.4,
-      "output_usd": 4.4,
-      "cache_read_usd": 0.26,
-      "note": "Z.ai定价$1.40/$4.40。OpenRouter通过Z.ai渠道提供~15%折扣,实际约$1.19/$3.74",
-      "platforms": {
-        "openrouter": {
-          "discount": 0.85,
-          "note": "Z.ai渠道~15%折扣+OpenRouter费用(促销期已结束,比上午0.65估值更精确)"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.55,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.53,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 1.1838,
-          "note": "TMax USD报价, 基于出厂价换算; In/Out折扣有差异(1.2474 vs 1.1201)"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "kimi-k2.7-code",
-      "vendor": "MoonshotAI",
-      "vendor_cn": "月之暗面",
-      "region": "国内",
-      "open": "开源",
-      "tier": "编程",
-      "input_cny": 6.5,
-      "output_cny": 27.0,
-      "cache_read_cny": 1.3,
-      "input_usd": 0.95,
-      "output_usd": 4.0,
-      "cache_read_usd": 0.19,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.55,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.73,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 1.055,
-          "note": "TMax USD报价,基于出厂价换算; ±1%内对齐OpenRouter(1.055); In/Out折扣有差异(1.0418 vs 1.0560)"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "kimi-k3",
-      "vendor": "MoonshotAI",
-      "vendor_cn": "月之暗面",
-      "region": "国内",
-      "open": "开源",
-      "tier": "旗舰",
-      "input_cny": 20.0,
-      "output_cny": 100.0,
-      "cache_read_cny": 2.0,
-      "input_usd": 3.0,
-      "output_usd": 15.0,
-      "cache_read_usd": 0.3,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 1.0,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "qwen-3.7-max",
-      "vendor": "Alibaba",
-      "vendor_cn": "通义实验室",
-      "region": "国内",
-      "open": "开源",
-      "tier": "旗舰",
-      "input_cny": 12.0,
-      "output_cny": 36.0,
-      "cache_read_cny": 1.2,
-      "input_usd": 1.65,
-      "output_usd": 4.95,
-      "cache_read_usd": 0.165,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 0.89,
-          "note": "Qwen国际渠道折扣"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.55,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.53,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 1.485,
-          "note": "TMax USD报价, 基于出厂价换算"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "qwen-3.7-plus",
-      "vendor": "Alibaba",
-      "vendor_cn": "通义实验室",
-      "region": "国内",
-      "open": "开源",
-      "tier": "中端",
-      "input_cny": 2.0,
-      "output_cny": 8.0,
-      "cache_read_cny": 0.2,
-      "input_usd": 0.4,
-      "output_usd": 1.6,
-      "cache_read_usd": 0.04,
-      "note": "分段计价0-262144/262145+",
-      "platforms": {
-        "openrouter": {
-          "discount": 0.8,
-          "note": "Qwen国际渠道折扣"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": 1.4256,
-          "note": "TMax USD报价, 基于出厂价换算"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "doubao-seed-2.0-pro",
-      "vendor": "ByteDance",
-      "vendor_cn": "字节跳动",
-      "region": "国内",
-      "open": "闭源",
-      "tier": "主力",
-      "input_cny": 3.2,
-      "output_cny": 16.0,
-      "cache_read_cny": 1.92,
-      "input_usd": 0.4444,
-      "output_usd": 2.2222,
-      "cache_read_usd": 0.27,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.72,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "minimax-m3",
-      "vendor": "MiniMax",
-      "vendor_cn": "MiniMax",
-      "region": "国内",
-      "open": "开源",
-      "tier": "主力",
-      "input_cny": 2.1,
-      "output_cny": 8.4,
-      "cache_read_cny": 0.42,
-      "input_usd": 0.3,
-      "output_usd": 1.2,
-      "cache_read_usd": 0.06,
-      "note": "分段计价0-524288/524289+，永久5折优惠",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.55,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "llama-4-maverick",
-      "vendor": "Meta",
-      "vendor_cn": "Meta",
-      "region": "国际",
-      "open": "开源",
-      "tier": "旗舰",
-      "input_usd": 0.2,
-      "output_usd": 0.6,
-      "cache_read_usd": 0.02,
-      "note": "Meta开源旗舰，MoE架构",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": 0.6,
-          "note": ""
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": 0.8,
-          "note": "Meta官方合作平台"
-        },
-        "groq": {
-          "discount": 0.7,
-          "note": "极速推理"
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "mistral-large-3",
-      "vendor": "Mistral",
-      "vendor_cn": "Mistral AI",
-      "region": "国际",
-      "open": "开源",
-      "tier": "主力",
-      "input_usd": 0.5,
-      "output_usd": 1.5,
-      "cache_read_usd": 0.05,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.6,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": 0.85,
-          "note": ""
-        },
-        "groq": {
-          "discount": 0.75,
-          "note": ""
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "gpt-5.5-o3",
-      "vendor": "OpenAI",
-      "vendor_cn": "OpenAI",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "高端",
-      "input_usd": 15.0,
-      "output_usd": 60.0,
-      "cache_read_usd": 1.5,
-      "note": "推理模型，深度思考场景",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.5,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {
-        "oem_price_verified": {
-          "monitor": "15.0/60.0",
-          "sales": "5.0/30.0",
-          "sales_note": "价格不一致: 输入: 供应商=5.0, 监控=15.0; 输出: 供应商=30.0, 监控=60.0",
-          "source": "销售定价数据_20260805.json"
-        }
-      }
-    },
-    {
-      "id": "ernie-5.0",
-      "vendor": "Baidu",
-      "vendor_cn": "百度",
-      "region": "国内",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_cny": 6.0,
-      "output_cny": 24.0,
-      "cache_read_cny": 0.6,
-      "input_usd": 1.4,
-      "output_usd": 5.6,
-      "cache_read_usd": 0.14,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.55,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "spark-5.0-max",
-      "vendor": "iFlytek",
-      "vendor_cn": "科大讯飞",
-      "region": "国内",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_cny": 12.0,
-      "output_cny": 48.0,
-      "cache_read_cny": 1.2,
-      "input_usd": 1.67,
-      "output_usd": 6.67,
-      "cache_read_usd": 0.17,
-      "note": "多模态能力强，语音场景领先",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.6,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "doubao-seed-2.0-lite",
-      "vendor": "ByteDance",
-      "vendor_cn": "字节跳动",
-      "region": "国内",
-      "open": "闭源",
-      "tier": "轻量",
-      "input_cny": 0.6,
-      "output_cny": 3.6,
-      "cache_read_cny": 0.24,
-      "input_usd": 0.0833,
-      "output_usd": 0.5,
-      "cache_read_usd": 0.03,
-      "note": "",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.72,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "qwen-3.7-flash",
-      "vendor": "Alibaba",
-      "vendor_cn": "通义实验室",
-      "region": "国内",
-      "open": "开源",
-      "tier": "轻量",
-      "input_cny": 0.2,
-      "output_cny": 0.8,
-      "cache_read_cny": 0.02,
-      "input_usd": 0.03,
-      "output_usd": 0.13,
-      "cache_read_usd": 0.006,
-      "note": "分段计价≤32K/32K-256K/256K-1M，表中为≤32K价格",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": 0.6,
-          "note": ""
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "together-ai": {
-          "discount": 0.8,
-          "note": ""
-        },
-        "groq": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {},
-      "cache_write_cny": 0.25
-    },
-    {
-      "id": "mimo-v2.5",
-      "vendor": "Xiaomi",
-      "vendor_cn": "小米",
-      "region": "国内",
-      "open": "开源",
-      "tier": "主力",
-      "input_cny": 0.8,
-      "output_cny": 1.6,
-      "cache_read_cny": 0.08,
-      "input_usd": 0.11,
-      "output_usd": 0.22,
-      "cache_read_usd": 0.011,
-      "note": "全球调用量第一，单周10.5万亿Token。MoE架构，1M上下文，全模态理解。出厂价待官方确认（参考OpenRouter数据）",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": 0.7,
-          "note": ""
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": 0.8,
-          "note": "开源模型优化推理"
-        },
-        "groq": {
-          "discount": 0.7,
-          "note": "极速推理"
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "hy3",
-      "vendor": "Tencent",
-      "vendor_cn": "腾讯",
-      "region": "国内",
-      "open": "闭源",
-      "tier": "主力",
-      "input_cny": 1.0,
-      "output_cny": 4.0,
-      "cache_read_cny": 0.1,
-      "input_usd": 0.13,
-      "output_usd": 0.53,
-      "cache_read_usd": 0.013,
-      "note": "腾讯混元第三代，全球调用量第三，环比暴涨999%。出厂价待官方确认（参考OpenRouter数据）",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "火山引擎": {
-          "discount": null,
-          "note": "/"
-        },
-        "百度千帆": {
-          "discount": null,
-          "note": "/"
-        },
-        "腾讯云TI": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    },
-    {
-      "id": "gpt-5.6-luna",
-      "vendor": "OpenAI",
-      "vendor_cn": "OpenAI",
-      "region": "国际",
-      "open": "闭源",
-      "tier": "轻量",
-      "input_usd": 0.2,
-      "output_usd": 1.2,
-      "cache_read_usd": 0.02,
-      "note": "OpenAI最便宜模型,官方定价$0.2/$1.2,1.05M上下文,直接竞争DeepSeek V4 Flash",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "/"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "groq": {
-          "discount": null,
-          "note": "不支持闭源"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": 0.65,
-          "note": ""
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {
-        "oem_price_verified": {
-          "monitor": "0.2/1.2",
-          "sales": "1.0/6.0",
-          "sales_note": "价格不一致: 输入: 供应商=1.0, 监控=0.2; 输出: 供应商=6.0, 监控=1.2",
-          "source": "销售定价数据_20260805.json"
-        }
-      }
-    },
-    {
-      "id": "qwen-3.8-max",
-      "vendor": "Alibaba",
-      "vendor_cn": "通义实验室",
-      "region": "国内",
-      "open": "闭源",
-      "tier": "旗舰",
-      "input_cny": 12.0,
-      "output_cny": 36.0,
-      "cache_read_cny": 1.5,
-      "input_usd": 2.0,
-      "output_usd": 6.0,
-      "cache_read_usd": 0.25,
-      "note": "Qwen3.7-Max继任者,8/3发布。2.4T参数,95B激活,1M上下文。国内¥12/¥36(同3.7-Max),国际$2/$6。PaperBench 93.0分超Fable 5。下周开源权重",
-      "platforms": {
-        "openrouter": {
-          "discount": 1.055,
-          "note": "+5.5%信用费"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "/"
-        },
-        "smartapi": {
-          "discount": 0.62,
-          "note": ""
-        },
-        "算能": {
-          "discount": null,
-          "note": "需确认"
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "原厂平台"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "/"
-        },
-        "groq": {
-          "discount": null,
-          "note": "/"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "/"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "/"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "/"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "TMax未报价"
-        }
-      },
-      "_changed_fields": {}
-    }
-  ],
-  "platforms": [
-    {
-      "id": "openrouter",
-      "name": "OpenRouter",
-      "type": "国际聚合",
-      "note": "全球最大聚合平台，800万用户，+5%服务费"
-    },
-    {
-      "id": "siliconflow",
-      "name": "硅基流动",
-      "type": "国内聚合",
-      "note": "170+开源模型，不支持闭源"
-    },
-    {
-      "id": "smartapi",
-      "name": "SmartAPI",
-      "type": "中转站",
-      "note": "TokenFlow主渠道，折扣0.62"
-    },
-    {
-      "id": "算能",
-      "name": "算能",
-      "type": "中转站",
-      "note": "备选渠道，折扣因模型而异"
-    },
-    {
-      "id": "阿里云百炼",
-      "name": "阿里云百炼",
-      "type": "大厂MaaS",
-      "note": "原厂直供，部分模型有折扣"
-    },
-    {
-      "id": "together-ai",
-      "name": "Together AI",
-      "type": "国际聚合",
-      "note": "开源模型优化推理，价格有竞争力"
-    },
-    {
-      "id": "groq",
-      "name": "Groq",
-      "type": "国际聚合",
-      "note": "LPU极速推理，数百tokens/s"
-    },
-    {
-      "id": "volcengine",
-      "name": "火山引擎",
-      "type": "大厂MaaS",
-      "note": "字节跳动旗下，豆包原厂平台"
-    },
-    {
-      "id": "baidu-qianfan",
-      "name": "百度千帆",
-      "type": "大厂MaaS",
-      "note": "百度旗下，文心原厂平台"
-    },
-    {
-      "id": "tencent-cloud-ti",
-      "name": "腾讯云TI",
-      "type": "大厂MaaS",
-      "note": "腾讯旗下，混元原厂平台"
-    },
-    {
-      "id": "tokenflow",
-      "name": "TokenFlow",
-      "type": "自有平台",
-      "note": "1+N机制，最低折扣+0.03"
-    },
-    {
-      "id": "tmax",
-      "name": "TMax",
-      "type": "中转站",
-      "note": "渠道商报价(USD绝对金额), 按出厂价换算为折扣率; 国内模型按汇率7.2转CNY"
-    }
-  ],
-  "watch_list_models": [
-    {
-      "id": "glm-5.3",
-      "vendor": "Zhipu",
-      "vendor_cn": "智谱",
-      "region": "国内",
-      "open": "分阶段开源",
-      "tier": "新版",
-      "input_cny": 8.0,
-      "output_cny": 28.0,
-      "cache_read_cny": 2.0,
-      "input_usd": 1.4,
-      "output_usd": 4.4,
-      "cache_read_usd": 0.26,
-      "note": "Z.ai 8/14发布,与GLM-5.2同基座(约743B)+大幅后训练,Terminal-Bench 3.0从4.6→28.3。定价与GLM-5.2同价$1.40/$4.40(¥8/¥28),多方来源一致(lobehub模型目录已录入CNY 8/28),官方按Token API分阶段开放中。权重约8/28放出。",
-      "platforms": {
-        "openrouter": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "siliconflow": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "smartapi": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "算能": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "阿里云百炼": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "together-ai": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "groq": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "volcengine": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "baidu-qianfan": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "tencent-cloud-ti": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "tokenflow": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        },
-        "tmax": {
-          "discount": null,
-          "note": "新发布,渠道未上架"
-        }
-      },
-      "_is_new": true,
-      "_added_to_watch": "2026-08-17",
-      "_auto_promote_date": "2026-08-23"
-    }
-  ],
-  "changes": {
-    "update_type": "人工核查补录:新模型发布监控盲区修复",
-    "summary": "刚哥核查发现两个新发布模型未被监控:GLM-5.3(智谱8/14发布,与5.2同价$1.40/$4.40)已纳入观察列表,8/23周更时评估纳入正式清单;MiniMax-H3(7/31发布,视频生成模型,按秒计费2K 0.8元/秒)因计费单位与Token监控体系不同,记录于watch_list.json待关注事项,未纳入价格表。原因为周更检索词仅覆盖调用量排行,新发布2天内未上榜的模型会被漏检,已在两个自动化中增补新模型发布监控检索词。",
-    "new_models": [],
-    "watch_list_additions": [
-      {
-        "model": "glm-5.3",
-        "reason": "8/14发布,定价已双源验证,API分阶段开放中"
-      }
-    ],
-    "changed_models": [],
-    "validation": {
-      "summary": "出厂价缺失 0 个, 出厂价不一致 3 个, 全渠道N/A 0 个",
-      "oem_price_missing": [],
-      "oem_price_mismatch": [
-        "glm-5",
-        "gpt-5.5-o3",
-        "gpt-5.6-luna"
-      ],
-      "all_na_alert": [],
-      "tmax_auto_fill": []
-    }
-  }
+const DATA = {"update_time": "2026-08-17 01:05", "currency_note": "国际模型出厂价为USD/1M tokens，国内模型出厂价为CNY/1M tokens，汇率参考7.2", "hot_models": [{"id": "claude-sonnet-5", "vendor": "Anthropic", "vendor_cn": "Anthropic", "region": "国际", "open": "闭源", "tier": "旗舰", "input_usd": 2.0, "output_usd": 10.0, "cache_read_usd": 0.2, "note": "官方标准价$3/$15, 限时活动价$2/$10至8.31。Opus 5已发布(同价$5/$25), Fable/Mythos 5 $10/$50", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": null, "note": "/"}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "coding"], "category_reason": "Anthropic Sonnet 系列官方定位为编程主力（SWE-bench 与终端任务表现接近 Opus，性价比首选）", "primary_label": "coding"}, {"id": "claude-opus-5", "vendor": "Anthropic", "vendor_cn": "Anthropic", "region": "国际", "open": "闭源", "tier": "旗舰", "input_usd": 5.0, "output_usd": 25.0, "cache_read_usd": 0.5, "note": "Anthropic 7/24发布,同价$5/$25取代Opus 4.5和Opus 4.8。1M上下文+128K输出,thinking默认开启,AA Intelligence Index~61 #1。批量价$2.50/$12.50", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.62, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {"is_new_addition": {"monitor": "added this week", "note": "本周新增 - Opus 4.5继任者"}}, "_is_new": true, "categories": ["text", "coding", "reasoning"], "category_reason": "Anthropic 旗舰：AA Intelligence Index ~61 居首，深度推理与复杂代码生成双强", "primary_label": "reasoning"}, {"id": "claude-haiku-4-5", "vendor": "Anthropic", "vendor_cn": "Anthropic", "region": "国际", "open": "闭源", "tier": "轻量", "input_usd": 1.0, "output_usd": 5.0, "cache_read_usd": 0.1, "note": "Anthropic官方定价已确认$1/$5", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.55, "note": ""}, "阿里云百炼": {"discount": 1.0, "note": ""}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text"], "category_reason": "Anthropic 轻量系列，定位日常对话/批量处理", "primary_label": "text"}, {"id": "gpt-5.6-terra", "vendor": "OpenAI", "vendor_cn": "OpenAI", "region": "国际", "open": "闭源", "tier": "旗舰", "input_usd": 2.5, "output_usd": 15.0, "cache_read_usd": 0.25, "note": "GPT-5.6系列平衡型,7/9发布,标准价$2.50/$15。OpenRouter与OpenAI联合50% off促销(8月底前),促销价$1/$6。同价定位于GPT-5.6 Sol($5/$30)和Luna($0.2/$1.2)之间,1.05M上下文", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费 (50% off促销到8月底)"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.62, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.53, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {"is_new_addition": {"monitor": "added this week", "note": "本周新增 - GPT-5.4继任者"}}, "_is_new": true, "categories": ["text", "multimodal"], "category_reason": "GPT-5.6 系列平衡型：原生多模态(文/图/音/视频理解)，1.05M 上下文", "primary_label": "multimodal"}, {"id": "gpt-5-mini", "vendor": "OpenAI", "vendor_cn": "OpenAI", "region": "国际", "open": "闭源", "tier": "轻量", "input_usd": 0.25, "output_usd": 2.0, "cache_read_usd": 0.075, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.5, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "coding"], "category_reason": "OpenAI 经济档：$0.25/$2 价位段编程使用量第一梯队(SWE-bench Verified 高分)", "primary_label": "coding"}, {"id": "gemini-3.1-pro-preview", "vendor": "Google", "vendor_cn": "Google", "region": "国际", "open": "闭源", "tier": "旗舰", "input_usd": 2.0, "output_usd": 12.0, "cache_read_usd": 0.2, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.7, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": 0.803, "note": "TMax USD报价, 基于出厂价换算"}}, "_changed_fields": {}, "categories": ["text", "multimodal", "reasoning"], "category_reason": "Gemini 3 Pro 原生多模态+1M+上下文，逻辑推理基准顶尖", "primary_label": "multimodal"}, {"id": "gemini-2.5-flash", "vendor": "Google", "vendor_cn": "Google", "region": "国际", "open": "闭源", "tier": "轻量", "input_usd": 0.3, "output_usd": 2.5, "cache_read_usd": 0.03, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.7, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "multimodal"], "category_reason": "Gemini 轻量档多模态，主流 Agent 应用首选之一", "primary_label": "multimodal"}, {"id": "gemini-3.5-flash", "vendor": "Google", "vendor_cn": "Google", "region": "国际", "open": "闭源", "tier": "中端", "input_usd": 1.5, "output_usd": 9.0, "cache_read_usd": 0.15, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": null, "note": "/"}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": 0.803, "note": "TMax USD报价, 基于出厂价换算"}}, "_changed_fields": {}, "categories": ["text", "multimodal"], "category_reason": "Gemini 3.5 平衡档，原生音/图/视频理解", "primary_label": "multimodal"}, {"id": "grok-4.5", "vendor": "xAI", "vendor_cn": "xAI", "region": "国际", "open": "闭源", "tier": "旗舰", "input_usd": 2.0, "output_usd": 6.0, "cache_read_usd": 0.3, "note": "原厂$2/$6", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": null, "note": "/"}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "reasoning"], "category_reason": "xAI 旗舰：X 平台实时数据，推理增强(thinking mode)", "primary_label": "reasoning"}, {"id": "deepseek-v4-pro", "vendor": "DeepSeek", "vendor_cn": "深度求索", "region": "国内", "open": "开源", "tier": "旗舰", "input_cny": 3.0, "output_cny": 6.0, "cache_read_cny": 0.025, "input_usd": 0.4167, "output_usd": 0.8333, "cache_read_usd": 0.003625, "note": "DeepSeek官方API ¥3/¥6($0.435/$0.87)。⚠️ 8/16 16:00 UTC 起实施峰谷定价: 峰时段USD $1.32/$3.96(约3倍涨价), 谷时段USD $0.66/$1.98; 峰时段UTC 01:00-04:00/06:00-10:00, 其余谷时段。生效后监控价将大幅上调, 客户报价需相应调整。", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": 0.7, "note": "阿里云折扣0.5"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 1.0, "note": ""}, "阿里云百炼": {"discount": 0.5, "note": ""}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": 5.0688, "note": "TMax USD报价, 基于出厂价换算"}}, "_changed_fields": {}, "categories": ["text", "coding", "reasoning"], "category_reason": "DeepSeek V4 旗舰：开源第一阵营，代码与推理双线领先(SWE-bench/AIME 全榜)", "primary_label": "coding"}, {"id": "deepseek-v4-flash", "vendor": "DeepSeek", "vendor_cn": "深度求索", "region": "国内", "open": "开源", "tier": "轻量", "input_cny": 1.0, "output_cny": 2.0, "cache_read_cny": 0.02, "input_usd": 0.14, "output_usd": 0.28, "cache_read_usd": 0.0028, "note": "DeepSeek官方API ¥1/¥2($0.14/$0.28)。⚠️ 8/16 16:00 UTC 起实施峰谷定价: 峰时段USD $0.44/$1.32(约3-4倍涨价), 谷时段USD $0.22/$0.66; 峰时段UTC 01:00-04:00/06:00-10:00, 其余谷时段。生效后监控价将大幅上调, 客户报价需相应调整。", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": 0.7, "note": ""}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.7, "note": ""}, "阿里云百炼": {"discount": 0.7, "note": ""}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": 1.2672, "note": "TMax USD报价, 基于出厂价换算"}}, "_changed_fields": {}, "categories": ["text", "coding"], "category_reason": "DeepSeek 轻量档：¥1/¥2 极致性价比，代码任务主力推荐", "primary_label": "coding"}, {"id": "glm-5", "vendor": "Zhipu", "vendor_cn": "智谱", "region": "国内", "open": "开源", "tier": "主力", "input_cny": 4.0, "output_cny": 18.0, "cache_read_cny": 1.0, "input_usd": 1.0, "output_usd": 3.2, "cache_read_usd": 0.2, "note": "分段计价0-32768/32769+", "platforms": {"openrouter": {"discount": 0.6, "note": "Z.ai渠道40%折扣"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.55, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.53, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {"oem_price_verified": {"monitor": "4.0/18.0", "sales": "8.0/28.0", "sales_note": "价格不一致: 输入: 供应商=8.0, 监控=4.0; 输出: 供应商=28.0, 监控=18.0", "source": "销售定价数据_20260805.json"}}, "categories": ["text", "coding", "open-source"], "category_reason": "智谱 GLM-5：基座开源，分段计价(0-32768/32769+)，代码任务水平接近旗舰", "primary_label": "coding"}, {"id": "glm-5.2", "vendor": "Zhipu", "vendor_cn": "智谱", "region": "国内", "open": "开源", "tier": "新版", "input_cny": 8.0, "output_cny": 28.0, "cache_read_cny": 2.0, "input_usd": 1.4, "output_usd": 4.4, "cache_read_usd": 0.26, "note": "Z.ai定价$1.40/$4.40。OpenRouter通过Z.ai渠道提供~15%折扣,实际约$1.19/$3.74", "platforms": {"openrouter": {"discount": 0.85, "note": "Z.ai渠道~15%折扣+OpenRouter费用(促销期已结束,比上午0.65估值更精确)"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.55, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.53, "note": ""}, "tmax": {"discount": 1.1838, "note": "TMax USD报价, 基于出厂价换算; In/Out折扣有差异(1.2474 vs 1.1201)"}}, "_changed_fields": {}, "categories": ["text", "coding", "open-source"], "category_reason": "GLM-5.2 新版后训练加强：Terminal-Bench 大幅跃升，编程/Agent 优先", "primary_label": "coding"}, {"id": "kimi-k2.7-code", "vendor": "MoonshotAI", "vendor_cn": "月之暗面", "region": "国内", "open": "开源", "tier": "编程", "input_cny": 6.5, "output_cny": 27.0, "cache_read_cny": 1.3, "input_usd": 0.95, "output_usd": 4.0, "cache_read_usd": 0.19, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.55, "note": ""}, "阿里云百炼": {"discount": 0.7, "note": ""}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.73, "note": ""}, "tmax": {"discount": 1.055, "note": "TMax USD报价,基于出厂价换算; ±1%内对齐OpenRouter(1.055); In/Out折扣有差异(1.0418 vs 1.0560)"}}, "_changed_fields": {}, "categories": ["text", "coding", "open-source"], "category_reason": "Moonshot 编程专用：tier 标注「编程」，SWE-bench/OpenRouter 代码任务主力", "primary_label": "coding"}, {"id": "kimi-k3", "vendor": "MoonshotAI", "vendor_cn": "月之暗面", "region": "国内", "open": "开源", "tier": "旗舰", "input_cny": 20.0, "output_cny": 100.0, "cache_read_cny": 2.0, "input_usd": 3.0, "output_usd": 15.0, "cache_read_usd": 0.3, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 1.0, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "reasoning"], "category_reason": "Kimi K3 长上下文旗舰：1M+ context 深度阅读与推理", "primary_label": "reasoning"}, {"id": "qwen-3.7-max", "vendor": "Alibaba", "vendor_cn": "通义实验室", "region": "国内", "open": "开源", "tier": "旗舰", "input_cny": 12.0, "output_cny": 36.0, "cache_read_cny": 1.2, "input_usd": 1.65, "output_usd": 4.95, "cache_read_usd": 0.165, "note": "", "platforms": {"openrouter": {"discount": 0.89, "note": "Qwen国际渠道折扣"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.55, "note": ""}, "阿里云百炼": {"discount": null, "note": "原厂平台"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.53, "note": ""}, "tmax": {"discount": 1.485, "note": "TMax USD报价, 基于出厂价换算"}}, "_changed_fields": {}, "categories": ["text", "coding", "open-source"], "category_reason": "Qwen 旗舰开源：2.4T参数 MoE 激活 95B，SWE-bench 与 PaperBench 顶尖", "primary_label": "coding"}, {"id": "qwen-3.7-plus", "vendor": "Alibaba", "vendor_cn": "通义实验室", "region": "国内", "open": "开源", "tier": "中端", "input_cny": 2.0, "output_cny": 8.0, "cache_read_cny": 0.2, "input_usd": 0.4, "output_usd": 1.6, "cache_read_usd": 0.04, "note": "分段计价0-262144/262145+", "platforms": {"openrouter": {"discount": 0.8, "note": "Qwen国际渠道折扣"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.65, "note": ""}, "阿里云百炼": {"discount": null, "note": "原厂平台"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": 1.4256, "note": "TMax USD报价, 基于出厂价换算"}}, "_changed_fields": {}, "categories": ["text", "coding"], "category_reason": "Qwen 平衡档：分段计价(0-262144/262145+)，代码任务性价比高", "primary_label": "coding"}, {"id": "doubao-seed-2.0-pro", "vendor": "ByteDance", "vendor_cn": "字节跳动", "region": "国内", "open": "闭源", "tier": "主力", "input_cny": 3.2, "output_cny": 16.0, "cache_read_cny": 1.92, "input_usd": 0.4444, "output_usd": 2.2222, "cache_read_usd": 0.27, "note": "", "platforms": {"openrouter": {"discount": null, "note": "未上架"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.72, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "原厂平台"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "multimodal"], "category_reason": "豆包 Seed 2.0 Pro：字节主力多模态模型(图文音视频理解)", "primary_label": "multimodal"}, {"id": "minimax-m3", "vendor": "MiniMax", "vendor_cn": "MiniMax", "region": "国内", "open": "开源", "tier": "主力", "input_cny": 2.1, "output_cny": 8.4, "cache_read_cny": 0.42, "input_usd": 0.3, "output_usd": 1.2, "cache_read_usd": 0.06, "note": "分段计价0-524288/524289+，永久5折优惠", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.55, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "需确认"}, "baidu-qianfan": {"discount": null, "note": "需确认"}, "tencent-cloud-ti": {"discount": null, "note": "需确认"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "open-source"], "category_reason": "MiniMax-M3：MoE 1M 上下文全模态理解，永久 5 折优惠", "primary_label": "text"}, {"id": "llama-4-maverick", "vendor": "Meta", "vendor_cn": "Meta", "region": "国际", "open": "开源", "tier": "旗舰", "input_usd": 0.2, "output_usd": 0.6, "cache_read_usd": 0.02, "note": "Meta开源旗舰，MoE架构", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": 0.6, "note": ""}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.65, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": 0.8, "note": "Meta官方合作平台"}, "groq": {"discount": 0.7, "note": "极速推理"}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "open-source"], "category_reason": "Meta Llama 4 旗舰：MoE 架构，开源协议可商用", "primary_label": "text"}, {"id": "mistral-large-3", "vendor": "Mistral", "vendor_cn": "Mistral AI", "region": "国际", "open": "开源", "tier": "主力", "input_usd": 0.5, "output_usd": 1.5, "cache_read_usd": 0.05, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": 0.65, "note": ""}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.6, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": 0.85, "note": ""}, "groq": {"discount": 0.75, "note": ""}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "open-source"], "category_reason": "Mistral Large 3 开源旗舰：欧洲合规首选", "primary_label": "text"}, {"id": "gpt-5.5-o3", "vendor": "OpenAI", "vendor_cn": "OpenAI", "region": "国际", "open": "闭源", "tier": "高端", "input_usd": 15.0, "output_usd": 60.0, "cache_read_usd": 1.5, "note": "推理模型，深度思考场景", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.5, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {"oem_price_verified": {"monitor": "15.0/60.0", "sales": "5.0/30.0", "sales_note": "价格不一致: 输入: 供应商=5.0, 监控=15.0; 输出: 供应商=30.0, 监控=60.0", "source": "销售定价数据_20260805.json"}}, "categories": ["text", "reasoning"], "category_reason": "OpenAI 推理模型：thinking 默认开启，专攻数学/科学/工程深度思考", "primary_label": "reasoning"}, {"id": "ernie-5.0", "vendor": "Baidu", "vendor_cn": "百度", "region": "国内", "open": "闭源", "tier": "旗舰", "input_cny": 6.0, "output_cny": 24.0, "cache_read_cny": 0.6, "input_usd": 1.4, "output_usd": 5.6, "cache_read_usd": 0.14, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.55, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "原厂平台"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "multimodal"], "category_reason": "百度文心 5.0：闭源旗舰，多模态理解", "primary_label": "multimodal"}, {"id": "spark-5.0-max", "vendor": "iFlytek", "vendor_cn": "科大讯飞", "region": "国内", "open": "闭源", "tier": "旗舰", "input_cny": 12.0, "output_cny": 48.0, "cache_read_cny": 1.2, "input_usd": 1.67, "output_usd": 6.67, "cache_read_usd": 0.17, "note": "多模态能力强，语音场景领先", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.6, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "audio"], "category_reason": "讯飞星火 5.0 Max：语音场景领先(国产语音 SOTA)，多模态强", "primary_label": "audio"}, {"id": "doubao-seed-2.0-lite", "vendor": "ByteDance", "vendor_cn": "字节跳动", "region": "国内", "open": "闭源", "tier": "轻量", "input_cny": 0.6, "output_cny": 3.6, "cache_read_cny": 0.24, "input_usd": 0.0833, "output_usd": 0.5, "cache_read_usd": 0.03, "note": "", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.72, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "火山引擎": {"discount": null, "note": "原厂平台"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text"], "category_reason": "豆包轻量档：¥0.6/¥3.6，字节火山方舟原厂低价", "primary_label": "text"}, {"id": "qwen-3.7-flash", "vendor": "Alibaba", "vendor_cn": "通义实验室", "region": "国内", "open": "开源", "tier": "轻量", "input_cny": 0.2, "output_cny": 0.8, "cache_read_cny": 0.02, "input_usd": 0.03, "output_usd": 0.13, "cache_read_usd": 0.006, "note": "分段计价≤32K/32K-256K/256K-1M，表中为≤32K价格", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": 0.6, "note": ""}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.65, "note": ""}, "阿里云百炼": {"discount": null, "note": "原厂平台"}, "together-ai": {"discount": 0.8, "note": ""}, "groq": {"discount": 0.7, "note": ""}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "cache_write_cny": 0.25, "categories": ["text", "open-source"], "category_reason": "Qwen 轻量开源：分段 0-32K 极低价，三档长文支持", "primary_label": "text"}, {"id": "mimo-v2.5", "vendor": "Xiaomi", "vendor_cn": "小米", "region": "国内", "open": "开源", "tier": "主力", "input_cny": 0.8, "output_cny": 1.6, "cache_read_cny": 0.08, "input_usd": 0.11, "output_usd": 0.22, "cache_read_usd": 0.011, "note": "全球调用量第一，单周10.5万亿Token。MoE架构，1M上下文，全模态理解。出厂价待官方确认（参考OpenRouter数据）", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": 0.7, "note": ""}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.65, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": 0.8, "note": "开源模型优化推理"}, "groq": {"discount": 0.7, "note": "极速推理"}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "/"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "open-source"], "category_reason": "小米 MiMo：全球调用量第一(单周 10.5 万亿 Token)，MoE 1M 全模态", "primary_label": "text"}, {"id": "hy3", "vendor": "Tencent", "vendor_cn": "腾讯", "region": "国内", "open": "闭源", "tier": "主力", "input_cny": 1.0, "output_cny": 4.0, "cache_read_cny": 0.1, "input_usd": 0.13, "output_usd": 0.53, "cache_read_usd": 0.013, "note": "腾讯混元第三代，全球调用量第三，环比暴涨999%。出厂价待官方确认（参考OpenRouter数据）", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": 0.65, "note": ""}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "火山引擎": {"discount": null, "note": "/"}, "百度千帆": {"discount": null, "note": "/"}, "腾讯云TI": {"discount": null, "note": "原厂平台"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "multimodal"], "category_reason": "腾讯混元第三代：全球调用量第三，环比 +999%，多模态", "primary_label": "multimodal"}, {"id": "gpt-5.6-luna", "vendor": "OpenAI", "vendor_cn": "OpenAI", "region": "国际", "open": "闭源", "tier": "轻量", "input_usd": 0.2, "output_usd": 1.2, "cache_read_usd": 0.02, "note": "OpenAI最便宜模型,官方定价$0.2/$1.2,1.05M上下文,直接竞争DeepSeek V4 Flash", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "不支持闭源"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": null, "note": "需确认"}, "阿里云百炼": {"discount": null, "note": "/"}, "together-ai": {"discount": null, "note": "不支持闭源"}, "groq": {"discount": null, "note": "不支持闭源"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": 0.65, "note": ""}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {"oem_price_verified": {"monitor": "0.2/1.2", "sales": "1.0/6.0", "sales_note": "价格不一致: 输入: 供应商=1.0, 监控=0.2; 输出: 供应商=6.0, 监控=1.2", "source": "销售定价数据_20260805.json"}}, "categories": ["text"], "category_reason": "OpenAI 最便宜端($0.2/$1.2)：轻量文本对话，直面 DeepSeek V4 Flash", "primary_label": "text"}, {"id": "qwen-3.8-max", "vendor": "Alibaba", "vendor_cn": "通义实验室", "region": "国内", "open": "闭源", "tier": "旗舰", "input_cny": 12.0, "output_cny": 36.0, "cache_read_cny": 1.5, "input_usd": 2.0, "output_usd": 6.0, "cache_read_usd": 0.25, "note": "Qwen3.7-Max继任者,8/3发布。2.4T参数,95B激活,1M上下文。国内¥12/¥36(同3.7-Max),国际$2/$6。PaperBench 93.0分超Fable 5。下周开源权重", "platforms": {"openrouter": {"discount": 1.055, "note": "+5.5%信用费"}, "siliconflow": {"discount": null, "note": "/"}, "smartapi": {"discount": 0.62, "note": ""}, "算能": {"discount": null, "note": "需确认"}, "阿里云百炼": {"discount": null, "note": "原厂平台"}, "together-ai": {"discount": null, "note": "/"}, "groq": {"discount": null, "note": "/"}, "volcengine": {"discount": null, "note": "/"}, "baidu-qianfan": {"discount": null, "note": "/"}, "tencent-cloud-ti": {"discount": null, "note": "/"}, "tokenflow": {"discount": null, "note": "未上架"}, "tmax": {"discount": null, "note": "TMax未报价"}}, "_changed_fields": {}, "categories": ["text", "coding", "reasoning"], "category_reason": "Qwen3.8 Max(8/3发布)：2.4T 参数 PaperBench 93.0 超 Sonnet 5，代码与推理双旗舰", "primary_label": "coding"}, {"id": "minimax-h3", "name": "MiniMax-H3", "vendor": "MiniMax", "vendor_cn": "稀宇科技", "region": "国内", "open": "闭源", "tier": "旗舰", "categories": ["video"], "category_reason": "全模态旗舰，2K/15s/24fps + 原生32kHz立体声。视频编辑能力全球第一。", "primary_label": "video", "billing_unit": "per_second", "input_cny": 0.5, "output_cny": 0.8, "cache_read_cny": 0, "input_usd": 0.072, "output_usd": 0.115, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频", "视频编辑", "文生音频"], "max_resolution": "2K", "max_duration_seconds": 15, "native_audio": true, "ranking": "AA视频编辑榜 #1", "release_date": "2025-07-31", "note": "全模态旗舰，2K/15s/24fps + 原生32kHz立体声。视频编辑能力全球第一。", "tiers": [{"resolution": "768P", "price_cny": 0.5, "price_usd": 0.072, "unit": "per second", "duration_range": "≤15s"}, {"resolution": "2K", "price_cny": 0.8, "price_usd": 0.115, "unit": "per second", "duration_range": "≤15s"}], "platforms": {"minimax-api": {"price_cny": null, "price_usd": null, "discount": 1.0, "note": "原厂直供，全球API"}}, "_is_new": true, "_changed_fields": {}}, {"id": "seedance-2.0", "name": "Seedance 2.0", "vendor": "ByteDance", "vendor_cn": "字节跳动", "region": "国内", "open": "闭源", "tier": "旗舰", "categories": ["video"], "category_reason": "支持四种模态输入 + 原生音频 + web search增强prompt。运动场景生成可用率SOTA。", "primary_label": "video", "billing_unit": "per_second", "input_cny": 0.5, "output_cny": 9.66, "cache_read_cny": 0, "input_usd": 0.07, "output_usd": 1.37, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频", "文生音频", "视频输入(编辑)"], "max_resolution": "4K", "max_duration_seconds": 15, "native_audio": true, "ranking": "中文视频生成 Top 2，性价比超过 Sora 2/Veo 3", "release_date": "2026-03", "note": "支持四种模态输入 + 原生音频 + web search增强prompt。运动场景生成可用率SOTA。", "tiers": [{"resolution": "480p", "price_cny": 0.5, "price_usd": 0.07, "unit": "per second", "duration_range": "4-15s", "note": "起步档"}, {"resolution": "720p", "price_cny": 1.13, "price_usd": 0.16, "unit": "per second", "duration_range": "4-15s", "note": "主力档"}, {"resolution": "1080p", "price_cny": 2.4, "price_usd": 0.34, "unit": "per second", "duration_range": "4-15s", "note": "高清档"}, {"resolution": "4K", "price_cny": 9.66, "price_usd": 1.37, "unit": "per second", "duration_range": "4-15s", "note": "顶级档"}], "platforms": {"volcengine": {"price_cny": null, "price_usd": null, "discount": 1.0, "note": "原厂直供，火山引擎Ark"}, "apimodels.app": {"price_usd": 0.092, "discount": 0.95, "note": "海外中转, $0.092/s(480p)≈原厂价"}}, "_is_new": false, "_changed_fields": {}}, {"id": "wan-2.2-t2v-plus", "name": "Wan 2.2 T2V Plus", "vendor": "Alibaba", "vendor_cn": "阿里巴巴", "region": "国内", "open": "闭源", "tier": "主力", "categories": ["video", "open-source"], "category_reason": "阿里万相2.2主力文生视频模型，14B参数。开源可商用，量产首选。", "primary_label": "video", "billing_unit": "per_second", "input_cny": 0.14, "output_cny": 0.7, "cache_read_cny": 0, "input_usd": 0.02, "output_usd": 0.1, "cache_read_usd": 0, "modalities": ["文生视频"], "max_resolution": "1080P", "max_duration_seconds": 10, "native_audio": false, "ranking": "开源视频生成 Top", "release_date": "2025-07", "note": "阿里万相2.2主力文生视频模型，14B参数。开源可商用，量产首选。", "tiers": [{"resolution": "480P", "price_cny": 0.14, "price_usd": 0.02, "unit": "per second", "duration_range": "≤10s"}, {"resolution": "1080P", "price_cny": 0.7, "price_usd": 0.1, "unit": "per second", "duration_range": "≤10s"}], "platforms": {"aliyun-bailian": {"price_cny": null, "price_usd": null, "discount": 1.0, "note": "阿里云百炼原厂直供"}, "crazyrouter": {"price_cny": null, "price_usd": null, "discount": 1.0, "note": "CrazyRouter对齐官方价"}}, "_is_new": false, "_changed_fields": {}}, {"id": "wan-2.2-i2v-flash", "name": "Wan 2.2 I2V Flash", "vendor": "Alibaba", "vendor_cn": "阿里巴巴", "region": "国内", "open": "闭源", "tier": "高效", "categories": ["video", "open-source"], "category_reason": "图生视频高性价比档，三档分辨率覆盖480P/720P/1080P。同名版本首尾帧生视频同价。", "primary_label": "video", "billing_unit": "per_second", "input_cny": 0.1, "output_cny": 0.48, "cache_read_cny": 0, "input_usd": 0.014, "output_usd": 0.067, "cache_read_usd": 0, "modalities": ["图生视频", "首尾帧生视频"], "max_resolution": "1080P", "max_duration_seconds": 10, "native_audio": false, "ranking": "阿里量产首选(图生)", "release_date": "2025-07", "note": "图生视频高性价比档，三档分辨率覆盖480P/720P/1080P。同名版本首尾帧生视频同价。", "tiers": [{"resolution": "480P", "price_cny": 0.1, "price_usd": 0.014, "unit": "per second"}, {"resolution": "720P", "price_cny": 0.2, "price_usd": 0.028, "unit": "per second"}, {"resolution": "1080P", "price_cny": 0.48, "price_usd": 0.067, "unit": "per second"}], "platforms": {"aliyun-bailian": {"price_cny": null, "price_usd": null, "discount": 1.0, "note": "阿里云百炼原厂直供"}, "crazyrouter": {"price_cny": null, "price_usd": null, "discount": 1.0, "note": "CrazyRouter对齐官方价"}}, "_is_new": false, "_changed_fields": {}}, {"id": "cogvideox-2", "name": "CogVideoX-2", "vendor": "Zhipu", "vendor_cn": "智谱", "region": "国内", "open": "开源", "tier": "主力", "categories": ["video", "open-source"], "category_reason": "图生视频能力提升38%。按次计费(¥0.5/次)。10s视频折算¥0.05/s, 国内最便宜的中端档。", "primary_label": "video", "billing_unit": "per_generation", "input_cny": 0.5, "output_cny": 0.5, "cache_read_cny": 0, "input_usd": 0.07, "output_usd": 0.07, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频"], "max_resolution": "4K", "max_duration_seconds": 10, "native_audio": false, "ranking": "国内开源视频生成 Top", "release_date": "2025-08", "note": "图生视频能力提升38%。按次计费(¥0.5/次)。10s视频折算¥0.05/s, 国内最便宜的中端档。", "tiers": [{"resolution": "720P-4K", "price_cny": 0.5, "price_usd": 0.07, "unit": "per generation", "duration_range": "5-10s", "note": "按次计费，不按秒"}], "platforms": {"zhipu-bigmodel": {"price_cny": 0.5, "discount": 1.0, "note": "智谱开放平台原厂直供"}, "302.ai": {"price_cny": 0.1, "discount": 0.2, "note": "海外中转, 0.1 PTC/次(PTC≈¥0.65), 性价比折扣"}}, "_is_new": false, "_changed_fields": {}}, {"id": "cogvideox-flash", "name": "CogVideoX-Flash", "vendor": "Zhipu", "vendor_cn": "智谱", "region": "国内", "open": "闭源", "tier": "免费/普惠", "categories": ["video"], "category_reason": "智谱普惠视频生成模型，¥0.1 PTC/次(≈¥0.065/次)，是替代Sora 2的最低成本选项。", "primary_label": "video", "billing_unit": "per_generation", "input_cny": 0.065, "output_cny": 0.065, "cache_read_cny": 0, "input_usd": 0.01, "output_usd": 0.01, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频"], "max_resolution": "720P", "max_duration_seconds": 6, "native_audio": false, "ranking": "国内最便宜的6秒视频", "release_date": "2026", "note": "智谱普惠视频生成模型，¥0.1 PTC/次(≈¥0.065/次)，是替代Sora 2的最低成本选项。", "tiers": [{"resolution": "720P", "price_cny": 0.065, "price_usd": 0.01, "unit": "per generation", "duration_range": "6s", "note": "按次计费"}], "platforms": {"zhipu-bigmodel": {"price_cny": 0.065, "discount": 1.0, "note": "普惠资源包内免费或极低价"}}, "_is_new": true, "_changed_fields": {}}, {"id": "hunyuan-video-1.5", "name": "HY-Video-1.5", "vendor": "Tencent", "vendor_cn": "腾讯", "region": "国内", "open": "开源", "tier": "主力", "categories": ["video", "open-source"], "category_reason": "1积分=1.2元，1.5积分/次≈¥1.8/次(5s视频)。导演级运镜+原生切镜+特效配音，国内开源最强。", "primary_label": "video", "billing_unit": "per_generation", "input_cny": 1.8, "output_cny": 1.8, "cache_read_cny": 0, "input_usd": 0.25, "output_usd": 0.25, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频", "数字人", "视频特效"], "max_resolution": "1080P", "max_duration_seconds": 5, "native_audio": true, "ranking": "开源参数最大(130亿)", "release_date": "2025-11", "note": "1积分=1.2元，1.5积分/次≈¥1.8/次(5s视频)。导演级运镜+原生切镜+特效配音，国内开源最强。", "tiers": [{"resolution": "1080P", "price_cny": 1.8, "price_usd": 0.25, "unit": "per generation", "duration_range": "5s", "note": "按次计费, 含原生切镜"}], "platforms": {"tencent-cloud-ti": {"price_cny": null, "discount": 1.0, "note": "腾讯云TokenHub原厂直供,新人50积分/365天免费"}}, "_is_new": false, "_changed_fields": {}}, {"id": "kling-v2.6", "name": "Kling v2.6", "vendor": "Kuaishou", "vendor_cn": "快手", "region": "国内", "open": "闭源", "tier": "旗舰(主流)", "categories": ["video"], "category_reason": "快手可灵2.6主流档，国产画质第一梯队。光影和运动连贯性最好，但生成速度偏慢(5-15min)。", "primary_label": "video", "billing_unit": "per_generation", "input_cny": 2.23, "output_cny": 2.23, "cache_read_cny": 0, "input_usd": 0.31, "output_usd": 0.31, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频", "首尾帧"], "max_resolution": "1080P", "max_duration_seconds": 10, "native_audio": false, "ranking": "国产画质天花板", "release_date": "2026-04", "note": "快手可灵2.6主流档，国产画质第一梯队。光影和运动连贯性最好，但生成速度偏慢(5-15min)。", "tiers": [{"resolution": "720P", "price_usd": 0.31, "price_cny": 2.23, "unit": "per 5s video", "duration_range": "5s/10s", "note": "基础档"}], "platforms": {"kling-api": {"price_usd": 0.31, "discount": 1.0, "note": "快手可灵API原厂直供"}, "renderful": {"price_usd": 0.31, "discount": 1.0, "note": "Renderful低于官方价的中转"}}, "_is_new": false, "_changed_fields": {}}, {"id": "kling-v2-master", "name": "Kling v2 Master", "vendor": "Kuaishou", "vendor_cn": "快手", "region": "国内", "open": "闭源", "tier": "极致", "categories": ["video"], "category_reason": "Master画质，$1.70/5s ≈ $0.34/s。1080P原生，对标Sora 2 Pro / Veo 3。", "primary_label": "video", "billing_unit": "per_generation", "input_cny": 12.24, "output_cny": 12.24, "cache_read_cny": 0, "input_usd": 1.7, "output_usd": 1.7, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频"], "max_resolution": "1080P(原生)", "max_duration_seconds": 10, "native_audio": false, "ranking": "国产顶级画质(对标Sora 2 Pro)", "release_date": "2025-11", "note": "Master画质，$1.70/5s ≈ $0.34/s。1080P原生，对标Sora 2 Pro / Veo 3。", "tiers": [{"resolution": "1080P(原生)", "price_usd": 1.7, "price_cny": 12.24, "unit": "per 5s video", "duration_range": "5s/10s", "note": "极致档"}], "platforms": {"kling-api": {"price_usd": 1.7, "discount": 1.0, "note": "快手可灵API原厂直供"}}, "_is_new": false, "_changed_fields": {}}, {"id": "sora-2", "name": "Sora 2", "vendor": "OpenAI", "vendor_cn": "OpenAI", "region": "国际", "open": "闭源", "tier": "旗舰(临近退场)", "categories": ["video"], "category_reason": "⚠️ API将于2026-09-24关闭。生成10秒720p视频≈$1.00。不推荐新集成。", "primary_label": "video", "billing_unit": "per_second", "input_cny": 0.72, "output_cny": 0.72, "cache_read_cny": 0, "input_usd": 0.1, "output_usd": 0.1, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频", "对话同步", "音效"], "max_resolution": "720P(API)", "max_duration_seconds": 12, "native_audio": true, "ranking": "物理仿真/电影感最强(2025-12发布时)", "release_date": "2025-12", "note": "⚠️ API将于2026-09-24关闭。生成10秒720p视频≈$1.00。不推荐新集成。", "tiers": [{"resolution": "720p", "price_usd": 0.1, "price_cny": 0.72, "unit": "per second", "duration_range": "4/8/12s"}], "platforms": {"openai-api": {"price_usd": 0.1, "discount": 1.0, "note": "⚠️ API 2026-09-24关闭"}, "openrouter": {"price_usd": null, "discount": null, "note": "暂未上架(预期关闭前不会新接入)"}}, "_is_new": false, "_changed_fields": {}}, {"id": "veo-3.1", "name": "Veo 3.1", "vendor": "Google", "vendor_cn": "Google", "region": "国际", "open": "闭源", "tier": "旗舰", "categories": ["video"], "category_reason": "Google Vertex AI官方。Fast档适合测试(720p $0.10/s)，Standard档适合商用。", "primary_label": "video", "billing_unit": "per_second", "input_cny": 0.7200000000000001, "output_cny": 4.32, "cache_read_cny": 0, "input_usd": 0.1, "output_usd": 0.6, "cache_read_usd": 0, "modalities": ["文生视频", "图生视频", "音效"], "max_resolution": "4K", "max_duration_seconds": 8, "native_audio": true, "ranking": "电影质感第二(对标Sora 2 Pro)", "release_date": "2026-01", "note": "Google Vertex AI官方。Fast档适合测试(720p $0.10/s)，Standard档适合商用。", "tiers": [{"name": "Fast, 视频", "resolution": "720p/1080p", "price_usd": 0.1, "unit": "per second", "note": "无音频"}, {"name": "Fast, 视频+音频", "resolution": "720p/1080p", "price_usd": 0.15, "unit": "per second", "note": "+50%"}, {"name": "Standard, 视频", "resolution": "720p/1080p", "price_usd": 0.2, "unit": "per second"}, {"name": "Standard, 视频+音频", "resolution": "720p/1080p", "price_usd": 0.4, "unit": "per second"}, {"name": "Fast, 4K", "resolution": "4K", "price_usd": 0.3, "unit": "per second"}, {"name": "Standard, 4K", "resolution": "4K", "price_usd": 0.4, "unit": "per second", "note": "纯视频"}, {"name": "Standard, 4K+音频", "resolution": "4K", "price_usd": 0.6, "unit": "per second"}], "platforms": {"google-vertex": {"price_usd": 0.1, "discount": 1.0, "note": "Vertex AI原厂直供"}}, "_is_new": false, "_changed_fields": {}}], "platforms": [{"id": "openrouter", "name": "OpenRouter", "type": "国际聚合", "note": "全球最大聚合平台，800万用户，+5%服务费"}, {"id": "siliconflow", "name": "硅基流动", "type": "国内聚合", "note": "170+开源模型，不支持闭源"}, {"id": "smartapi", "name": "SmartAPI", "type": "中转站", "note": "TokenFlow主渠道，折扣0.62"}, {"id": "算能", "name": "算能", "type": "中转站", "note": "备选渠道，折扣因模型而异"}, {"id": "阿里云百炼", "name": "阿里云百炼", "type": "大厂MaaS", "note": "原厂直供，部分模型有折扣"}, {"id": "together-ai", "name": "Together AI", "type": "国际聚合", "note": "开源模型优化推理，价格有竞争力"}, {"id": "groq", "name": "Groq", "type": "国际聚合", "note": "LPU极速推理，数百tokens/s"}, {"id": "volcengine", "name": "火山引擎", "type": "大厂MaaS", "note": "字节跳动旗下，豆包原厂平台"}, {"id": "baidu-qianfan", "name": "百度千帆", "type": "大厂MaaS", "note": "百度旗下，文心原厂平台"}, {"id": "tencent-cloud-ti", "name": "腾讯云TI", "type": "大厂MaaS", "note": "腾讯旗下，混元原厂平台"}, {"id": "tokenflow", "name": "TokenFlow", "type": "自有平台", "note": "1+N机制，最低折扣+0.03"}, {"id": "tmax", "name": "TMax", "type": "中转站", "note": "渠道商报价(USD绝对金额), 按出厂价换算为折扣率; 国内模型按汇率7.2转CNY"}], "watch_list_models": [{"id": "glm-5.3", "vendor": "Zhipu", "vendor_cn": "智谱", "region": "国内", "open": "分阶段开源", "tier": "新版", "input_cny": 8.0, "output_cny": 28.0, "cache_read_cny": 2.0, "input_usd": 1.4, "output_usd": 4.4, "cache_read_usd": 0.26, "note": "Z.ai 8/14发布,与GLM-5.2同基座(约743B)+大幅后训练,Terminal-Bench 3.0从4.6→28.3。定价与GLM-5.2同价$1.40/$4.40(¥8/¥28),多方来源一致(lobehub模型目录已录入CNY 8/28),官方按Token API分阶段开放中。权重约8/28放出。", "platforms": {"openrouter": {"discount": null, "note": "新发布,渠道未上架"}, "siliconflow": {"discount": null, "note": "新发布,渠道未上架"}, "smartapi": {"discount": null, "note": "新发布,渠道未上架"}, "算能": {"discount": null, "note": "新发布,渠道未上架"}, "阿里云百炼": {"discount": null, "note": "新发布,渠道未上架"}, "together-ai": {"discount": null, "note": "新发布,渠道未上架"}, "groq": {"discount": null, "note": "新发布,渠道未上架"}, "volcengine": {"discount": null, "note": "新发布,渠道未上架"}, "baidu-qianfan": {"discount": null, "note": "新发布,渠道未上架"}, "tencent-cloud-ti": {"discount": null, "note": "新发布,渠道未上架"}, "tokenflow": {"discount": null, "note": "新发布,渠道未上架"}, "tmax": {"discount": null, "note": "新发布,渠道未上架"}}, "_is_new": true, "_added_to_watch": "2026-08-17", "_auto_promote_date": "2026-08-23", "categories": ["text", "coding"], "category_reason": "GLM-5.3 与 GLM-5.2 同基座增强版，编程与 Agent 优化", "primary_label": "coding"}], "changes": {"update_type": "人工核查补录:新模型发布监控盲区修复", "summary": "刚哥核查发现两个新发布模型未被监控:GLM-5.3(智谱8/14发布,与5.2同价$1.40/$4.40)已纳入观察列表,8/23周更时评估纳入正式清单;MiniMax-H3(7/31发布,视频生成模型,按秒计费2K 0.8元/秒)因计费单位与Token监控体系不同,记录于watch_list.json待关注事项,未纳入价格表。原因为周更检索词仅覆盖调用量排行,新发布2天内未上榜的模型会被漏检,已在两个自动化中增补新模型发布监控检索词。", "new_models": [], "watch_list_additions": [{"model": "glm-5.3", "reason": "8/14发布,定价已双源验证,API分阶段开放中"}], "changed_models": [], "validation": {"summary": "出厂价缺失 0 个, 出厂价不一致 3 个, 全渠道N/A 0 个", "oem_price_missing": [], "oem_price_mismatch": ["glm-5", "gpt-5.5-o3", "gpt-5.6-luna"], "all_na_alert": [], "tmax_auto_fill": []}}, "coding_suggestions": [{"id": "qwen3-coder-plus", "vendor": "Alibaba", "vendor_cn": "通义实验室", "reason": "Qwen3-Coder Plus（Qwen3-Coder 480B）：SWE-bench Verified 70.6%，开源 SOTA 编程模型", "tier": "编程旗舰", "estimated_price": "$0.6/$2.4 (估计)", "source": "Coder 路线独立分支, 周更审核纳入"}, {"id": "deepseek-coder-v3", "vendor": "DeepSeek", "vendor_cn": "深度求索", "reason": "DeepSeek Coder V3：编程专用分支，verifier+RL 路径", "tier": "编程旗舰", "estimated_price": "需官网复核", "source": "候选纳入清单"}, {"id": "codestral-3", "vendor": "Mistral", "vendor_cn": "Mistral AI", "reason": "Codestral 3：Mistral 编程专用，repo-level 补全", "tier": "编程主力", "estimated_price": "$0.3/$0.9", "source": "候选纳入清单"}], "category_meta": {"categories_definitions": {"text": "通用文本对话/推理", "coding": "程序代码生成、补全与 Agent 编程", "video": "视频生成（图生视频/文生视频/视频编辑）", "reasoning": "深度思考/数学/科学推理", "multimodal": "原生文/图/音/视频多模态理解", "audio": "语音场景领先", "open-source": "可自部署/可商用开源权重"}, "sort_within_category": {"primary": "tier 优先级: 旗舰 > 主力 > 中端 > 轻量", "secondary": "是否为 _is_new 新增模型（末尾）", "tertiary": "output_usd/CNY 价格升序"}}};
+
+/* ========== 分类标签元数据 ========== */
+const CAT_LABELS = {
+  text: { icon: '', name: '文本' },
+  coding: { icon: '💻', name: 'Coding' },
+  video: { icon: '🎬', name: '视频' },
+  reasoning: { icon: '🧠', name: '推理' },
+  multimodal: { icon: '🎨', name: '多模态' },
+  audio: { icon: '🎵', name: '语音' },
+  'open-source': { icon: '🔓', name: '开源' }
 };
+
+/* ========== 排序优先级 ========== */
+const TIER_ORDER = { '旗舰': 1, '极致': 1, '主力': 2, '新版': 2, '编程': 2, '中端': 3, '高端': 3, '轻量': 4, '高效': 4, '免费/普惠': 5 };
+function tierRank(t) { return TIER_ORDER[t] || 3; }
+
+function sortInCategory(arr, primaryLabel) {
+  return arr.slice().sort(function(a, b) {
+    // Video cards: 按 region 国内优先
+    if (a.categories && a.categories.indexOf('video') >= 0 && b.categories && b.categories.indexOf('video') >= 0) {
+      const ar = a.region === '国内' ? 0 : 1;
+      const br = b.region === '国内' ? 0 : 1;
+      if (ar !== br) return ar - br;
+    }
+    // tier 优先级
+    const tr = tierRank(a.tier) - tierRank(b.tier);
+    if (tr !== 0) return tr;
+    // 新增在末尾
+    const an = a._is_new ? 1 : 0;
+    const bn = b._is_new ? 1 : 0;
+    if (an !== bn) return an - bn;
+    // 价格升序
+    const ap = a.output_usd || a.output_cny || 0;
+    const bp = b.output_usd || b.output_cny || 0;
+    return ap - bp;
+  });
+}
 
 function fmtPrice(v) {
   if (v === null || v === undefined || v === '') return '-';
@@ -2611,6 +622,14 @@ function discountTag(d) {
   return '<span class="discount-tag tag-blue">' + (d*100).toFixed(0) + '%</span>';
 }
 
+/* ========== 价格单位 ========== */
+function billingUnitText(m) {
+  const b = m.billing_unit || '1M_tokens';
+  if (b === 'per_second') return '1 second (按秒)';
+  if (b === 'per_generation') return 'per generation (按次)';
+  return '1M tokens';
+}
+
 function getBasePrices(model) {
   if (model.region === '国内' && model.input_cny) {
     return { in: model.input_cny, out: model.output_cny, cur: '¥' };
@@ -2624,7 +643,6 @@ function calcPlatformPrice(model, discount) {
   return base.cur + (base.in * discount).toFixed(2) + '/' + base.cur + (base.out * discount).toFixed(2);
 }
 
-// Find the platform with the lowest discount (<=1) for a model
 function findBestPlatform(model) {
   let best = null;
   let bestDiscount = Infinity;
@@ -2639,7 +657,24 @@ function findBestPlatform(model) {
   return best;
 }
 
-// Render change banner
+/* ========== 分类角标渲染 ========== */
+function renderCategoryBadges(model) {
+  const cats = model.categories || ['text'];
+  return cats.map(function(c) {
+    const meta = CAT_LABELS[c];
+    if (!meta) return '';
+    // Video/Coding badge 默认显示，其余标签 hover
+    if (c === 'video' || c === 'coding') {
+      const title = (model.category_reason || '').replace(/"/g, '&quot;');
+      return '<span class="cat-badge cat-' + c + '" title="' + title + '">' + meta.icon + ' ' + meta.name + '</span>';
+    } else {
+      const title = (model.category_reason || '').replace(/"/g, '&quot;');
+      return '<span class="cat-badge cat-' + c + '" title="' + title + '">' + meta.icon + ' ' + meta.name + '</span>';
+    }
+  }).join('');
+}
+
+/* ========== 变更横幅 ========== */
 function renderChangeBanner() {
   const container = document.getElementById('changeBannerContainer');
   if (!DATA.changes || !DATA.changes.summary) {
@@ -2678,73 +713,112 @@ function renderChangeBanner() {
     '</div>';
 }
 
+/* ========== 主卡片渲染 ========== */
 function renderModel(model) {
   const base = getBasePrices(model);
   const vendorClass = 'v-' + model.vendor;
   const isNew = model._is_new === true;
-  const cardClass = isNew ? 'model-card is-new' : 'model-card';
+  const isVideo = (model.categories || []).indexOf('video') >= 0;
+  const cardClass = isVideo ? 'model-card is-video' : 'model-card';
+  const finalCardClass = isNew ? (cardClass + ' is-new') : cardClass;
   const newBadge = isNew ? '<span class="new-badge">NEW</span>' : '';
+  const dataCats = (model.categories || ['text']).join(',');
 
   // Split model ID into family name and version
   var dashIdx = model.id.indexOf('-');
   var familyName = dashIdx >= 0 ? model.id.substring(0, dashIdx) : model.id;
   var versionName = dashIdx >= 0 ? model.id.substring(dashIdx + 1) : '';
 
-  // Find best platform
-  const best = findBestPlatform(model);
-  const bestHtml = best ? '' +
-    '<div class="mc-best-row">' +
-      '<span class="best-icon">💰</span>' +
-      '<span class="best-label">最低渠道</span>' +
-      '<span class="best-channel">' + best.platform.name + '</span>' +
-      '<span class="best-discount">' + (best.discount * 100).toFixed(0) + '%</span>' +
-      '<span class="best-price">' + calcPlatformPrice(model, best.discount) + '</span>' +
-      '<span class="expand-hint">点击查看全部 ▼</span>' +
-    '</div>' : '';
+  // Find best platform (text models only)
+  let bestHtml = '';
+  if (!isVideo) {
+    const best = findBestPlatform(model);
+    if (best) {
+      bestHtml = '' +
+        '<div class="mc-best-row">' +
+          '<span class="best-icon">💰</span>' +
+          '<span class="best-label">最低渠道</span>' +
+          '<span class="best-channel">' + best.platform.name + '</span>' +
+          '<span class="best-discount">' + (best.discount * 100).toFixed(0) + '%</span>' +
+          '<span class="best-price">' + calcPlatformPrice(model, best.discount) + '</span>' +
+          '<span class="expand-hint">点击查看全部 ▼</span>' +
+        '</div>';
+    }
+  }
 
   // Check if this model has changed prices
   const changedFields = model._changed_fields || {};
   const priceChanged = changedFields.input || changedFields.output;
 
-  // Platform rows - highlight best and changed
-  const platformRows = DATA.platforms.map(p => {
-    const pdata = model.platforms[p.id] || {};
-    const d = pdata.discount;
-    const priceStr = calcPlatformPrice(model, d);
-    const isBest = best && best.platform.id === p.id;
-    const isChanged = changedFields.platforms && changedFields.platforms[p.id];
+  // Platform rows
+  let platformRows;
+  if (isVideo) {
+    // Video tier table - render tiers + platforms
+    let tierHtml = '';
+    const tiers = model.tiers || [];
+    if (tiers.length > 0) {
+      tierHtml += '<div class="model-note" style="color:var(--cat-video);background:rgba(247,120,186,0.08)">🎬 ' + (model.ranking || '视频生成') + (model.native_audio ? ' · 🔊 原生音频' : '') + ' · 最高 ' + (model.max_resolution || '-') + (model.max_duration_seconds ? ' / ' + model.max_duration_seconds + 's' : '') + '</div>';
+      tierHtml += '<table class="video-tier-table">' +
+        '<thead><tr><th>档位</th><th>分辨率</th><th>时长</th><th style="text-align:right">CNY</th><th style="text-align:right">USD</th></tr></thead>' +
+        '<tbody>';
+      tiers.forEach(function(t) {
+        tierHtml += '<tr>' +
+          '<td style="color:var(--text)">' + (t.name || '-') + '</td>' +
+          '<td>' + (t.resolution || '-') + '</td>' +
+          '<td>' + (t.duration_range || '-') + '</td>' +
+          '<td style="text-align:right">' + (t.price_cny != null ? '¥' + t.price_cny.toFixed(2) : '-') + '</td>' +
+          '<td style="text-align:right">' + (t.price_usd != null ? '$' + t.price_usd.toFixed(3) : '-') + '</td>' +
+          '</tr>';
+      });
+      tierHtml += '</tbody></table>';
+      platformRows = tierHtml;
+    }
+  } else {
+    // Text mode price table
+    const best = findBestPlatform(model);
+    platformRows = DATA.platforms.map(p => {
+      const pdata = model.platforms[p.id] || {};
+      const d = pdata.discount;
+      const priceStr = calcPlatformPrice(model, d);
+      const isBest = best && best.platform.id === p.id;
+      const isChanged = changedFields.platforms && changedFields.platforms[p.id];
 
-    let rowClass = '';
-    if (isBest) rowClass = 'best-row';
-    else if (isChanged) rowClass = 'changed-row';
+      let rowClass = '';
+      if (isBest) rowClass = 'best-row';
+      else if (isChanged) rowClass = 'changed-row';
 
-    let priceClass = '';
-    if (isChanged) priceClass = 'changed-cell';
+      let priceClass = '';
+      if (isChanged) priceClass = 'changed-cell';
 
-    return '' +
-      '<tr class="' + rowClass + '">' +
-        '<td class="platform-name">' + p.name + (isChanged ? ' <span style="color:var(--changed);font-size:9px">▲</span>' : '') + '</td>' +
-        '<td>' + discountTag(d) + '</td>' +
-        '<td style="text-align:right" class="' + priceClass + '">' + priceStr + '</td>' +
-      '</tr>';
-  }).join('');
+      return '' +
+        '<tr class="' + rowClass + '">' +
+          '<td class="platform-name">' + p.name + (isChanged ? ' <span style="color:var(--changed);font-size:9px">▲</span>' : '') + '</td>' +
+          '<td>' + discountTag(d) + '</td>' +
+          '<td style="text-align:right" class="' + priceClass + '">' + priceStr + '</td>' +
+        '</tr>';
+    }).join('');
+  }
 
   const noteHtml = model.note ? '<div class="model-note">⚠️ ' + model.note + '</div>' : '';
 
-  // Validation: check for price issues
-  const priceMissing = base.in === null || base.in === undefined || base.in === 0 ||
-                       base.out === null || base.out === undefined || base.out === 0;
+  // Validation (text only)
+  const priceMissing = !isVideo && (base.in === null || base.in === undefined || base.in === 0 ||
+                       base.out === null || base.out === undefined || base.out === 0);
   const oemFixInfo = changedFields.oem_price_fix || changedFields.oem_price_missing || changedFields.oem_price_verified;
   const hasPriceMismatch = !!changedFields.oem_price_fix;
 
-  // Check if all platforms are N/A
-  const validPlatformCount = DATA.platforms.filter(p => {
-    const pdata = model.platforms[p.id] || {};
-    return pdata.discount !== null && pdata.discount !== undefined;
-  }).length;
-  const allNa = validPlatformCount === 0;
+  // Platform count (text only)
+  let allNa = false;
+  let validPlatformCount = 0;
+  if (!isVideo) {
+    validPlatformCount = DATA.platforms.filter(p => {
+      const pdata = model.platforms[p.id] || {};
+      return pdata.discount !== null && pdata.discount !== undefined;
+    }).length;
+    allNa = validPlatformCount === 0;
+  }
 
-  // Build alert badges
+  // Alert badges
   let alertBadges = '';
   let alertCardClass = '';
   if (priceMissing) {
@@ -2760,7 +834,6 @@ function renderModel(model) {
     if (!alertCardClass) alertCardClass = 'has-alert';
   }
 
-  // Add validation note
   let validationNote = '';
   if (oemFixInfo) {
     if (changedFields.oem_price_fix) {
@@ -2778,14 +851,25 @@ function renderModel(model) {
 
   const priceClass = priceMissing ? 'price-main price-warn' : (priceChanged ? 'price-main changed' : 'price-main');
 
+  // Category reason block (show inside expanded card)
+  const reasonText = (model.category_reason || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const catReasonBlock = (isVideo || reasonText) ? '' +
+    '<div class="cat-reason">' +
+      '<span class="cr-label">💡 分类依据</span>' + reasonText +
+    '</div>' : '';
+
+  // Build category badge HTML
+  const catBadges = renderCategoryBadges(model);
+
   return '' +
-    '<div class="' + cardClass + (alertCardClass ? ' ' + alertCardClass : '') + '" data-region="' + model.region + '" data-tier="' + model.tier + '" data-open="' + model.open + '" data-id="' + model.id + '" data-isnew="' + (isNew ? '1' : '0') + '">' +
+    '<div class="' + finalCardClass + (alertCardClass ? ' ' + alertCardClass : '') + '" data-region="' + model.region + '" data-tier="' + model.tier + '" data-open="' + model.open + '" data-id="' + model.id + '" data-isnew="' + (isNew ? '1' : '0') + '" data-categories="' + dataCats + '">' +
       '<div class="mc-header" onclick="toggleCard(this)">' +
         '<div class="mc-top-row">' +
           '<div class="mc-left">' +
             '<div class="mc-left-top">' +
               '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
               '<span class="model-family">' + familyName + '</span>' +
+              catBadges +
               newBadge +
               alertBadges +
             '</div>' +
@@ -2796,23 +880,27 @@ function renderModel(model) {
           '</div>' +
           '<div class="mc-right">' +
             '<div class="' + priceClass + '">' + base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out) + '</div>' +
-            '<div class="price-unit">出厂价 输入/输出 · 1M tokens</div>' +
+            '<div class="price-unit">出厂价 输入/输出 · ' + billingUnitText(model) + '</div>' +
           '</div>' +
           '<div class="expand-arrow">▼</div>' +
         '</div>' +
-        bestHtml +
+        (bestHtml || '') +
       '</div>' +
       '<div class="mc-body">' +
-        '<table class="price-table">' +
-          '<thead><tr><th>渠道</th><th>折扣</th><th style="text-align:right">实际价格</th></tr></thead>' +
-          '<tbody>' + platformRows + '</tbody>' +
-        '</table>' +
+        catReasonBlock +
+        (isVideo ? platformRows : (
+          '<table class="price-table">' +
+            '<thead><tr><th>渠道</th><th>折扣</th><th style="text-align:right">实际价格</th></tr></thead>' +
+            '<tbody>' + platformRows + '</tbody>' +
+          '</table>'
+        )) +
         noteHtml +
         validationNote +
       '</div>' +
     '</div>';
 }
 
+/* ========== Watch 卡片渲染 ========== */
 function renderWatchModel(model, idx) {
   const base = getBasePrices(model);
   const vendorClass = 'v-' + model.vendor;
@@ -2820,12 +908,10 @@ function renderWatchModel(model, idx) {
   const cardClass = isNew ? 'model-card watch-list is-new' : 'model-card watch-list';
   const newBadge = isNew ? '<span class="new-badge">NEW</span>' : '';
 
-  // Split model ID into family name and version
   var dashIdx = model.id.indexOf('-');
   var familyName = dashIdx >= 0 ? model.id.substring(0, dashIdx) : model.id;
   var versionName = dashIdx >= 0 ? model.id.substring(dashIdx + 1) : '';
 
-  // Calculate watch days
   const addDate = model._added_to_watch || model._added_date || DATA.update_time.split(' ')[0];
   const promoteDate = model._auto_promote_date || '';
   const addTime = new Date(addDate.replace(/-/g, '/'));
@@ -2833,7 +919,6 @@ function renderWatchModel(model, idx) {
   const watchDays = Math.max(0, Math.floor((nowTime - addTime) / (1000*60*60*24)));
   const daysLeft = promoteDate ? Math.max(0, Math.ceil((new Date(promoteDate.replace(/-/g, '/')) - nowTime) / (1000*60*60*24))) : 7 - watchDays;
 
-  // Find best platform
   const best = findBestPlatform(model);
   const bestHtml = best ? '' +
     '<div class="mc-best-row">' +
@@ -2875,6 +960,7 @@ function renderWatchModel(model, idx) {
             '<div class="mc-left-top">' +
               '<span class="vendor-badge ' + vendorClass + '">' + model.vendor_cn + '</span>' +
               '<span class="model-family">' + familyName + '</span>' +
+              renderCategoryBadges(model) +
               newBadge +
             '</div>' +
             '<div class="mc-left-bottom">' +
@@ -2885,13 +971,14 @@ function renderWatchModel(model, idx) {
           '</div>' +
           '<div class="mc-right">' +
             '<div class="price-main">' + base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out) + '</div>' +
-            '<div class="price-unit">出厂价 输入/输出 · 1M tokens</div>' +
+            '<div class="price-unit">出厂价 输入/输出 · ' + billingUnitText(model) + '</div>' +
           '</div>' +
           '<div class="expand-arrow">▼</div>' +
         '</div>' +
         bestHtml +
       '</div>' +
       '<div class="mc-body">' +
+        (model.category_reason ? '<div class="cat-reason"><span class="cr-label">💡 分类依据</span>' + model.category_reason.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' : '') +
         '<table class="price-table">' +
           '<thead><tr><th>渠道</th><th>折扣</th><th style="text-align:right">实际价格</th></tr></thead>' +
           '<tbody>' + platformRows + '</tbody>' +
@@ -2902,19 +989,43 @@ function renderWatchModel(model, idx) {
     '</div>';
 }
 
+/* ========== 分类说明卡 (Coding/Video 时展示) ========== */
+function renderCategoryExplainer(filter) {
+  if (filter === 'coding') {
+    return '' +
+      '<div class="category-explainer">' +
+        '<div class="ce-title">💻 Coding 热门子项</div>' +
+        '<div>收录依据：①厂商官方定位为编程（SWE-Bench Verified / Terminal-Bench 等基准分高）；②模型 tier 标签为「编程」；③开源生态中代码任务主力推荐。</div>' +
+        '<div class="ce-sort"><b>排序规则:</b> 旗舰 > 主力 > 中端 > 轻量 → 新增模型置末 → 价格升序。同 tier 时按输出价由低到高。</div>' +
+      '</div>';
+  }
+  if (filter === 'video') {
+    return '' +
+      '<div class="category-explainer" style="border-color:rgba(247,120,186,0.25);background:rgba(247,120,186,0.05)">' +
+        '<div class="ce-title" style="color:var(--cat-video)">🎬 视频生成子项</div>' +
+        '<div>收录依据：①国内主流视频生成 API（Seedance / Wan / CogVideoX / HY-Video / Kling / MiniMax-H3）；②国际厂商旗舰（Sora 2 / Veo 3.1）。⚠️ 注意：视频模型按 <b>秒 / 按次</b> 计费，与文本 Token 模型不可直接比较单价位。</div>' +
+        '<div class="ce-sort"><b>排序规则:</b> 国内优先 → 旗舰 > 主力 > 轻量 → 价格升序。卡片中显示最低→最高档位的 CNY/USD。</div>' +
+      '</div>';
+  }
+  return '';
+}
+
+/* ========== 主渲染函数 ========== */
 function render(filter) {
   filter = filter || 'all';
   const list = document.getElementById('modelList');
+  const explainerEl = document.getElementById('categoryExplainerContainer');
+  explainerEl.innerHTML = renderCategoryExplainer(filter);
+
   let models = DATA.hot_models;
   const watchModels = DATA.watch_list_models || [];
 
   if (filter === 'watch') {
-    // Only show watch list models
     const watchIntl = watchModels.filter(m => m.region === '国际');
     const watchDom = watchModels.filter(m => m.region === '国内');
     let html = '';
     if (watchModels.length === 0) {
-      html = '<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:13px;">👁️ 暂无待观察模型</div>';
+      html = '<div class="empty-state"><div class="emoji">👁️</div>暂无待观察模型</div>';
     } else {
       if (watchIntl.length) {
         html += '<div class="section-title">🌐 国际 · 待观察 <span class="new-count">' + watchIntl.length + '</span></div>';
@@ -2930,6 +1041,55 @@ function render(filter) {
     return;
   }
 
+  // ========== Coding 子项 ==========
+  if (filter === 'coding') {
+    const codingModels = models.filter(m => (m.categories || []).indexOf('coding') >= 0);
+    const sorted = sortInCategory(codingModels);
+    const intl = sorted.filter(m => m.region === '国际');
+    const dom = sorted.filter(m => m.region === '国内');
+
+    let html = '';
+    if (intl.length) {
+      html += '<div class="section-title">🌐 国际 Coding 模型 <span class="new-count">' + intl.length + '</span></div>';
+      html += intl.map(renderModel).join('');
+    }
+    if (dom.length) {
+      html += '<div class="section-title">🇨🇳 国内 Coding 模型 <span class="new-count">' + dom.length + '</span></div>';
+      html += dom.map(renderModel).join('');
+    }
+    if (sorted.length === 0) {
+      html = '<div class="empty-state"><div class="emoji">💻</div>暂无 Coding 子项收录模型</div>';
+    }
+    list.innerHTML = html;
+    updateSummary();
+    return;
+  }
+
+  // ========== Video 子项 ==========
+  if (filter === 'video') {
+    const videoModels = models.filter(m => (m.categories || []).indexOf('video') >= 0);
+    const sorted = sortInCategory(videoModels, 'video');
+    const intl = sorted.filter(m => m.region === '国际');
+    const dom = sorted.filter(m => m.region === '国内');
+
+    let html = '';
+    if (dom.length) {
+      html += '<div class="section-title">🇨🇳 国内视频模型 <span class="new-count">' + dom.length + '</span></div>';
+      html += dom.map(renderModel).join('');
+    }
+    if (intl.length) {
+      html += '<div class="section-title">🌐 国际视频模型 <span class="new-count">' + intl.length + '</span></div>';
+      html += intl.map(renderModel).join('');
+    }
+    if (sorted.length === 0) {
+      html = '<div class="empty-state"><div class="emoji">🎬</div>暂无视频子项收录模型</div>';
+    }
+    list.innerHTML = html;
+    updateSummary();
+    return;
+  }
+
+  // ========== 全部/区域/tier/open 过滤 ==========
   if (filter !== 'all') {
     if (filter === 'new') {
       models = models.filter(m => m._is_new === true);
@@ -2940,31 +1100,55 @@ function render(filter) {
     }
   }
 
-  const intl = models.filter(m => m.region === '国际');
-  const dom = models.filter(m => m.region === '国内');
+  // 分离视频 / 文本
+  const textModels = models.filter(m => (m.categories || []).indexOf('video') < 0);
+  const videoModels = models.filter(m => (m.categories || []).indexOf('video') >= 0);
+
+  const intl = textModels.filter(m => m.region === '国际');
+  const dom = textModels.filter(m => m.region === '国内');
+  const vIntl = videoModels.filter(m => m.region === '国际');
+  const vDom = videoModels.filter(m => m.region === '国内');
 
   const newIntlCount = intl.filter(m => m._is_new).length;
   const newDomCount = dom.filter(m => m._is_new).length;
 
   let html = '';
   if (intl.length) {
-    html += '<div class="section-title">🌐 国际模型';
+    html += '<div class="section-title">🌐 国际文本模型';
     if (newIntlCount > 0) html += ' <span class="new-count">+' + newIntlCount + ' 新增</span>';
     html += '</div>';
     html += intl.map(renderModel).join('');
   }
   if (dom.length) {
-    html += '<div class="section-title">🇨🇳 国内模型';
+    html += '<div class="section-title">🇨🇳 国内文本模型';
     if (newDomCount > 0) html += ' <span class="new-count">+' + newDomCount + ' 新增</span>';
     html += '</div>';
     html += dom.map(renderModel).join('');
   }
 
-  // Always show watch list models (for 'all' and region/tier/open filters, not 'new' or 'watch')
+  // 视频部分（仅在不过滤 watch 时显示）
+  if (filter !== 'new' && (vDom.length || vIntl.length)) {
+    html += '<hr class="watch-divider" style="border-top:2px dashed rgba(247,120,186,0.3)">' +
+            '<div style="position:relative;height:0">' +
+            '<div style="position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--cat-video);background:var(--bg);padding:0 12px;white-space:nowrap">🎬 视频生成模型 · 按秒/按次计费</div>' +
+            '</div>';
+    if (vDom.length) {
+      html += '<div class="section-title" style="color:var(--cat-video)">🇨🇳 国内视频模型 <span style="font-size:10px">' + vDom.length + ' 个</span></div>';
+      html += vDom.map(renderModel).join('');
+    }
+    if (vIntl.length) {
+      html += '<div class="section-title" style="color:var(--cat-video)">🌐 国际视频模型 <span style="font-size:10px">' + vIntl.length + ' 个</span></div>';
+      html += vIntl.map(renderModel).join('');
+    }
+  }
+
+  // Watch list
   if (filter !== 'new' && watchModels.length > 0) {
     const watchIntl = watchModels.filter(m => m.region === '国际');
     const watchDom = watchModels.filter(m => m.region === '国内');
-    html += '<hr class="watch-divider">';
+    if (watchIntl.length || watchDom.length) {
+      html += '<hr class="watch-divider">';
+    }
     if (watchIntl.length) {
       html += '<div class="section-title">🌐 国际 · 待观察 <span style="font-size:10px;color:var(--accent);">+观察期7天</span></div>';
       html += watchIntl.map(renderWatchModel).join('');
@@ -2975,8 +1159,8 @@ function render(filter) {
     }
   }
 
-  if (models.length === 0 && watchModels.length === 0) {
-    html = '<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:13px;">暂无匹配模型</div>';
+  if (!html) {
+    html = '<div class="empty-state"><div class="emoji">🔍</div>暂无匹配模型</div>';
   }
 
   list.innerHTML = html;
@@ -2987,6 +1171,8 @@ function updateSummary() {
   const allDiscounts = [];
   const channelWins = {};
   DATA.hot_models.forEach(m => {
+    // 跳过视频模型，因计费单位不同
+    if ((m.categories || []).indexOf('video') >= 0) return;
     const best = findBestPlatform(m);
     if (best) {
       allDiscounts.push(best.discount);
@@ -3021,7 +1207,9 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 document.getElementById('updateTime').textContent = '更新于 ' + DATA.update_time;
-document.getElementById('modelCount').textContent = DATA.hot_models.length + '个热门模型' + ((DATA.watch_list_models || []).length > 0 ? ' +' + DATA.watch_list_models.length + '观察' : '');
+const totalText = DATA.hot_models.filter(m => (m.categories || []).indexOf('video') < 0).length;
+const totalVideo = DATA.hot_models.filter(m => (m.categories || []).indexOf('video') >= 0).length;
+document.getElementById('modelCount').textContent = totalText + '个文本 + ' + totalVideo + '个视频' + ((DATA.watch_list_models || []).length > 0 ? ' +' + DATA.watch_list_models.length + '观察' : '');
 document.getElementById('platformCount').textContent = DATA.platforms.length + '个平台渠道';
 renderChangeBanner();
 render();
