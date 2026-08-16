@@ -219,6 +219,33 @@ body {
   font-size: 10px; color: var(--text-dim);
   white-space: nowrap;
 }
+/* Persistent category reason subtitle (card header, coding/video models) */
+.mc-cat-reason {
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-left: 3px solid var(--cat-coding);
+  border-radius: 4px;
+  background: rgba(88,166,255,0.06);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.45;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help;
+}
+.mc-cat-reason.is-video-reason {
+  border-left-color: var(--cat-video);
+  background: rgba(247,120,186,0.06);
+}
+.mc-cat-reason .mcr-label {
+  font-size: 9px; font-weight: 800;
+  color: var(--cat-coding);
+  margin-right: 5px;
+}
+.mc-cat-reason.is-video-reason .mcr-label { color: var(--cat-video); }
+
 .new-badge {
   font-size: 9px; font-weight: 800;
   padding: 1px 5px; border-radius: 3px;
@@ -348,6 +375,46 @@ body {
   font-variant-numeric: tabular-nums;
 }
 .video-tier-table tr:last-child td { border-bottom: none; }
+
+/* Video platform discount table (connected platforms only) */
+.vp-divider {
+  display: flex; align-items: center; gap: 8px;
+  margin: 12px 0 4px;
+  font-size: 10px; color: var(--text-muted); font-weight: 700;
+  white-space: nowrap;
+}
+.vp-divider::before, .vp-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.video-plat-table {
+  width: 100%; margin-top: 4px;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.video-plat-table th {
+  text-align: left; font-weight: 600;
+  color: var(--text-dim); padding: 4px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+}
+.video-plat-table td {
+  padding: 4px;
+  border-bottom: 1px solid rgba(48,54,61,0.5);
+  font-variant-numeric: tabular-nums;
+}
+.video-plat-table tr:last-child td { border-bottom: none; }
+.video-plat-table .vp-best { color: var(--green); font-weight: 800; }
+.video-plat-table tr.vp-best-row td { background: rgba(63,185,80,0.06); }
+.vp-oem-tag {
+  font-size: 8px; font-weight: 700;
+  padding: 1px 4px; border-radius: 3px;
+  background: rgba(63,185,80,0.15); color: var(--green);
+  margin-left: 3px;
+}
+.vp-best-tag {
+  font-size: 8px; font-weight: 700;
+  margin-left: 3px;
+}
 
 /* Price detail table */
 .price-table {
@@ -753,7 +820,7 @@ function renderModel(model) {
   // Platform rows
   let platformRows;
   if (isVideo) {
-    // Video tier table - render tiers + platforms
+    // Video tier table + connected-platform discount table
     let tierHtml = '';
     const tiers = model.tiers || [];
     if (tiers.length > 0) {
@@ -771,8 +838,58 @@ function renderModel(model) {
           '</tr>';
       });
       tierHtml += '</tbody></table>';
-      platformRows = tierHtml;
     }
+
+    // Connected-platform discount table (only platforms with discount data)
+    const pfDict = model.platforms || {};
+    const vPlats = [];
+    DATA.platforms.forEach(function(p) {
+      const pd = pfDict[p.id];
+      if (pd && pd.discount !== null && pd.discount !== undefined) {
+        vPlats.push({ id: p.id, name: p.name, data: pd });
+      }
+    });
+    // Also include video-specific OEM channels not in the 12-platform list (e.g. minimax-api, kling-api)
+    Object.keys(pfDict).forEach(function(pid) {
+      if (!DATA.platforms.some(function(p) { return p.id === pid; })) {
+        const pd = pfDict[pid];
+        if (pd && pd.discount !== null && pd.discount !== undefined) {
+          vPlats.push({ id: pid, name: pid, data: pd });
+        }
+      }
+    });
+
+    let platHtml = '';
+    if (vPlats.length > 0) {
+      // Find best discount (< 1.0)
+      let bestId = null, bestD = 1.0;
+      vPlats.forEach(function(v) {
+        if (v.data.discount < bestD) { bestD = v.data.discount; bestId = v.id; }
+      });
+      const unitCn = model.billing_unit === 'per_generation' ? 'CNY/次' : 'CNY/秒';
+      const unitUs = model.billing_unit === 'per_generation' ? 'USD/次' : 'USD/秒';
+      platHtml += '<div class="vp-divider">渠道折扣 · 已对接 ' + vPlats.length + ' 家</div>';
+      platHtml += '<table class="video-plat-table">' +
+        '<thead><tr><th>平台</th><th>折扣</th><th style="text-align:right">' + unitCn + '</th><th style="text-align:right">' + unitUs + '</th></tr></thead>' +
+        '<tbody>';
+      vPlats.forEach(function(v) {
+        const d = v.data.discount;
+        const isOem = Math.abs(d - 1) < 0.0001;
+        const isBest = v.id === bestId && !isOem;
+        const pc = v.data.price_cny;
+        const pu = v.data.price_usd;
+        platHtml += '<tr' + (isBest ? ' class="vp-best-row"' : '') + '>' +
+          '<td>' + v.name +
+            (isOem ? '<span class="vp-oem-tag">出厂价</span>' : '') +
+            (isBest ? '<span class="vp-best-tag">💰最优</span>' : '') + '</td>' +
+          '<td class="' + (isBest ? 'vp-best' : '') + '">' + (d * 100).toFixed(0) + '%' + '</td>' +
+          '<td style="text-align:right">' + (pc != null ? '¥' + Number(pc).toFixed(2) : '-') + '</td>' +
+          '<td style="text-align:right">' + (pu != null ? '$' + Number(pu).toFixed(3) : '-') + '</td>' +
+          '</tr>';
+      });
+      platHtml += '</tbody></table>';
+    }
+    platformRows = tierHtml + platHtml;
   } else {
     // Text mode price table
     const best = findBestPlatform(model);
@@ -851,12 +968,28 @@ function renderModel(model) {
 
   const priceClass = priceMissing ? 'price-main price-warn' : (priceChanged ? 'price-main changed' : 'price-main');
 
-  // Category reason block (show inside expanded card)
+  // Category reason block (inside expanded card) — only for non-coding/video
+  // categories (coding/video show a persistent subtitle in the header instead)
   const reasonText = (model.category_reason || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  const catReasonBlock = (isVideo || reasonText) ? '' +
+  const cats = model.categories || [];
+  const hasCvCat = isVideo || cats.indexOf('coding') >= 0;
+  const catReasonBlock = (reasonText && !hasCvCat) ? '' +
     '<div class="cat-reason">' +
       '<span class="cr-label">💡 分类依据</span>' + reasonText +
     '</div>' : '';
+
+  // Persistent category reason subtitle (card header, coding/video models)
+  let catSubtitle = '';
+  if (hasCvCat && model.category_reason) {
+    const fullTitle = String(model.category_reason).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    let short = String(model.category_reason);
+    if (short.length > 80) short = short.substring(0, 80) + '…';
+    short = short.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    catSubtitle = '' +
+      '<div class="mc-cat-reason' + (isVideo ? ' is-video-reason' : '') + '" title="' + fullTitle + '">' +
+        '<span class="mcr-label">📌 加标签理由</span>' + short +
+      '</div>';
+  }
 
   // Build category badge HTML
   const catBadges = renderCategoryBadges(model);
@@ -877,6 +1010,7 @@ function renderModel(model) {
               '<span class="model-tier">' + model.tier + '</span>' +
               '<span class="model-version">' + versionName + '</span>' +
             '</div>' +
+            catSubtitle +
           '</div>' +
           '<div class="mc-right">' +
             '<div class="' + priceClass + '">' + base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out) + '</div>' +
