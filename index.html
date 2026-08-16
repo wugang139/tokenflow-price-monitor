@@ -220,6 +220,7 @@ body {
   white-space: nowrap;
 }
 /* Persistent category reason subtitle (card header, coding/video models) */
+/* 2026-08-17 修复：允许自动换行，手机窄屏也能完整显示（长度由 JS 80 字截断控制） */
 .mc-cat-reason {
   margin-top: 5px;
   padding: 3px 8px;
@@ -228,11 +229,9 @@ body {
   background: rgba(88,166,255,0.06);
   font-size: 11px;
   color: var(--text-dim);
-  line-height: 1.45;
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.5;
+  white-space: normal;
+  word-break: break-word;
   cursor: help;
 }
 .mc-cat-reason.is-video-reason {
