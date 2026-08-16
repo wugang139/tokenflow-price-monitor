@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>TokenFlow · 视频生成模型价格监控</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --card: #161b22;
+  --card-hover: #1c2330;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-dim: #7d8590;
+  --text-muted: #484f58;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --yellow: #d29922;
+  --orange: #db6d28;
+  --purple: #bc8cff;
+  --pink: #f778ba;
+  --teal: #39d0d8;
+  --gold: #e3b341;
+  --cn-domestic: #f85149;
+  --intl: #58a6ff;
+  --changed: #f85149;
+  --changed-bg: rgba(248,81,73,0.08);
+  --changed-border: rgba(248,81,73,0.35);
+  --new-badge: #f85149;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 100px;
+}
+/* Header */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,17,23,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px 10px;
+}
+.header h1 {
+  font-size: 18px; font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+}
+.header h1 .emoji { font-size: 20px; }
+.header .subtitle { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.header .meta {
+  font-size: 11px; color: var(--text-dim);
+  margin-top: 6px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.header .meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+.header .meta .badge {
+  padding: 2px 8px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  font-size: 10px; font-weight: 600;
+}
+.header .meta .badge.cn { color: var(--cn-domestic); border-color: var(--cn-domestic); }
+.header .meta .badge.intl { color: var(--intl); border-color: var(--intl); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* Change banner */
+.change-banner {
+  margin: 8px 12px;
+  padding: 10px 12px;
+  background: var(--changed-bg);
+  border: 1px solid var(--changed-border);
+  border-radius: 10px;
+}
+.change-banner .cb-title { font-size: 13px; font-weight: 700; color: var(--changed); }
+.change-banner .cb-detail { font-size: 11px; color: var(--text-dim); margin-top: 4px; line-height: 1.6; }
+
+/* Billing note card */
+.note-card {
+  margin: 8px 12px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.note-card .note-title { color: var(--gold); font-weight: 700; margin-bottom: 4px; font-size: 12px; }
+.note-card ul { list-style: none; padding-left: 0; }
+.note-card li { padding: 2px 0; padding-left: 14px; position: relative; }
+.note-card li::before { content: "•"; position: absolute; left: 4px; color: var(--text-muted); }
+.note-card li.warn { color: var(--red); }
+.note-card li.warn::before { content: "⚠"; }
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 6px; padding: 8px 12px 4px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex-shrink: 0;
+  padding: 6px 12px; border-radius: 16px;
+  font-size: 12px; font-weight: 600;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer; transition: all 0.2s;
+}
+.tab.active {
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+
+/* Model card */
+.model-section { padding: 4px 12px 0; }
+.model-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.model-card.new { border-color: var(--new-badge); }
+.model-card.new::before {
+  content: "🆕"; position: absolute; margin-left: -8px; margin-top: -8px;
+}
+.model-head {
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+.model-head:active { background: var(--card-hover); }
+.model-head .rank {
+  flex-shrink: 0;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--text-dim);
+}
+.model-head .info { flex: 1; min-width: 0; }
+.model-head .name {
+  font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+}
+.model-head .name .vendor {
+  font-size: 11px; font-weight: 400; color: var(--text-dim);
+  padding: 1px 6px; border-radius: 8px; background: var(--bg);
+}
+.model-head .name .tier-tag {
+  font-size: 9px; padding: 1px 5px; border-radius: 6px;
+  background: rgba(227,179,65,0.15); color: var(--gold); font-weight: 700;
+}
+.model-head .meta-line {
+  font-size: 10px; color: var(--text-dim); margin-top: 2px;
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.model-head .meta-line .region-cn { color: var(--cn-domestic); }
+.model-head .meta-line .region-intl { color: var(--intl); }
+.model-head .meta-line .oss { color: var(--green); }
+.model-head .meta-line .close { color: var(--orange); }
+.model-head .price-main {
+  flex-shrink: 0; text-align: right;
+}
+.model-head .price-main .num {
+  font-size: 16px; font-weight: 700; color: var(--text);
+  font-family: 'SF Mono', Menlo, monospace;
+}
+.model-head .price-main .unit {
+  font-size: 9px; color: var(--text-dim); margin-top: 2px;
+}
+.model-head .arrow {
+  flex-shrink: 0;
+  width: 18px; color: var(--text-muted);
+  transition: transform 0.2s;
+  font-size: 12px;
+}
+.model-card.expanded .arrow { transform: rotate(90deg); }
+
+/* Expanded details */
+.model-detail {
+  display: none;
+  padding: 8px 12px 12px;
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--bg);
+}
+.model-card.expanded .model-detail { display: block; }
+
+/* Tier table */
+.tier-table {
+  margin: 6px 0;
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 11px;
+}
+.tier-row {
+  display: flex; align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.tier-row:last-child { border-bottom: none; }
+.tier-row .res {
+  flex: 0 0 70px;
+  color: var(--accent); font-weight: 600;
+}
+.tier-row .price {
+  flex: 1;
+  color: var(--text); font-weight: 600;
+}
+.tier-row .price small { color: var(--text-dim); font-weight: 400; }
+.tier-row .note {
+  flex: 1; font-size: 10px; color: var(--text-dim);
+  font-family: -apple-system, sans-serif;
+  text-align: right;
+}
+
+/* Platform chips */
+.platforms {
+  margin-top: 8px;
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.platform-chip {
+  font-size: 10px;
+  padding: 3px 8px; border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.platform-chip .name { color: var(--accent); font-weight: 600; }
+.platform-chip .dis { color: var(--green); margin-left: 4px; }
+
+/* Modalities */
+.modalities {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  margin: 4px 0;
+}
+.mod {
+  font-size: 9px; padding: 1px 5px; border-radius: 6px;
+  background: rgba(88,166,255,0.1); color: var(--accent);
+}
+.mod.audio { background: rgba(227,179,65,0.15); color: var(--gold); }
+
+/* Ranking bar */
+.ranking {
+  margin: 4px 0;
+  padding: 4px 8px;
+  background: rgba(227,179,65,0.08);
+  border-left: 2px solid var(--gold);
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* Note */
+.model-note {
+  margin: 4px 0;
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* Section header */
+.section-h {
+  padding: 14px 16px 6px;
+  font-size: 12px; font-weight: 700;
+  color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Platform list */
+.plat-card {
+  margin: 0 12px 8px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+}
+.plat-card .pname { font-weight: 700; color: var(--accent); }
+.plat-card .pregion { font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 6px; }
+.plat-card .pregion.domestic { background: rgba(248,81,73,0.15); color: var(--cn-domestic); }
+.plat-card .pregion.intl { background: rgba(88,166,255,0.15); color: var(--intl); }
+.plat-card .pnote { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 20px 16px;
+  color: var(--text-muted); font-size: 10px;
+}
+.footer a { color: var(--accent); text-decoration: none; }
+
+/* Tab content */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Compare view */
+.compare-table {
+  margin: 0 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+.compare-row.head {
+  background: var(--bg);
+  position: sticky; top: 130px;
+  z-index: 50;
+}
+.compare-cell {
+  background: var(--card);
+  padding: 8px 6px;
+  font-size: 11px;
+  text-align: center;
+}
+.compare-cell.head { font-weight: 700; color: var(--text-dim); font-size: 10px; }
+.compare-cell .name { color: var(--text); font-weight: 700; }
+.compare-cell .price { color: var(--green); font-family: 'SF Mono', monospace; font-weight: 700; }
+.compare-cell .note { font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><span class="emoji">🎬</span>TokenFlow · 视频生成模型价格监控</h1>
+  <div class="subtitle">AI 视频生成大模型 · 按秒/按次计费 · 跨厂商横向对比</div>
+  <div class="meta">
+    <span class="dot"></span>
+    <span>共 <b id="m-count" style="color:var(--text)">--</b> 个模型</span>
+    <span class="badge cn" id="m-cn">国内 --</span>
+    <span class="badge intl" id="m-intl">国际 --</span>
+    <span style="color:var(--text-muted)">·</span>
+    <span id="m-updated">更新中...</span>
+  </div>
+</div>
+
+<div class="note-card" id="billing-note">
+  <div class="note-title">📌 计费规则</div>
+  <ul id="billing-list"></ul>
+</div>
+
+<div class="change-banner" id="change-banner" style="display:none">
+  <div class="cb-title" id="cb-title"></div>
+  <div class="cb-detail" id="cb-detail"></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="main">� 主对比</div>
+  <div class="tab" data-tab="detail">🔍 完整多档</div>
+  <div class="tab" data-tab="platforms">🏭 原厂入口</div>
+</div>
+
+<div id="tab-main" class="tab-content active">
+  <div class="section-h">📊 主流分辨率定价横向对比（720P/1080P基准）</div>
+  <div class="compare-table" id="compare-table"></div>
+</div>
+
+<div id="tab-detail" class="tab-content">
+  <div class="section-h">🔍 各模型完整多档定价</div>
+  <div class="model-section" id="model-list"></div>
+</div>
+
+<div id="tab-platforms" class="tab-content">
+  <div class="section-h">🏭 原厂/中转平台入口</div>
+  <div id="platform-list"></div>
+</div>
+
+<div class="footer">
+  TokenFlow 视频生成模型监控 · 数据来源：原厂官方定价页面 + 第三方跨验证<br>
+  与 TokenFlow 文本模型监控并行更新（每周日 08:00）
+</div>
+
+<script>
+// ============ DATA INJECTION ============
+const DATA = {
+  "meta": {
+    "title": "TokenFlow 视频生成模型价格监控",
+    "subtitle": "Video Generation Models Price Monitor",
+    "billing_unit": "per second (按输出秒数) 或 per generation (按次)",
+    "last_updated": "2026-08-17",
+    "update_time": "2026-08-17 00:30",
+    "update_frequency": "每周日 08:00（与文本Token监控同步）",
+    "total_models": 11,
+    "regions": [
+      "国际",
+      "国内"
+    ],
+    "fx_rate": "USD/CNY = 7.2",
+    "data_sources": [
+      "厂商官方API定价页面",
+      "中转站第三方定价页",
+      "Renderful/CrazyRouter/302.ai跨验证",
+      "知乎/财联社行业评测"
+    ],
+    "watch_out": [
+      "Sora 2 API将于 2026-09-24 关闭，不再推荐新集成",
+      "智谱 CogVideoX 按次计费(¥0.5/次)，不等同按秒",
+      "腾讯 HY-Video 按积分(1积分=1.2元)计费",
+      "可灵 Master 高画质档($1.70/5s)成本是标准档的 5.5 倍",
+      "Seedance 2.0 含视频输入版(视频编辑) 比纯生成版便宜，但效果略弱"
+    ]
+  },
+  "video_models": [
+    {
+      "id": "minimax-h3",
+      "name": "MiniMax-H3",
+      "vendor": "MiniMax",
+      "vendor_cn": "稀宇科技",
+      "region": "国内",
+      "open_source": "闭源",
+      "tier": "旗舰",
+      "modalities": [
+        "文生视频",
+        "图生视频",
+        "视频编辑",
+        "文生音频"
+      ],
+      "max_resolution": "2K",
+      "max_duration_seconds": 15,
+      "native_audio": true,
+      "ranking": "AA视频编辑榜 #1",
+      "release_date": "2025-07-31",
+      "note": "全模态旗舰，2K/15s/24fps + 原生32kHz立体声。视频编辑能力全球第一。",
+      "tiers": [
+        {
+          "resolution": "768P",
+          "price_cny": 0.5,
+          "price_usd": 0.072,
+          "unit": "per second",
+          "duration_range": "≤15s"
+        },
+        {
+          "resolution": "2K",
+          "price_cny": 0.8,
+          "price_usd": 0.115,
+          "unit": "per second",
+          "duration_range": "≤15s"
+        }
+      ],
+      "platforms": {
+        "minimax-api": {
+          "price_cny": null,
+          "price_usd": null,
+          "discount": 1.0,
+          "note": "原厂直供，全球API"
+        }
+      },
+      "_is_new": true
+    },
+    {
+      "id": "seedance-2.0",
+      "name": "Seedance 2.0",
+      "vendor": "ByteDance",
+      "vendor_cn": "字节跳动",
+      "region": "国内",
+      "open_source": "闭源",
+      "tier": "旗舰",
+      "modalities": [
+        "文生视频",
+        "图生视频",
+        "文生音频",
+        "视频输入(编辑)"
+      ],
+      "max_resolution": "4K",
+      "max_duration_seconds": 15,
+      "native_audio": true,
+      "ranking": "中文视频生成 Top 2，性价比超过 Sora 2/Veo 3",
+      "release_date": "2026-03",
+      "note": "支持四种模态输入 + 原生音频 + web search增强prompt。运动场景生成可用率SOTA。",
+      "tiers": [
+        {
+          "resolution": "480p",
+          "price_cny": 0.5,
+          "price_usd": 0.07,
+          "unit": "per second",
+          "duration_range": "4-15s",
+          "note": "起步档"
+        },
+        {
+          "resolution": "720p",
+          "price_cny": 1.13,
+          "price_usd": 0.16,
+          "unit": "per second",
+          "duration_range": "4-15s",
+          "note": "主力档"
+        },
+        {
+          "resolution": "1080p",
+          "price_cny": 2.4,
+          "price_usd": 0.34,
+          "unit": "per second",
+          "duration_range": "4-15s",
+          "note": "高清档"
+        },
+        {
+          "resolution": "4K",
+          "price_cny": 9.66,
+          "price_usd": 1.37,
+          "unit": "per second",
+          "duration_range": "4-15s",
+          "note": "顶级档"
+        }
+      ],
+      "fast_tiers": [
+        {
+          "name": "seedance-2.0-fast",
+          "resolution": "480p",
+          "price_usd": 0.06,
+          "unit": "per second"
+        },
+        {
+          "name": "seedance-2.0-fast",
+          "resolution": "720p",
+          "price_usd": 0.13,
+          "unit": "per second"
+        }
+      ],
+      "mini_tiers": [
+        {
+          "name": "seedance-2.0-mini",
+          "resolution": "480p",
+          "price_usd": 0.04,
+          "unit": "per second"
+        },
+        {
+          "name": "seedance-2.0-mini",
+          "resolution": "720p",
+          "price_usd": 0.08,
+          "unit": "per second"
+        }
+      ],
+      "platforms": {
+        "volcengine": {
+          "price_cny": null,
+          "price_usd": null,
+          "discount": 1.0,
+          "note": "原厂直供，火山引擎Ark"
+        },
+        "apimodels.app": {
+          "price_usd": 0.092,
+          "discount": 0.95,
+          "note": "海外中转, $0.092/s(480p)≈原厂价"
+        }
+      }
+    },
+    {
+      "id": "wan-2.2-t2v-plus",
+      "name": "Wan 2.2 T2V Plus",
+      "vendor": "Alibaba",
+      "vendor_cn": "阿里巴巴",
+      "region": "国内",
+      "open_source": "部分开源(Apache 2.0)",
+      "tier": "主力",
+      "modalities": [
+        "文生视频"
+      ],
+      "max_resolution": "1080P",
+      "max_duration_seconds": 10,
+      "native_audio": false,
+      "ranking": "开源视频生成 Top",
+      "release_date": "2025-07",
+      "note": "阿里万相2.2主力文生视频模型，14B参数。开源可商用，量产首选。",
+      "tiers": [
+        {
+          "resolution": "480P",
+          "price_cny": 0.14,
+          "price_usd": 0.02,
+          "unit": "per second",
+          "duration_range": "≤10s"
+        },
+        {
+          "resolution": "1080P",
+          "price_cny": 0.7,
+          "price_usd": 0.1,
+          "unit": "per second",
+          "duration_range": "≤10s"
+        }
+      ],
+      "other_versions": [
+        {
+          "name": "wan2.5-t2v-preview",
+          "tiers": [
+            {
+              "resolution": "480P",
+              "price_cny": 0.3,
+              "unit": "per second"
+            },
+            {
+              "resolution": "720P",
+              "price_cny": 0.6,
+              "unit": "per second"
+            },
+            {
+              "resolution": "1080P",
+              "price_cny": 1.0,
+              "unit": "per second"
+            }
+          ]
+        },
+        {
+          "name": "wan2.2-t2v-turbo",
+          "resolution": "720P",
+          "price_cny": 0.2,
+          "unit": "per second"
+        }
+      ],
+      "platforms": {
+        "aliyun-bailian": {
+          "price_cny": null,
+          "price_usd": null,
+          "discount": 1.0,
+          "note": "阿里云百炼原厂直供"
+        },
+        "crazyrouter": {
+          "price_cny": null,
+          "price_usd": null,
+          "discount": 1.0,
+          "note": "CrazyRouter对齐官方价"
+        }
+      }
+    },
+    {
+      "id": "wan-2.2-i2v-flash",
+      "name": "Wan 2.2 I2V Flash",
+      "vendor": "Alibaba",
+      "vendor_cn": "阿里巴巴",
+      "region": "国内",
+      "open_source": "部分开源(Apache 2.0)",
+      "tier": "高效",
+      "modalities": [
+        "图生视频",
+        "首尾帧生视频"
+      ],
+      "max_resolution": "1080P",
+      "max_duration_seconds": 10,
+      "native_audio": false,
+      "ranking": "阿里量产首选(图生)",
+      "release_date": "2025-07",
+      "note": "图生视频高性价比档，三档分辨率覆盖480P/720P/1080P。同名版本首尾帧生视频同价。",
+      "tiers": [
+        {
+          "resolution": "480P",
+          "price_cny": 0.1,
+          "price_usd": 0.014,
+          "unit": "per second"
+        },
+        {
+          "resolution": "720P",
+          "price_cny": 0.2,
+          "price_usd": 0.028,
+          "unit": "per second"
+        },
+        {
+          "resolution": "1080P",
+          "price_cny": 0.48,
+          "price_usd": 0.067,
+          "unit": "per second"
+        }
+      ],
+      "platforms": {
+        "aliyun-bailian": {
+          "price_cny": null,
+          "price_usd": null,
+          "discount": 1.0,
+          "note": "阿里云百炼原厂直供"
+        },
+        "crazyrouter": {
+          "price_cny": null,
+          "price_usd": null,
+          "discount": 1.0,
+          "note": "CrazyRouter对齐官方价"
+        }
+      }
+    },
+    {
+      "id": "cogvideox-2",
+      "name": "CogVideoX-2",
+      "vendor": "Zhipu",
+      "vendor_cn": "智谱",
+      "region": "国内",
+      "open_source": "开源(Apache 2.0)",
+      "tier": "主力",
+      "modalities": [
+        "文生视频",
+        "图生视频"
+      ],
+      "max_resolution": "4K",
+      "max_duration_seconds": 10,
+      "native_audio": false,
+      "ranking": "国内开源视频生成 Top",
+      "release_date": "2025-08",
+      "note": "图生视频能力提升38%。按次计费(¥0.5/次)。10s视频折算¥0.05/s, 国内最便宜的中端档。",
+      "tiers": [
+        {
+          "resolution": "720P-4K",
+          "price_cny": 0.5,
+          "price_usd": 0.07,
+          "unit": "per generation",
+          "duration_range": "5-10s",
+          "note": "按次计费，不按秒"
+        }
+      ],
+      "other_versions": [
+        {
+          "name": "cogvideox-3",
+          "price_cny": 1.5,
+          "unit": "per generation",
+          "note": "CogVideoX-3 新增首尾帧生成功能"
+        },
+        {
+          "name": "cogvideox-1.5",
+          "price_cny": 0.5,
+          "unit": "per generation",
+          "note": "上一代"
+        }
+      ],
+      "platforms": {
+        "zhipu-bigmodel": {
+          "price_cny": 0.5,
+          "discount": 1.0,
+          "note": "智谱开放平台原厂直供"
+        },
+        "302.ai": {
+          "price_cny": 0.1,
+          "discount": 0.2,
+          "note": "海外中转, 0.1 PTC/次(PTC≈¥0.65), 性价比折扣"
+        }
+      }
+    },
+    {
+      "id": "cogvideox-flash",
+      "name": "CogVideoX-Flash",
+      "vendor": "Zhipu",
+      "vendor_cn": "智谱",
+      "region": "国内",
+      "open_source": "闭源",
+      "tier": "免费/普惠",
+      "modalities": [
+        "文生视频",
+        "图生视频"
+      ],
+      "max_resolution": "720P",
+      "max_duration_seconds": 6,
+      "native_audio": false,
+      "ranking": "国内最便宜的6秒视频",
+      "release_date": "2026",
+      "note": "智谱普惠视频生成模型，¥0.1 PTC/次(≈¥0.065/次)，是替代Sora 2的最低成本选项。",
+      "tiers": [
+        {
+          "resolution": "720P",
+          "price_cny": 0.065,
+          "price_usd": 0.01,
+          "unit": "per generation",
+          "duration_range": "6s",
+          "note": "按次计费"
+        }
+      ],
+      "platforms": {
+        "zhipu-bigmodel": {
+          "price_cny": 0.065,
+          "discount": 1.0,
+          "note": "普惠资源包内免费或极低价"
+        }
+      },
+      "_is_new": true
+    },
+    {
+      "id": "hunyuan-video-1.5",
+      "name": "HY-Video-1.5",
+      "vendor": "Tencent",
+      "vendor_cn": "腾讯",
+      "region": "国内",
+      "open_source": "开源(130亿参数)",
+      "tier": "主力",
+      "modalities": [
+        "文生视频",
+        "图生视频",
+        "数字人",
+        "视频特效"
+      ],
+      "max_resolution": "1080P",
+      "max_duration_seconds": 5,
+      "native_audio": true,
+      "ranking": "开源参数最大(130亿)",
+      "release_date": "2025-11",
+      "note": "1积分=1.2元，1.5积分/次≈¥1.8/次(5s视频)。导演级运镜+原生切镜+特效配音，国内开源最强。",
+      "tiers": [
+        {
+          "resolution": "1080P",
+          "price_cny": 1.8,
+          "price_usd": 0.25,
+          "unit": "per generation",
+          "duration_range": "5s",
+          "note": "按次计费, 含原生切镜"
+        }
+      ],
+      "other_versions": [
+        {
+          "name": "YT-Video-2.0",
+          "price_cny": "2.4/6.0",
+          "unit": "per generation",
+          "note": "480p 2积分, 720p/1080p 5积分"
+        },
+        {
+          "name": "YT-Video-HumanActor",
+          "resolution": "720p",
+          "price_cny": 1.2,
+          "unit": "per second",
+          "note": "数字人单张参考图驱动"
+        },
+        {
+          "name": "YT-Video-HumanActor",
+          "resolution": "1080p",
+          "price_cny": 2.4,
+          "unit": "per second",
+          "note": "数字人1080P"
+        }
+      ],
+      "platforms": {
+        "tencent-cloud-ti": {
+          "price_cny": null,
+          "discount": 1.0,
+          "note": "腾讯云TokenHub原厂直供,新人50积分/365天免费"
+        }
+      }
+    },
+    {
+      "id": "kling-v2.6",
+      "name": "Kling v2.6",
+      "vendor": "Kuaishou",
+      "vendor_cn": "快手",
+      "region": "国内",
+      "open_source": "闭源",
+      "tier": "旗舰(主流)",
+      "modalities": [
+        "文生视频",
+        "图生视频",
+        "首尾帧"
+      ],
+      "max_resolution": "1080P",
+      "max_duration_seconds": 10,
+      "native_audio": false,
+      "ranking": "国产画质天花板",
+      "release_date": "2026-04",
+      "note": "快手可灵2.6主流档，国产画质第一梯队。光影和运动连贯性最好，但生成速度偏慢(5-15min)。",
+      "tiers": [
+        {
+          "resolution": "720P",
+          "price_usd": 0.31,
+          "price_cny": 2.23,
+          "unit": "per 5s video",
+          "duration_range": "5s/10s",
+          "note": "基础档"
+        }
+      ],
+      "platforms": {
+        "kling-api": {
+          "price_usd": 0.31,
+          "discount": 1.0,
+          "note": "快手可灵API原厂直供"
+        },
+        "renderful": {
+          "price_usd": 0.31,
+          "discount": 1.0,
+          "note": "Renderful低于官方价的中转"
+        }
+      }
+    },
+    {
+      "id": "kling-v2-master",
+      "name": "Kling v2 Master",
+      "vendor": "Kuaishou",
+      "vendor_cn": "快手",
+      "region": "国内",
+      "open_source": "闭源",
+      "tier": "极致",
+      "modalities": [
+        "文生视频",
+        "图生视频"
+      ],
+      "max_resolution": "1080P(原生)",
+      "max_duration_seconds": 10,
+      "native_audio": false,
+      "ranking": "国产顶级画质(对标Sora 2 Pro)",
+      "release_date": "2025-11",
+      "note": "Master画质，$1.70/5s ≈ $0.34/s。1080P原生，对标Sora 2 Pro / Veo 3。",
+      "tiers": [
+        {
+          "resolution": "1080P(原生)",
+          "price_usd": 1.7,
+          "price_cny": 12.24,
+          "unit": "per 5s video",
+          "duration_range": "5s/10s",
+          "note": "极致档"
+        }
+      ],
+      "platforms": {
+        "kling-api": {
+          "price_usd": 1.7,
+          "discount": 1.0,
+          "note": "快手可灵API原厂直供"
+        }
+      }
+    },
+    {
+      "id": "sora-2",
+      "name": "Sora 2",
+      "vendor": "OpenAI",
+      "vendor_cn": "OpenAI",
+      "region": "国际",
+      "open_source": "闭源",
+      "tier": "旗舰(临近退场)",
+      "modalities": [
+        "文生视频",
+        "图生视频",
+        "对话同步",
+        "音效"
+      ],
+      "max_resolution": "720P(API)",
+      "max_duration_seconds": 12,
+      "native_audio": true,
+      "ranking": "物理仿真/电影感最强(2025-12发布时)",
+      "release_date": "2025-12",
+      "note": "⚠️ API将于2026-09-24关闭。生成10秒720p视频≈$1.00。不推荐新集成。",
+      "tiers": [
+        {
+          "resolution": "720p",
+          "price_usd": 0.1,
+          "price_cny": 0.72,
+          "unit": "per second",
+          "duration_range": "4/8/12s"
+        }
+      ],
+      "pro_tiers": [
+        {
+          "name": "sora-2-pro",
+          "resolution": "720p",
+          "price_usd": 0.3,
+          "unit": "per second"
+        },
+        {
+          "name": "sora-2-pro",
+          "resolution": "1024p",
+          "price_usd": 0.5,
+          "unit": "per second"
+        },
+        {
+          "name": "sora-2-pro",
+          "resolution": "1080p",
+          "price_usd": 0.7,
+          "unit": "per second",
+          "note": "OpenAI页面公布但API schema当前不支持1080p"
+        }
+      ],
+      "platforms": {
+        "openai-api": {
+          "price_usd": 0.1,
+          "discount": 1.0,
+          "note": "⚠️ API 2026-09-24关闭"
+        },
+        "openrouter": {
+          "price_usd": null,
+          "discount": null,
+          "note": "暂未上架(预期关闭前不会新接入)"
+        }
+      }
+    },
+    {
+      "id": "veo-3.1",
+      "name": "Veo 3.1",
+      "vendor": "Google",
+      "vendor_cn": "Google",
+      "region": "国际",
+      "open_source": "闭源",
+      "tier": "旗舰",
+      "modalities": [
+        "文生视频",
+        "图生视频",
+        "音效"
+      ],
+      "max_resolution": "4K",
+      "max_duration_seconds": 8,
+      "native_audio": true,
+      "ranking": "电影质感第二(对标Sora 2 Pro)",
+      "release_date": "2026-01",
+      "note": "Google Vertex AI官方。Fast档适合测试(720p $0.10/s)，Standard档适合商用。",
+      "tiers": [
+        {
+          "name": "Fast, 视频",
+          "resolution": "720p/1080p",
+          "price_usd": 0.1,
+          "unit": "per second",
+          "note": "无音频"
+        },
+        {
+          "name": "Fast, 视频+音频",
+          "resolution": "720p/1080p",
+          "price_usd": 0.15,
+          "unit": "per second",
+          "note": "+50%"
+        },
+        {
+          "name": "Standard, 视频",
+          "resolution": "720p/1080p",
+          "price_usd": 0.2,
+          "unit": "per second"
+        },
+        {
+          "name": "Standard, 视频+音频",
+          "resolution": "720p/1080p",
+          "price_usd": 0.4,
+          "unit": "per second"
+        },
+        {
+          "name": "Fast, 4K",
+          "resolution": "4K",
+          "price_usd": 0.3,
+          "unit": "per second"
+        },
+        {
+          "name": "Standard, 4K",
+          "resolution": "4K",
+          "price_usd": 0.4,
+          "unit": "per second",
+          "note": "纯视频"
+        },
+        {
+          "name": "Standard, 4K+音频",
+          "resolution": "4K",
+          "price_usd": 0.6,
+          "unit": "per second"
+        }
+      ],
+      "platforms": {
+        "google-vertex": {
+          "price_usd": 0.1,
+          "discount": 1.0,
+          "note": "Vertex AI原厂直供"
+        }
+      }
+    }
+  ],
+  "platforms": [
+    {
+      "id": "minimax-api",
+      "name": "MiniMax开放平台",
+      "region": "国内",
+      "url": "https://api.minimax.chat",
+      "note": "MiniMax-H3原厂直供"
+    },
+    {
+      "id": "volcengine",
+      "name": "火山引擎·方舟",
+      "region": "国内",
+      "url": "https://www.volcengine.com/product/ark",
+      "note": "Seedance 2.0原厂"
+    },
+    {
+      "id": "aliyun-bailian",
+      "name": "阿里云百炼",
+      "region": "国内",
+      "url": "https://bailian.console.aliyun.com",
+      "note": "Wan全系列原厂"
+    },
+    {
+      "id": "zhipu-bigmodel",
+      "name": "智谱AI开放平台",
+      "region": "国内",
+      "url": "https://open.bigmodel.cn",
+      "note": "CogVideoX原厂直供"
+    },
+    {
+      "id": "tencent-cloud-ti",
+      "name": "腾讯云·TokenHub",
+      "region": "国内",
+      "url": "https://cloud.tencent.com/product/ti",
+      "note": "HY-Video原厂"
+    },
+    {
+      "id": "kling-api",
+      "name": "可灵AI·开放平台",
+      "region": "国内",
+      "url": "https://klingai.kuaishou.com",
+      "note": "可灵全系列原厂"
+    },
+    {
+      "id": "openai-api",
+      "name": "OpenAI API",
+      "region": "国际",
+      "url": "https://platform.openai.com",
+      "note": "⚠️ Sora 2 API 9/24关闭"
+    },
+    {
+      "id": "google-vertex",
+      "name": "Google Vertex AI",
+      "region": "国际",
+      "url": "https://cloud.google.com/vertex-ai",
+      "note": "Veo 3.1原厂"
+    },
+    {
+      "id": "apimodels.app",
+      "name": "APImodels.app",
+      "region": "国际",
+      "url": "https://apimodels.app",
+      "note": "Seedance 2.0海外中转"
+    },
+    {
+      "id": "renderful",
+      "name": "Renderful API",
+      "region": "国际",
+      "url": "https://renderful.ai",
+      "note": "可灵海外中转"
+    },
+    {
+      "id": "crazyrouter",
+      "name": "CrazyRouter",
+      "region": "国内",
+      "url": "https://crazyrouter.com",
+      "note": "万相中转，对齐官方价"
+    },
+    {
+      "id": "302.ai",
+      "name": "302.AI",
+      "region": "国际",
+      "url": "https://302.ai",
+      "note": "CogVideoX海外中转"
+    }
+  ],
+  "changes": {
+    "update_type": "首次建立视频生成模型监控清单",
+    "summary": "2026-08-17 刚哥要求建立视频生成模型监控页，覆盖主流的11个模型(7国内+4国际)，按秒/按次两类计费模式。已交叉验证MiniMax-H3、Seedance 2.0、Wan 2.2、CogVideoX、HY-Video、Kling、Sora 2、Veo 3.1的出厂价。",
+    "new_models": [
+      {
+        "model": "minimax-h3",
+        "reason": "刚哥要求纳入"
+      },
+      {
+        "model": "cogvideox-flash",
+        "reason": "国内最便宜的6秒视频, 普惠资源包"
+      }
+    ],
+    "watch_list_additions": [],
+    "validation": {
+      "out_of_scope": [
+        "Sora 2 API 9/24关闭, 已纳入但标注退场时间",
+        "Pika($0.07/次按次)、Runway Gen-4($0.12/s)未纳入, 待刚哥确认是否补录"
+      ],
+      "all_prices_verified": true,
+      "verification_sources_count": 2
+    }
+  }
+};
+// ============ END DATA INJECTION ============
+
+(function(){
+  // Header
+  const models = DATA.video_models;
+  const meta = DATA.meta;
+  document.getElementById('m-count').textContent = models.length;
+  const cn = models.filter(m => m.region === '国内').length;
+  const intl = models.length - cn;
+  document.getElementById('m-cn').textContent = `国内 ${cn}`;
+  document.getElementById('m-intl').textContent = `国际 ${intl}`;
+  document.getElementById('m-updated').textContent = `更新于 ${meta.update_time}`;
+
+  // Billing note
+  const list = document.getElementById('billing-list');
+  meta.billing_notes.forEach(n => {
+    const li = document.createElement('li'); li.textContent = n; list.appendChild(li);
+  });
+  meta.watch_out.forEach(n => {
+    const li = document.createElement('li'); li.className='warn'; li.textContent = n; list.appendChild(li);
+  });
+
+  // Change banner
+  if (DATA.changes && DATA.changes.update_type) {
+    const cb = document.getElementById('change-banner');
+    cb.style.display = 'block';
+    document.getElementById('cb-title').textContent = '🔔 ' + DATA.changes.update_type;
+    document.getElementById('cb-detail').textContent = DATA.changes.summary;
+  }
+
+  // Compare table (main view)
+  const cmp = document.getElementById('compare-table');
+  const head = document.createElement('div');
+  head.className = 'compare-row head';
+  head.innerHTML = `
+    <div class="compare-cell head">模型</div>
+    <div class="compare-cell head">旗舰档价</div>
+    <div class="compare-cell head">主流档价</div>
+    <div class="compare-cell head">特点</div>
+  `;
+  cmp.appendChild(head);
+
+  models.forEach((m, idx) => {
+    const row = document.createElement('div');
+    row.className = 'compare-row';
+    // 旗舰档：选最高档价格
+    const topTier = m.tiers[m.tiers.length-1];
+    // 主流档：选中间档价格（720P或第二档）
+    let mainTier = null;
+    if (m.tiers.length >= 2) {
+      mainTier = m.tiers[Math.floor(m.tiers.length/2)] || m.tiers[0];
+    } else {
+      mainTier = m.tiers[0];
+    }
+    const fmt = (t) => {
+      if (!t) return '—';
+      const p = t.price_cny || t.price_usd;
+      if (!p && p !== 0) return '—';
+      const cur = t.price_cny ? '¥' : '$';
+      const num = t.price_cny || t.price_usd;
+      return `${cur}${num}<small style="font-size:9px;color:var(--text-dim)"> /${t.unit.includes('second')?'秒':'次'}</small>`;
+    };
+    row.innerHTML = `
+      <div class="compare-cell">
+        <div class="name">${m.name}</div>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:2px">${m.vendor_cn} · ${m.region}</div>
+      </div>
+      <div class="compare-cell">
+        <div class="price">${fmt(topTier)}</div>
+        <div class="note">${topTier ? topTier.resolution || topTier.name || '' : ''}</div>
+      </div>
+      <div class="compare-cell">
+        <div class="price">${fmt(mainTier)}</div>
+        <div class="note">${mainTier ? mainTier.resolution || mainTier.name || '' : ''}</div>
+      </div>
+      <div class="compare-cell" style="font-size:10px;color:var(--text-dim);text-align:left;padding-left:10px">
+        ${m.ranking || ''}
+      </div>
+    `;
+    cmp.appendChild(row);
+  });
+
+  // Model detail list
+  const list2 = document.getElementById('model-list');
+  models.forEach((m, idx) => {
+    const card = document.createElement('div');
+    card.className = 'model-card' + (m._is_new ? ' new' : '');
+    card.style.position = 'relative';
+
+    // Head
+    const head2 = document.createElement('div');
+    head2.className = 'model-head';
+    const tierBadge = m.tier ? `<span class="tier-tag">${m.tier}</span>` : '';
+    const osTag = m.open_source.includes('开源') ? '<span class="oss">开源</span>' : '<span class="close">闭源</span>';
+    const regionClass = m.region === '国内' ? 'region-cn' : 'region-intl';
+
+    // 主显价格：选最高档
+    const mainT = m.tiers[m.tiers.length-1];
+    const mainNum = mainT.price_cny || mainT.price_usd;
+    const mainCur = mainT.price_cny ? '¥' : '$';
+    const mainUnit = mainT.unit.includes('second') ? '/秒' : '/次';
+
+    head2.innerHTML = `
+      <div class="rank">${idx+1}</div>
+      <div class="info">
+        <div class="name">
+          ${m.name} ${tierBadge}
+          <span class="vendor">${m.vendor_cn}</span>
+        </div>
+        <div class="meta-line">
+          <span class="${regionClass}">${m.region}</span>
+          ${osTag}
+          <span>${m.modalities[0]}${m.modalities.length>1 ? ' · 多模态' : ''}</span>
+          ${m.native_audio ? '<span style="color:var(--gold)">🔊原生音频</span>' : ''}
+        </div>
+      </div>
+      <div class="price-main">
+        <div class="num">${mainCur}${mainNum}</div>
+        <div class="unit">${mainUnit} · ${mainT.resolution || mainT.name || ''}</div>
+      </div>
+      <div class="arrow">▶</div>
+    `;
+    card.appendChild(head2);
+
+    // Detail (collapsed by default)
+    const detail = document.createElement('div');
+    detail.className = 'model-detail';
+
+    // Modalities
+    const mods = m.modalities.map(mt => {
+      const cls = mt.includes('音频') ? 'mod audio' : 'mod';
+      return `<span class="${cls}">${mt}</span>`;
+    }).join('');
+    detail.innerHTML += `<div class="modalities">${mods}</div>`;
+
+    // Ranking
+    if (m.ranking) {
+      detail.innerHTML += `<div class="ranking">� ${m.ranking}</div>`;
+    }
+
+    // Note
+    if (m.note) {
+      detail.innerHTML += `<div class="model-note">${m.note}</div>`;
+    }
+
+    // Tier table
+    let tierHtml = '<div class="tier-table">';
+    m.tiers.forEach(t => {
+      const cur = t.price_cny ? '¥' : '$';
+      const num = t.price_cny || t.price_usd;
+      const unitText = t.unit.includes('second') ? '/秒' : '/次';
+      tierHtml += `
+        <div class="tier-row">
+          <div class="res">${t.resolution || t.name || '默认'}</div>
+          <div class="price">${cur}${num}${unitText}</div>
+          <div class="note">${t.note || t.duration_range || ''}</div>
+        </div>
+      `;
+    });
+    // Other versions
+    if (m.other_versions) {
+      m.other_versions.forEach(v => {
+        const cur = typeof v.price_cny === 'string' ? '¥' : '$';
+        const num = v.price_cny || v.price_usd;
+        const unitText = v.unit.includes('second') ? '/秒' : '/次';
+        tierHtml += `
+          <div class="tier-row" style="opacity:0.7">
+            <div class="res" style="color:var(--purple)">${v.name}</div>
+            <div class="price" style="color:var(--purple)">${v.price_cny ? '¥' : '$'}${v.price_cny || v.price_usd}${unitText}</div>
+            <div class="note">${v.note || v.resolution || ''}</div>
+          </div>
+        `;
+      });
+    }
+    if (m.fast_tiers) {
+      m.fast_tiers.forEach(v => {
+        tierHtml += `
+          <div class="tier-row" style="opacity:0.85">
+            <div class="res" style="color:var(--teal)">${v.name}<br>${v.resolution}</div>
+            <div class="price" style="color:var(--teal)">$${v.price_usd}/秒</div>
+            <div class="note">极速档</div>
+          </div>
+        `;
+      });
+    }
+    if (m.pro_tiers) {
+      m.pro_tiers.forEach(v => {
+        tierHtml += `
+          <div class="tier-row" style="opacity:0.85">
+            <div class="res" style="color:var(--gold)">${v.name}<br>${v.resolution}</div>
+            <div class="price" style="color:var(--gold)">$${v.price_usd}/秒</div>
+            <div class="note">${v.note || ''}</div>
+          </div>
+        `;
+      });
+    }
+    tierHtml += '</div>';
+    detail.innerHTML += tierHtml;
+
+    // Platforms
+    const platKeys = Object.keys(m.platforms || {});
+    if (platKeys.length) {
+      let pHtml = '<div style="margin-top:8px;font-size:10px;color:var(--text-dim)">原厂/中转入口：</div><div class="platforms">';
+      platKeys.forEach(pk => {
+        const p = m.platforms[pk];
+        const dis = p.discount ? (p.discount === 1.0 ? '原价' : `×${p.discount}`) : '';
+        pHtml += `<span class="platform-chip"><span class="name">${pk}</span>${dis ? '<span class="dis">' + dis + '</span>' : ''}<span style="color:var(--text-muted);margin-left:4px">${p.note || ''}</span></span>`;
+      });
+      pHtml += '</div>';
+      detail.innerHTML += pHtml;
+    }
+
+    card.appendChild(detail);
+
+    // Click to expand
+    head2.addEventListener('click', () => {
+      card.classList.toggle('expanded');
+    });
+
+    list2.appendChild(card);
+  });
+
+  // Platform list
+  const plist = document.getElementById('platform-list');
+  DATA.platforms.forEach(p => {
+    const c = document.createElement('div');
+    c.className = 'plat-card';
+    c.innerHTML = `
+      <div>
+        <span class="pname">${p.name}</span>
+        <span class="pregion ${p.region==='国内'?'domestic':'intl'}">${p.region}</span>
+      </div>
+      <div style="margin-top:4px;font-size:10px"><a href="${p.url}" style="color:var(--accent);text-decoration:none" target="_blank">${p.url}</a></div>
+      <div class="pnote">${p.note}</div>
+    `;
+    plist.appendChild(c);
+  });
+
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('tab-' + t.dataset.tab).classList.add('active');
+    });
+  });
+})();
+</script>
+</body>
+</html>
