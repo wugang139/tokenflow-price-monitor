@@ -1372,7 +1372,7 @@ function renderCategoryExplainer(filter) {
     return '' +
       '<div class="category-explainer" style="border-color:rgba(167,139,250,0.25);background:rgba(167,139,250,0.05)">' +
         '<div class="ce-title" style="color:var(--cat-image)">🖼️ 图片生成子项</div>' +
-        '<div>收录依据：TMax 260825 报价单中的图片模型（按张计费，per_image）。覆盖阿里 Qwen Image / Wan 2.7 Image / Z Image、字节 Doubao Seedream 5.0、生数 Vidu Q2。⚠️ 当前仅有 TMax 渠道批发价，OEM 出厂价缺失（待各厂商官网公开后回填）。</div>' +
+        '<div>收录依据：TMax 公开渠道报价中的图片模型（按张计费，per_image）。覆盖阿里 Qwen Image / Wan 2.7 Image / Z Image、字节 Doubao Seedream 5.0、生数 Vidu Q2。⚠️ 当前仅有 TMax 渠道批发价，OEM 出厂价缺失（待各厂商官网公开后回填）。</div>' +
         '<div class="ce-sort"><b>排序规则:</b> 按 TMax 成交价 (USD/张) 升序，同价时按 tier 优先级（旗舰>主力>轻量）。CNY 按 fx_rate.current(央行中间价 n006) 折算。</div>' +
       '</div>';
   }
@@ -1380,7 +1380,7 @@ function renderCategoryExplainer(filter) {
     return '' +
       '<div class="category-explainer" style="border-color:rgba(251,146,60,0.25);background:rgba(251,146,60,0.05)">' +
         '<div class="ce-title" style="color:var(--cat-audio)">🎵 语音合成子项</div>' +
-        '<div>收录依据：TMax 260825 报价单中的 TTS 语音合成模型（按 1 万字符计费，per_10k_chars）。当前仅有阿里 Qwen 3 TTS Flash / Instruct Flash 2 款。⚠️ 当前仅有 TMax 渠道批发价，OEM 出厂价缺失（待各厂商官网公开后回填）。</div>' +
+        '<div>收录依据：TMax 公开渠道报价中的 TTS 语音合成模型（按 1 万字符计费，per_10k_chars）。当前仅有阿里 Qwen 3 TTS Flash / Instruct Flash 2 款。⚠️ 当前仅有 TMax 渠道批发价，OEM 出厂价缺失（待各厂商官网公开后回填）。</div>' +
         '<div class="ce-sort"><b>排序规则:</b> 按 TMax 成交价 (USD/10K 字符) 升序。CNY 按 fx_rate.current(央行中间价 n006) 折算。</div>' +
       '</div>';
   }
@@ -1388,7 +1388,7 @@ function renderCategoryExplainer(filter) {
     return '' +
       '<div class="category-explainer" style="border-color:rgba(251,191,36,0.25);background:rgba(251,191,36,0.05)">' +
         '<div class="ce-title" style="color:var(--cat-vidu)">🎬 Vidu 系列子项</div>' +
-        '<div>收录依据：生数科技 Vidu 品牌全系列（图片 + 视频），260825 报价单收录 Vidu Q2（图）和 Vidu Q3 Pro（视频）。Tencent 托管。⚠️ 该厂商模型按「per_image / per_second」混合计费，Vidu Q3 Omni 多模态曾在某渠道偏高（详见 n003）。</div>' +
+        '<div>收录依据：生数科技 Vidu 品牌全系列（图片 + 视频），TMax 渠道报价收录 Vidu Q2（图）和 Vidu Q3 Pro（视频）。⚠️ 该厂商模型按「per_image / per_second」混合计费，Vidu Q3 Omni 多模态曾在某渠道偏高（详见 n003）。</div>' +
         '<div class="ce-sort"><b>排序规则:</b> 按 TMax 成交价 (USD) 升序，跨计费单位时按单笔请求换算。CNY 按 fx_rate.current(央行中间价 n006) 折算。</div>' +
       '</div>';
   }
@@ -1441,8 +1441,6 @@ function renderPerUnitCard(model) {
     priceLine = '<div class="mc-price-row" style="margin:8px 0 4px;color:var(--text-dim)">价格缺失</div>';
   }
 
-  const srcAttr = (t.source || '').substring(0, 80) + ((t.source || '').length > 80 ? '...' : '');
-
   return '<div class="' + finalCardClass + '" data-id="' + model.id + '" data-categories="' + dataCats + '" data-billing="' + billing + '">' +
     '<div class="mc-header">' +
       '<div class="mc-title">' +
@@ -1455,9 +1453,8 @@ function renderPerUnitCard(model) {
       '</div>' +
     '</div>' +
     priceLine +
-    '<div class="mc-info-row" style="font-size:11px;color:var(--text-dim);margin-top:2px">批发渠道: <b style="color:var(--text)">TMax</b> · 260825 报价单</div>' +
-    '<div class="mc-info-row" style="font-size:10px;color:var(--text-dim);margin-top:2px">OEM 出厂价: 缺失(260825报价单未列, 待各厂商官网公开)</div>' +
-    '<div class="mc-source" style="font-size:9px;color:var(--text-dim);margin-top:4px;font-family:monospace">' + srcAttr + '</div>' +
+    '<div class="mc-info-row" style="font-size:11px;color:var(--text-dim);margin-top:2px">批发渠道: <b style="color:var(--text)">TMax</b>（公开渠道报价）</div>' +
+    '<div class="mc-info-row" style="font-size:10px;color:var(--text-dim);margin-top:2px">OEM 出厂价: 缺失(渠道报价未列, 待各厂商官网公开)</div>' +
   '</div>';
 }
 
@@ -1681,7 +1678,7 @@ function render(filter) {
             '<div style="position:relative;height:0">' +
             '<div style="position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--cat-image);background:var(--bg);padding:0 12px;white-space:nowrap">🖼️ 图片生成模型 · 按张计费</div>' +
             '</div>';
-    html += '<div class="section-title" style="color:var(--cat-image)">🖼️ 图片模型 <span style="font-size:10px">' + imageModels.length + ' 个 (TMax 260825)</span></div>';
+    html += '<div class="section-title" style="color:var(--cat-image)">🖼️ 图片模型 <span style="font-size:10px">' + imageModels.length + ' 个 (TMax 渠道)</span></div>';
     html += imageModels.map(renderPerUnitCard).join('');
   }
 
@@ -1691,7 +1688,7 @@ function render(filter) {
             '<div style="position:relative;height:0">' +
             '<div style="position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--cat-audio);background:var(--bg);padding:0 12px;white-space:nowrap">🎵 语音合成模型 · 按 1 万字符计费</div>' +
             '</div>';
-    html += '<div class="section-title" style="color:var(--cat-audio)">🎵 语音模型 <span style="font-size:10px">' + audioModels.length + ' 个 (TMax 260825)</span></div>';
+    html += '<div class="section-title" style="color:var(--cat-audio)">🎵 语音模型 <span style="font-size:10px">' + audioModels.length + ' 个 (TMax 渠道)</span></div>';
     html += audioModels.map(renderPerUnitCard).join('');
   }
 
