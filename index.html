@@ -1419,10 +1419,10 @@ function renderPerUnitCard(model) {
 
   const discount = t.tmax_discount_rate;
   const discountText = (discount == null || discount === undefined) ? '-'
-    : (discount >= 0.999 ? '无折扣(Custom)')
-    : (discount <= 0.5001 ? '50% OFF')
-    : (Math.abs(discount - 0.6) < 0.01 ? '40% OFF')
-    : ((1 - discount) * 100).toFixed(0) + '% OFF';
+    : (discount >= 0.999 ? '无折扣(Custom)'
+    : (discount <= 0.5001 ? '50% OFF'
+    : (Math.abs(discount - 0.6) < 0.01 ? '40% OFF'
+    : ((1 - discount) * 100).toFixed(0) + '% OFF')));
 
   const fmtNum = function (v) {
     if (v == null) return '-';
