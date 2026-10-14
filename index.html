@@ -912,7 +912,7 @@ body {
   <div class="tab" data-filter="旗舰">旗舰</div>
   <div class="tab" data-filter="闭源">闭源</div>
   <div class="tab" data-filter="开源">开源</div>
-  <div class="tab tab-guanwang" data-filter="guanwang">🌐 官网列表</div>
+  <div class="tab tab-guanwang" data-filter="guanwang">🌐 官网&更新</div>
   <div class="tab" data-filter="new">🆕 新增</div>
   <div class="tab" data-filter="watch">👁️ 待观察</div>
   <div class="tab tab-notes" data-filter="notes">📝 备注 <span class="notes-badge" id="notesBadge">0</span></div>
@@ -1992,7 +1992,8 @@ function renderGuanwangPanel() {
     {name:'百度千帆', type:'大厂MaaS', site:'https://cloud.baidu.com', pricing:'https://cloud.baidu.com/product/wenxinworkshop/pricing', checked:'2026-10-04', note:'文心原厂直供 1.0'},
     {name:'腾讯云TI', type:'大厂MaaS', site:'https://cloud.tencent.com', pricing:'https://cloud.tencent.com/document/product/1729/97731', checked:'2026-10-04', note:'混元原厂直供'},
     {name:'知一', type:'中转站', site:'', pricing:'', checked:'2026-10-04', note:'纯 Token 0.43–0.89（商务对接）'},
-    {name:'TokenFlow', type:'自有平台', site:'', pricing:'', checked:'2026-10-04', note:'1+N：对外折扣 = 最低供应商 +0.03'}
+    {name:'词易', type:'中转站', site:'https://www.tokease.cn', pricing:'', checked:'2026-10-14', note:'新增渠道，定价页待补充'},
+    {name:'TokenFlow', type:'自有平台', site:'https://www.tokenflow.host', pricing:'', checked:'2026-10-04', note:'1+N：对外折扣 = 最低供应商 +0.03'}
   ];
   const siteCell = c => c.site
     ? '<a href="'+c.site+'" target="_blank" rel="noopener">'+c.site+'</a>'
@@ -2020,7 +2021,7 @@ function renderGuanwangPanel() {
         '<thead><tr><th>渠道</th><th>类型</th><th>官网地址</th><th>定价页</th><th>最近核价</th><th>备注</th></tr></thead>' +
         '<tbody>'+rows+'</tbody>' +
       '</table>' +
-      '<div class="gw-foot">本表为渠道官网入口样板；官网待确认项（SmartAPI / 算能 / 知一 / TokenFlow 自有）将在定稿后补充或标注内部备案路径。数据来源：database/热门平台渠道及数据源地址.json。</div>' +
+      '<div class="gw-foot">本表为渠道官网入口样板；官网待确认项（SmartAPI / 算能 / 知一）将在定稿后补充或标注内部备案路径。数据来源：database/热门平台渠道及数据源地址.json。</div>' +
     '</div>';
 }
 
