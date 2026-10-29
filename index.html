@@ -1139,6 +1139,7 @@ function renderModel(model, opts) {
   const vendorClass = 'v-' + model.vendor;
   const isNew = model._is_new === true;
   const isVideo = (model.categories || []).indexOf('video') >= 0;
+  const isImage = (model.billing_unit === 'per_image');
   const cardClass = isVideo ? 'model-card is-video' : 'model-card';
   const finalCardClass = isNew ? (cardClass + ' is-new') : cardClass;
   const newBadge = isNew ? '<span class="new-badge">NEW</span>' : '';
@@ -1409,8 +1410,8 @@ function renderModel(model, opts) {
             catSubtitle +
           '</div>' +
           '<div class="mc-right">' +
-            '<div class="' + priceClass + '">' + base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out) + '</div>' +
-            '<div class="price-unit">出厂价 输入/输出 · ' + billingUnitText(model) + (isVideo && model.billing_unit === 'per_second' ? ' <span class="tier-flag">按分辨率分级</span>' : '') + '</div>' +
+            '<div class="' + priceClass + '">' + (isImage ? (base.cur + fmtPrice(base.out) + '<span style="color:var(--text-muted);font-size:11px"> /张</span>') : (base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out))) + '</div>' +
+            '<div class="price-unit">' + (isImage ? '出厂价（每张）· ' : '出厂价 输入/输出 · ') + billingUnitText(model) + (isVideo && model.billing_unit === 'per_second' ? ' <span class="tier-flag">按分辨率分级</span>' : '') + '</div>' +
           '</div>' +
           '<div class="expand-arrow">▼</div>' +
         '</div>' +
