@@ -1030,7 +1030,7 @@ function billingUnitText(m) {
 }
 
 function getBasePrices(model) {
-  if (model.region === '国内' && model.input_cny) {
+  if (model.region === '国内' && model.input_cny != null) {
     return { in: model.input_cny, out: model.output_cny, cur: '¥' };
   }
   return { in: model.input_usd, out: model.output_usd, cur: '$' };
@@ -1300,9 +1300,9 @@ function renderModel(model, opts) {
 
   const noteHtml = model.note ? '<div class="model-note">⚠️ ' + model.note + '</div>' : '';
 
-  // Validation (text only)
-  const priceMissing = !isVideo && (base.in === null || base.in === undefined || base.in === 0 ||
-                       base.out === null || base.out === undefined || base.out === 0);
+  // Validation (text only) — 仅当出厂价字段确为 null/undefined 才判定缺失；
+  // 0 是合法值（如图像模型输入图免费 input=0、开源模型 output=0），不应误判
+  const priceMissing = !isVideo && (base.in == null || base.out == null);
   const oemFixInfo = changedFields.oem_price_fix || changedFields.oem_price_missing || changedFields.oem_price_verified;
   const hasPriceMismatch = !!changedFields.oem_price_fix;
 
@@ -1542,7 +1542,7 @@ function renderCategoryExplainer(filter) {
     return '' +
       '<div class="category-explainer" style="border-color:rgba(167,139,250,0.25);background:rgba(167,139,250,0.05)">' +
         '<div class="ce-title" style="color:var(--cat-image)">🖼️ 图片生成子项</div>' +
-        '<div>收录依据：TMax 公开渠道报价中的图片模型（按张计费，per_image）。覆盖阿里 Qwen Image / Wan 2.7 Image / Z Image、字节 Doubao Seedream 5.0、生数 Vidu Q2。⚠️ 当前仅有 TMax 渠道批发价，OEM 出厂价缺失（待各厂商官网公开后回填）。</div>' +
+        '<div>收录依据：TMax 公开渠道报价中的图片模型（按张计费，per_image），叠加各厂商官网公开价。覆盖阿里 Qwen Image / Wan 2.7 Image / Z Image、字节 Doubao Seedream 5.0、生数 Vidu Q2。✅ 出厂价已按官方公开价补齐（阿里云百炼 / 腾讯云 TokenHub 等，双源印证），展示为官方按张价（输入图免费、仅输出计费）；Z-Image 为通义团队开源免费模型（Apache 2.0），官方不按张收费，出厂价记 ¥0。</div>' +
         '<div class="ce-sort"><b>排序规则:</b> 按 TMax 成交价 (USD/张) 升序，同价时按 tier 优先级（旗舰>主力>轻量）。CNY 按 fx_rate.current(央行中间价 n006) 折算。</div>' +
       '</div>';
   }
