@@ -1026,6 +1026,7 @@ function billingUnitText(m) {
   if (b === 'per_second') return '1 second (按秒)';
   if (b === 'per_generation') return 'per generation (按次)';
   if (b === 'per_image') return '元/张 (按张)';
+  if (b === 'per_10k_chars') return '元/万字符 (按字符)';
   return '1M tokens';
 }
 
@@ -1417,7 +1418,7 @@ function renderModel(model, opts) {
           '</div>' +
           '<div class="mc-right">' +
             '<div class="' + priceClass + '">' + (isImage ? (base.cur + fmtPrice(base.out) + '<span style="color:var(--text-muted);font-size:11px"> /张</span>') : isTts ? (base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> /万字符</span>') : (base.cur + fmtPrice(base.in) + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + base.cur + fmtPrice(base.out))) + '</div>' +
-            '<div class="price-unit">' + (isImage ? '出厂价（每张）· ' : isTts ? '出厂价（每万字符）· ' : '出厂价 输入/输出 · ') + billingUnitText(model) + (isVideo && model.billing_unit === 'per_second' ? ' <span class="tier-flag">按分辨率分级</span>' : '') + '</div>' +
+            '<div class="price-unit">' + (isImage ? '出厂价 · ' : isTts ? '出厂价 · ' : '出厂价 输入/输出 · ') + billingUnitText(model) + (isVideo && model.billing_unit === 'per_second' ? ' <span class="tier-flag">按分辨率分级</span>' : '') + '</div>' +
           '</div>' +
           '<div class="expand-arrow">▼</div>' +
         '</div>' +
