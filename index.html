@@ -230,6 +230,23 @@ body {
   color: var(--text-muted);
 }
 .category-explainer .ce-sort b { color: var(--text-dim); font-weight: 600; }
+.category-explainer .ce-counts {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 8px;
+}
+.category-explainer .ce-count-pill {
+  font-size: 11px; font-weight: 500;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(88,166,255,0.1);
+  border: 1px solid rgba(88,166,255,0.25);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.category-explainer .ce-count-pill b { font-size: 13px; font-weight: 800; color: var(--text); }
+.category-explainer .ce-count-pill.c-in { background: rgba(63,185,80,0.12); border-color: rgba(63,185,80,0.35); }
+.category-explainer .ce-count-pill.c-in b { color: #2ea043; }
+.category-explainer .ce-count-pill.c-out { background: rgba(248,81,73,0.12); border-color: rgba(248,81,73,0.35); }
+.category-explainer .ce-count-pill.c-out b { color: #f85149; }
 
 /* Section title */
 .section-title {
@@ -1567,10 +1584,33 @@ function renderCategoryExplainer(filter) {
     const dmeta = DATA.demand_meta || {};
     const ddesc = dmeta.description || '按客户明确提出的模型需求汇总（数量与顺序均可调整）。';
     const dupdated = dmeta.updated ? ('（清单更新于 ' + dmeta.updated + '）') : '';
+    // 动态统计：总数 / 在库 / 未收录入库（含已下架、非Token、待补充）
+    const dmL = DATA.demand_models || [];
+    const hotIds = {};
+    (DATA.hot_models || []).forEach(m => { hotIds[m.id] = true; });
+    let inLib = 0, notLib = 0, discN = 0, nonN = 0;
+    dmL.forEach(e => {
+      if (hotIds[e.id]) { inLib++; }
+      else {
+        notLib++;
+        if (e.status === 'discontinued') discN++;
+        else if (e.status === 'different_billing') nonN++;
+      }
+    });
+    const pending = notLib - discN - nonN;
+    const summaryHtml =
+      '<div class="ce-counts">' +
+        '<span class="ce-count-pill"><b>' + dmL.length + '</b> 个模型</span>' +
+        '<span class="ce-count-pill c-in"><b>' + inLib + '</b> 在库</span>' +
+        '<span class="ce-count-pill c-out"><b>' + notLib + '</b> 未收录入库' +
+          (notLib > 0 ? ('（已下架 ' + discN + ' · 非Token ' + nonN + ' · 待补充 ' + pending + '）') : '') +
+        '</span>' +
+      '</div>';
     return '' +
       '<div class="category-explainer" style="border-color:rgba(79,70,229,0.35);background:rgba(79,70,229,0.06)">' +
         '<div class="ce-title" style="color:#4f46e5">🤝 客户需求（客户指定模型清单）</div>' +
         '<div>' + ddesc + '</div>' +
+        summaryHtml +
         '<div class="ce-sort"><b>说明:</b> 本页按客户提出的模型需求排列，逐一展示各模型官方出厂价与最低渠道报价及对应渠道；已下架模型标注 🚫 并说明停售时间，非 token 计费模型单独标注计费口径。' + dupdated + '</div>' +
       '</div>';
   }
