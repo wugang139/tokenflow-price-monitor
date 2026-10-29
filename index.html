@@ -291,6 +291,7 @@ body {
   padding: 2px 6px; border-radius: 4px;
   white-space: nowrap;
 }
+.vendor-badge.v-unknown { background: var(--text-dim); color: #fff; }
 .model-family {
   font-size: 14px; font-weight: 600;
   white-space: nowrap;
@@ -1603,6 +1604,61 @@ function renderPerUnitCard(model) {
 }
 
 /* ========== 主渲染函数 ========== */
+/* ========== 未收录模型卡片渲染（客户需求页：字段以 — 占位，样式与正式卡片一致） ========== */
+function renderUnlistedModel(displayName, mid) {
+  const DASH = '—';
+  // 最低渠道行（占位）
+  const bestHtml = '' +
+    '<div class="mc-best-row">' +
+      '<span class="best-icon">💰</span>' +
+      '<span class="best-label">最低渠道</span>' +
+      '<span class="best-channel">' + DASH + '</span>' +
+      '<span class="best-discount">' + DASH + '</span>' +
+      '<span class="best-price">' + DASH + '</span>' +
+      '<span class="expand-hint">尚未收录 ▼</span>' +
+    '</div>';
+  // 渠道价格表（与正式卡片同构，全部 — 占位）
+  const platRows = (DATA.platforms || []).map(function(p) {
+    return '' +
+      '<tr>' +
+        '<td class="platform-name">' + (p.name || DASH) + '</td>' +
+        '<td>' + DASH + '</td>' +
+        '<td style="text-align:right">' + DASH + '</td>' +
+      '</tr>';
+  }).join('');
+  const note = '<div class="model-note" style="color:var(--text-muted)">⚠️ 该模型尚未收录至价格监控库，暂无渠道报价。补充数据后本卡片自动展示最低报价及对应渠道。</div>';
+  return '' +
+    '<div class="model-card is-unlisted" data-region="" data-tier="' + DASH + '" data-open="" data-id="' + (mid || '') + '" data-isnew="0" data-categories="text">' +
+      '<div class="mc-header" onclick="toggleCard(this)">' +
+        '<div class="mc-top-row">' +
+          '<div class="mc-left">' +
+            '<div class="mc-left-top">' +
+              '<span class="vendor-badge v-unknown">待收录</span>' +
+              '<span class="model-family">' + String(displayName).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' +
+            '</div>' +
+            '<div class="mc-left-bottom">' +
+              '<span class="model-tier">' + DASH + '</span>' +
+              '<span class="model-version">' + DASH + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mc-right">' +
+            '<div class="price-main">' + DASH + '<span style="color:var(--text-muted);font-size:11px"> / </span>' + DASH + '</div>' +
+            '<div class="price-unit">出厂价 输入/输出 · ' + DASH + '</div>' +
+          '</div>' +
+          '<div class="expand-arrow">▼</div>' +
+        '</div>' +
+        bestHtml +
+      '</div>' +
+      '<div class="mc-body">' +
+        '<table class="price-table">' +
+          '<thead><tr><th>渠道</th><th>折扣</th><th style="text-align:right">实际价格</th></tr></thead>' +
+          '<tbody>' + platRows + '</tbody>' +
+        '</table>' +
+        note +
+      '</div>' +
+    '</div>';
+}
+
 function render(filter) {
   filter = filter || 'all';
   const list = document.getElementById('modelList');
@@ -1675,11 +1731,7 @@ function render(filter) {
         const label = (typeof entry === 'string') ? '' : (entry && entry.label ? entry.label : '');
         const m = byId[mid];
         if (!m) {
-          return '<div class="empty-state" style="padding:18px;text-align:left">' +
-            '<div class="emoji">📭</div>' +
-            '<div style="font-weight:600;margin-bottom:4px">' + (label || mid) + '</div>' +
-            '<div style="font-size:12px;color:var(--text-muted)">该模型尚未收录至价格监控库，暂无渠道报价。补充数据后本卡片自动展示最低报价及对应渠道。</div>' +
-          '</div>';
+          return renderUnlistedModel(label || mid, mid);
         }
         if (label) {
           return renderModel(Object.assign({}, m, { name: label }), { hideReason: true });
