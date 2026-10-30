@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" "black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Token 热门模型价格监控</title>
 <style>
 :root {
@@ -938,6 +938,57 @@ body {
 .quote-table .q-price{font-weight:500}
 .quote-table .q-disc{font-variant-numeric:tabular-nums;font-weight:700;color:var(--gold,#f0b429);white-space:nowrap}
 .supp-code{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:5px;font-size:10.5px;font-weight:700;letter-spacing:.5px;background:rgba(88,166,255,.16);color:var(--accent,#58a6ff);border:1px solid rgba(88,166,255,.35);vertical-align:middle}
+
+/* ========== 手机端适配（≤768px）：表格转卡片堆叠，消除横向滑动 ========== */
+@media (max-width: 768px) {
+  /* —— 模型报价表 —— */
+  .quote-table-wrap { max-width: 100%; padding: 4px 0; overflow: visible; }
+  .quote-table, .quote-table tbody, .quote-table tr, .quote-table td { display: block; width: 100%; }
+  .quote-table thead { display: none; }
+  .quote-table tr:not(.q-group) {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    margin: 8px 8px; padding: 2px 0; box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  }
+  .quote-table tr:not(.q-group) td {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,.06);
+    white-space: normal; text-align: right;
+  }
+  .quote-table tr:not(.q-group) td:last-child { border-bottom: none; }
+  .quote-table tr:not(.q-group) td::before {
+    content: attr(data-label); flex-shrink: 0;
+    color: var(--text-dim); font-weight: 600; font-size: 12px; text-align: left;
+  }
+  .quote-table tr.q-group td {
+    background: rgba(99,102,241,.14); color: var(--gold); font-weight: 700;
+    padding: 8px 12px; margin: 12px 8px 0; border-radius: 8px; text-align: left;
+  }
+  /* —— 官网&更新表 —— */
+  .gw-panel { padding: 8px 2px; }
+  .gw-table, .gw-table tbody, .gw-table tr, .gw-table td { display: block; width: 100%; }
+  .gw-table thead { display: none; }
+  .gw-table tbody tr {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    margin: 10px 4px; padding: 2px 0; box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  }
+  .gw-table tbody tr td {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,.06);
+    white-space: normal; text-align: right;
+  }
+  .gw-table tbody tr td:last-child { border-bottom: none; }
+  .gw-table tbody tr td::before {
+    content: attr(data-label); flex-shrink: 0;
+    color: var(--text-dim); font-weight: 600; font-size: 12px; text-align: left;
+  }
+  /* 渠道列（name+code 两行）与备注列：上下堆叠、左对齐，长内容更易读 */
+  .gw-table tbody tr td:first-child,
+  .gw-table tbody tr td.gw-note {
+    flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
+  }
+  .gw-table tbody tr td:first-child::before,
+  .gw-table tbody tr td.gw-note::before { margin-bottom: 2px; }
+}
 </style>
 </head>
 <body>
@@ -1188,13 +1239,13 @@ function renderQuoteTable() {
       const code = tf !== null && tf !== undefined ? bestSourceCode(m) : '';
       const discHtml = disc + (code ? '<span class="supp-code">' + code + '</span>' : '');
       html += '<tr>' +
-        '<td class="q-num">' + n + '</td>' +
-        '<td class="q-vendor">' + vcn + '</td>' +
-        '<td class="q-model">' + m.id + '</td>' +
-        '<td class="q-type">' + (TYPE_LABEL[t] || t) + '</td>' +
-        '<td class="q-price">' + pr[0] + '</td>' +
-        '<td class="q-price">' + pr[1] + '</td>' +
-        '<td class="q-disc">' + discHtml + '</td>' +
+        '<td class="q-num" data-label="序号">' + n + '</td>' +
+        '<td class="q-vendor" data-label="厂商">' + vcn + '</td>' +
+        '<td class="q-model" data-label="模型">' + m.id + '</td>' +
+        '<td class="q-type" data-label="类型">' + (TYPE_LABEL[t] || t) + '</td>' +
+        '<td class="q-price" data-label="原厂输入">' + pr[0] + '</td>' +
+        '<td class="q-price" data-label="原厂输出">' + pr[1] + '</td>' +
+        '<td class="q-disc" data-label="Token报价">' + discHtml + '</td>' +
         '</tr>';
     });
   });
@@ -2433,13 +2484,13 @@ function renderGuanwangPanel() {
     const code = (c.id && CHANNEL_3CHAR[c.id]) ? CHANNEL_3CHAR[c.id] : '';
     const nameCell = '<span class="gw-name">'+c.name+'</span>' + (code ? '<span class="gw-code">'+code+'</span>' : '');
     return '<tr>' +
-      '<td>'+nameCell+'</td>' +
-      '<td><span class="gw-tag">'+c.type+'</span></td>' +
-      '<td class="gw-site">'+siteCell(c)+'</td>' +
-      '<td class="gw-site">'+priceCell(c)+'</td>' +
-      '<td>'+c.checked+'</td>' +
-      '<td class="gw-disc">'+(c.discount || '—')+'</td>' +
-      '<td class="gw-note">'+c.note+'</td>' +
+      '<td data-label="渠道">'+nameCell+'</td>' +
+      '<td data-label="类型"><span class="gw-tag">'+c.type+'</span></td>' +
+      '<td class="gw-site" data-label="官网地址">'+siteCell(c)+'</td>' +
+      '<td class="gw-site" data-label="定价页">'+priceCell(c)+'</td>' +
+      '<td data-label="最近核价">'+c.checked+'</td>' +
+      '<td class="gw-disc" data-label="折扣率范围">'+(c.discount || '—')+'</td>' +
+      '<td class="gw-note" data-label="备注">'+c.note+'</td>' +
     '</tr>';
   }).join('');
   return '' +
