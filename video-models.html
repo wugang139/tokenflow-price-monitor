@@ -388,27 +388,30 @@ const DATA = {
     "title": "TokenFlow 视频生成模型价格监控",
     "subtitle": "Video Generation Models Price Monitor",
     "billing_unit": "per second (按输出秒数) 或 per generation (按次)",
-    "last_updated": "2026-08-17",
-    "update_time": "2026-08-17 00:30",
+    "last_updated": "2026-11-08",
+    "update_time": "2026-11-08 23:55",
     "update_frequency": "每周日 08:00（与文本Token监控同步）",
-    "total_models": 11,
+    "total_models": 12,
     "regions": [
       "国际",
       "国内"
     ],
-    "fx_rate": "USD/CNY = 7.2",
+    "fx_rate": "USD/CNY = 6.7817 (2026-08-21 央行中间价, n006)",
     "data_sources": [
       "厂商官方API定价页面",
       "中转站第三方定价页",
       "Renderful/CrazyRouter/302.ai跨验证",
-      "知乎/财联社行业评测"
+      "知乎/财联社行业评测",
+      "https://kling.ai/dev/pricing（2026-11-08 双方法核定）"
     ],
     "watch_out": [
       "Sora 2 API将于 2026-09-24 关闭，不再推荐新集成",
       "智谱 CogVideoX 按次计费(¥0.5/次)，不等同按秒",
       "腾讯 HY-Video 按积分(1积分=1.2元)计费",
       "可灵 Master 高画质档($1.70/5s)成本是标准档的 5.5 倍",
-      "Seedance 2.0 含视频输入版(视频编辑) 比纯生成版便宜，但效果略弱"
+      "Seedance 2.0 含视频输入版(视频编辑) 比纯生成版便宜，但效果略弱",
+      "Kling 4.0 按秒计费（Unit/s），官方页以 Unit 列价；页面 USD 为检索侧多源一致换算值 1 Unit = $0.157",
+      "Kling 4.0 含输入视频档单价较低，但计费时长为输出×2 或输入+输出，实际总价需按时长计算"
     ]
   },
   "video_models": [
@@ -1049,6 +1052,124 @@ const DATA = {
           "note": "Vertex AI原厂直供"
         }
       }
+    },
+    {
+      "id": "kling-4.0",
+      "name": "Kling 4.0",
+      "vendor": "Kuaishou",
+      "vendor_cn": "快手",
+      "region": "国内",
+      "open_source": "闭源",
+      "tier": "旗舰",
+      "modalities": [
+        "文生视频",
+        "图生视频",
+        "多图参考",
+        "视频编辑",
+        "首尾帧",
+        "原生音频"
+      ],
+      "max_resolution": "1080P",
+      "max_duration_seconds": 30,
+      "native_audio": true,
+      "ranking": "官方 4.0 主力档（按秒计费，非 Token 计价）",
+      "release_date": "2026-10-15",
+      "note": "快手 Kling 4.0。官方开发者定价页按总视频时长（秒）计费：无输入视频 720P 1.0 Unit/s、1080P 1.5 Units/s；含输入视频 720P 0.6 Unit/s、1080P 0.9 Units/s，计费时长为输出×2 或输入+输出。官方页未列视频 Unit 的美元单价，页面展示的 USD 为检索侧多源一致换算值（1 Unit = $0.157）。本条目价格仅取自官方 4.0 价目表，未沿用 Kling v2.6 / v2-master / v3 任何价格。",
+      "tiers": [
+        {
+          "resolution": "720P",
+          "price_usd": 0.157,
+          "unit": "per second",
+          "duration_range": "按输出秒数",
+          "note": "官方 1.0 Unit/s（无输入视频）；1 Unit = $0.157 换算"
+        },
+        {
+          "resolution": "1080P",
+          "price_usd": 0.235,
+          "unit": "per second",
+          "duration_range": "按输出秒数",
+          "note": "官方 1.5 Units/s（无输入视频）；1 Unit = $0.157 换算"
+        }
+      ],
+      "input_video_tiers": [
+        {
+          "resolution": "720P",
+          "official_units_per_s": 0.6,
+          "price_usd": 0.094,
+          "unit": "per second",
+          "note": "官方含输入视频档；计费时长 = 输出×2 或 输入+输出"
+        },
+        {
+          "resolution": "1080P",
+          "official_units_per_s": 0.9,
+          "price_usd": 0.141,
+          "unit": "per second",
+          "note": "官方含输入视频档；计费时长 = 输出×2 或 输入+输出"
+        }
+      ],
+      "flash_tiers": [
+        {
+          "name": "kling-4.0-flash",
+          "resolution": "720P",
+          "official_units_per_s": 0.6,
+          "price_usd": 0.094,
+          "unit": "per second",
+          "note": "官方 Kling 4.0 Flash 无输入视频档"
+        },
+        {
+          "name": "kling-4.0-flash-input",
+          "resolution": "720P",
+          "official_units_per_s": 0.4,
+          "price_usd": 0.063,
+          "unit": "per second",
+          "note": "官方 Kling 4.0 Flash 含输入视频档"
+        }
+      ],
+      "platforms": {
+        "kling-api": {
+          "price_usd": 0.157,
+          "discount": 1.0,
+          "note": "原厂直供，官方开发者 API 720P 1.0 Unit/s；USD 为换算值"
+        }
+      },
+      "official_pricing_page": "https://kling.ai/dev/pricing",
+      "dual_method_verification": {
+        "rule": "刚哥「双方法验证原则」：①联网检索 ②官网直抓，两路交叉核定",
+        "verified_at": "2026-11-08",
+        "official_pricing_page": "https://kling.ai/dev/pricing",
+        "method_1_search": {
+          "performed": true,
+          "finding": "5 个独立来源一致指向官方页 kling.ai/dev/pricing 的 Kling 4.0 价目表，并给出换算 1 Unit = $0.157：720P $0.157/s、1080P $0.235/s、含输入视频 $0.094/$0.141、Flash 720P $0.094/s。",
+          "sources": [
+            "https://cheapergen.com/models/kuaishou/kling-4.0/cheapest",
+            "https://convly.ai/kling-ai",
+            "https://www.llms.blog/posts/kling-4-0-flash-open-to-all-api-price-limits",
+            "https://www.glbgpt.com/hub/kling-4-0-pricing/",
+            "https://aivideocosts.fyi/"
+          ]
+        },
+        "method_2_official_fetch": {
+          "url": "https://kling.ai/dev/pricing",
+          "http_status": 200,
+          "page_title": "Kling API Pricing | AI Video & Image Generation Costs",
+          "finding": "官方价目表原文：Kling 4.0 无输入视频 720P 1.0 Unit/s、1080P 1.5 Units/s、4K 为 -；含输入视频 0.6 / 0.9 Units/s；Kling 4.0 Flash 0.6 / 0.4 Units/s。页面另写明 Image API Pricing 1 Unit = $0.0035（图像档，不适用于视频）。",
+          "note": "官方页以 Unit/s 列价，未在页面列出视频 Unit 的美元单价；官网原始 HTML 中亦未出现 $0.157。"
+        },
+        "secondary_official_site": {
+          "url": "https://klingai.kuaishou.com/",
+          "finding": "可灵AI创作台页面，未列出 API 价格表。"
+        },
+        "conclusion": "官方开发者定价页核定为 https://kling.ai/dev/pricing（可访问，含 Kling 4.0 完整价目表）。条目价格取自该页 Unit/s 表；USD 数值为检索侧多源一致的换算值，已与官网原文字段分层标注。",
+        "unit_to_usd_rate": 0.157,
+        "unit_to_usd_source": "检索侧 5 个独立来源对官方价目表的一致换算；官网定价页未列视频 Unit 的美元单价",
+        "external_price_signal": {
+          "observed": "wl-053 记录的 Runware $0.094/秒（720p）价格信号",
+          "fact": "该数值与官方含输入视频档 0.6 Unit/s × $0.157 ≈ $0.0942/秒 相同，也与官方 Kling 4.0 Flash 无输入视频档 0.6 Unit/s 的换算值相同。",
+          "handling": "仅作价格信号留痕，不登记为渠道报价，不进入价格比对。"
+        },
+        "no_model_generation_inheritance": true
+      },
+      "_is_new": true
     }
   ],
   "platforms": [
@@ -1138,26 +1259,29 @@ const DATA = {
     }
   ],
   "changes": {
-    "update_type": "首次建立视频生成模型监控清单",
-    "summary": "2026-08-17 刚哥要求建立视频生成模型监控页，覆盖主流的11个模型(7国内+4国际)，按秒/按次两类计费模式。已交叉验证MiniMax-H3、Seedance 2.0、Wan 2.2、CogVideoX、HY-Video、Kling、Sora 2、Veo 3.1的出厂价。",
+    "update_type": "新增 Kling 4.0 视频监控条目（原厂官方定价页双方法核定）",
+    "summary": "2026-11-08 按刚哥决策建立 Kling 4.0 视频监控条目。原厂官方定价页按双方法核定：①联网检索 5 个独立来源一致指向 kling.ai/dev/pricing；②官网直抓该页取得 Kling 4.0 完整 Unit/s 价目表（720P 1.0、1080P 1.5、含输入视频 0.6/0.9、Flash 0.6/0.4）。价格仅取自官方 4.0 价目表，未沿用任何 Kling 旧代际价格。按秒计费非 Token，条目落在视频监控，不进入 hot_models 主清单。",
     "new_models": [
       {
-        "model": "minimax-h3",
-        "reason": "刚哥要求纳入"
-      },
-      {
-        "model": "cogvideox-flash",
-        "reason": "国内最便宜的6秒视频, 普惠资源包"
+        "model": "kling-4.0",
+        "reason": "刚哥 2026-11-08 确认建条目；官方开发者定价页已双方法核定"
       }
     ],
     "watch_list_additions": [],
     "validation": {
       "out_of_scope": [
-        "Sora 2 API 9/24关闭, 已纳入但标注退场时间",
-        "Pika($0.07/次按次)、Runway Gen-4($0.12/s)未纳入, 待刚哥确认是否补录"
+        "Sora 2 API 9/24 关闭，已纳入但标注退场时间",
+        "Pika、Runway Gen-4 未纳入本监控范围"
       ],
       "all_prices_verified": true,
-      "verification_sources_count": 2
+      "verification_sources_count": 2,
+      "dual_method": {
+        "search": true,
+        "official_page_fetch": true,
+        "official_page": "https://kling.ai/dev/pricing",
+        "verified_at": "2026-11-08"
+      },
+      "out_of_scope_note": "wl-053 观察项已按刚哥决策销项：建视频条目，不进入 hot_models 主清单。"
     }
   }
 };
@@ -1176,7 +1300,7 @@ const DATA = {
 
   // Billing note
   const list = document.getElementById('billing-list');
-  meta.billing_notes.forEach(n => {
+  (meta.billing_notes || []).forEach(n => {
     const li = document.createElement('li'); li.textContent = n; list.appendChild(li);
   });
   meta.watch_out.forEach(n => {
