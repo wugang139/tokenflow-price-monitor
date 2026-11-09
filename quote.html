@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Token 模型报价表（对外版）</title>
+<style>
+:root {
+  --bg:#0d1117; --card:#161b22; --card-hover:#1c2330; --border:#30363d;
+  --text:#e6edf3; --text-dim:#7d8590; --text-muted:#484f58;
+  --accent:#58a6ff; --green:#3fb950; --gold:#e3b341; --header:#1f2937;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body {
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang SC','Helvetica Neue',sans-serif;
+  background:var(--bg); color:var(--text); font-size:14px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; padding:16px 12px 60px;
+}
+.pg-head { max-width:1180px; margin:0 auto 10px; }
+.pg-head h1 { font-size:18px; font-weight:700; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.pg-head .meta { font-size:11px; color:var(--text-dim); margin-top:5px; }
+.section-title { font-size:15px; font-weight:700; margin:10px 0; color:var(--gold); display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.section-title span { font-size:11px; font-weight:400; color:var(--text-dim); }
+
+/* ===== 模型报价表（与主监控页 Tab 同源） ===== */
+.quote-table-wrap{max-width:1180px;margin:0 auto;padding:6px 2px;overflow-x:auto}
+.quote-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card,#161b22);border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.3);table-layout:fixed}
+.quote-table th{position:sticky;top:0;background:var(--header,#1f2937);color:var(--text,#e6edf3);padding:10px 12px;text-align:left;font-weight:600;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.08)}
+.quote-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--text,#e6edf3);vertical-align:middle;white-space:nowrap}
+.quote-table tr:hover td{background:rgba(255,255,255,.04)}
+.quote-table .q-group td{background:rgba(99,102,241,.14);color:var(--gold,#f0b429);font-weight:700;padding:7px 12px;letter-spacing:.5px}
+.quote-table .q-num{color:var(--text-dim,#8b949e);text-align:right;font-variant-numeric:tabular-nums}
+.quote-table .q-vendor{font-weight:600;color:var(--text,#e6edf3)}
+.quote-table .q-model{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--accent,#58a6ff);overflow-wrap:break-word}
+.quote-table .q-type{text-align:center}
+.quote-table .q-price{text-align:right;font-variant-numeric:tabular-nums;color:var(--text,#e6edf3);font-weight:500}
+.quote-table .q-disc{font-variant-numeric:tabular-nums;font-weight:700;color:var(--gold,#f0b429);white-space:nowrap;line-height:1.25}
+.supp-code{display:inline-block;margin-left:2px;font-size:8px;font-weight:400;color:var(--text-dim,#8b949e);vertical-align:super;line-height:1}
+
+@media (max-width:768px){
+  /* 放开表格级裁剪：原先最后一列角标被 overflow:hidden 切掉 */
+  .quote-table-wrap{max-width:100%;padding:4px 0;overflow:visible}
+  .quote-table{font-size:11px;overflow:visible}
+  /* 重分配列宽：最后两列留足「百分比 + 三字符角标」空间 */
+  .quote-table col:nth-child(1){width:5% !important}
+  .quote-table col:nth-child(2){width:24% !important}
+  .quote-table col:nth-child(3){width:9% !important}
+  .quote-table col:nth-child(4){width:8% !important}
+  .quote-table col:nth-child(5){width:12% !important}
+  .quote-table col:nth-child(6){width:12% !important}
+  .quote-table col:nth-child(7){width:14% !important}
+  .quote-table col:nth-child(8){width:16% !important}
+  .quote-table th{padding:7px 4px;font-size:10.5px;white-space:normal;text-align:center}
+  .quote-table td{padding:6px 4px;font-size:11px;white-space:normal;vertical-align:middle}
+  .quote-table .q-num{text-align:center;color:var(--text-dim);font-size:10.5px}
+  .quote-table .q-vendor{font-size:11px;white-space:normal}
+  .quote-table .q-model{font-size:10.5px;overflow-wrap:anywhere;line-height:1.3}
+  .quote-table .q-type{font-size:10.5px;white-space:nowrap;text-align:center}
+  .quote-table .q-price{font-size:11px;white-space:nowrap}
+  .quote-table .q-disc{font-size:10px;white-space:normal;text-align:center;line-height:1.3}
+  .quote-table td.q-disc:last-child{padding-right:6px}
+  .quote-table .supp-code{font-size:7px;white-space:nowrap}
+  .quote-table tr.q-group td{font-size:12px;padding:7px 8px}
+}
+
+:root{
+  --ver-bg:linear-gradient(135deg, hsl(267, 76%, 60%), hsl(267, 82%, 76%));
+  --ver-border:hsla(267, 76%, 55%, .55);
+  --ver-shadow:0 1px 4px hsla(267, 76%, 55%, .28);
+}
+.page-version {
+  display:inline-flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.3px;
+  padding:2px 9px;border-radius:999px;color:#0d1117;
+  background:var(--ver-bg);border:1px solid var(--ver-border);
+  white-space:nowrap;box-shadow:var(--ver-shadow);
+}
+.pg-foot{max-width:1180px;margin:16px auto 0;padding:12px 14px;border-top:1px solid var(--border);
+  font-size:11.5px;line-height:1.85;color:var(--text-dim)}
+.pg-foot b{color:var(--text)}
+@media (max-width:768px){
+  /* 7 列专用列宽：合计 100%，最后一列留足「百分比 + 三字符角标」 */
+  .quote-table col:nth-child(1){width:5% !important}
+  .quote-table col:nth-child(2){width:25% !important}
+  .quote-table col:nth-child(3){width:12% !important}
+  .quote-table col:nth-child(4){width:10% !important}
+  .quote-table col:nth-child(5){width:15% !important}
+  .quote-table col:nth-child(6){width:15% !important}
+  .quote-table col:nth-child(7){width:18% !important}
+  .pg-head h1{font-size:16px}
+  .pg-foot{font-size:11px;padding:10px 4px}
+}
+</style>
+</head>
+<body>
+  <div class="pg-head">
+    <h1>📋 Token 模型报价表 <span class="page-version">V1.1.0041</span></h1>
+    <div class="meta">对外单页版 · 数据基准 2026-11-08 06:30:00 · 88 个模型 · 与 Token 热门模型价格监控「模型报价」Tab 同源</div>
+  </div>
+  <div class="section-title" style="color:var(--gold)">📋 Token 模型报价表 <span>（原厂价 · Token 报价=min(渠道报价)+0.02 · 角标=最优采购来源）</span></div>
+  <div class="quote-table-wrap"><table class="quote-table">
+    <colgroup><col style="width:6%"><col style="width:28%"><col style="width:12%"><col style="width:10%"><col style="width:14%"><col style="width:14%"><col style="width:16%"></colgroup>
+    <thead><tr><th>#</th><th>模型</th><th>厂商</th><th>类型</th><th>原厂输入</th><th>原厂输出</th><th>Token 报价</th></tr></thead>
+    <tbody>
+<tr class="q-group"><td colspan="7">阿里巴巴 (23)</td></tr>
+<tr><td class="q-num" data-label="序号">1</td><td class="q-model" data-label="模型">happyhorse-<wbr>1.1-<wbr>i2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥1.12</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">2</td><td class="q-model" data-label="模型">happyhorse-<wbr>1.1-<wbr>r2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥1.12</td><td class="q-disc" data-label="Token报价">31%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">3</td><td class="q-model" data-label="模型">happyhorse-<wbr>1.1-<wbr>t2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥1.12</td><td class="q-disc" data-label="Token报价">42%<span class="supp-code">ALB</span></td></tr>
+<tr><td class="q-num" data-label="序号">4</td><td class="q-model" data-label="模型">qwen-<wbr>3.6-<wbr>flash</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥1.2</td><td class="q-price" data-label="原厂输出">¥7.2</td><td class="q-disc" data-label="Token报价">54%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">5</td><td class="q-model" data-label="模型">qwen-<wbr>3.6-<wbr>plus</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥2</td><td class="q-price" data-label="原厂输出">¥12</td><td class="q-disc" data-label="Token报价">54%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">6</td><td class="q-model" data-label="模型">qwen-<wbr>3.7-<wbr>flash</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥0.2</td><td class="q-price" data-label="原厂输出">¥0.87</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">SIF</span></td></tr>
+<tr><td class="q-num" data-label="序号">7</td><td class="q-model" data-label="模型">qwen-<wbr>3.7-<wbr>max</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥11.1</td><td class="q-price" data-label="原厂输出">¥33.31</td><td class="q-disc" data-label="Token报价">49%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">8</td><td class="q-model" data-label="模型">qwen-<wbr>3.7-<wbr>plus</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥2.69</td><td class="q-price" data-label="原厂输出">¥10.77</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">9</td><td class="q-model" data-label="模型">qwen-<wbr>3.8-<wbr>flash</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥1.01</td><td class="q-price" data-label="原厂输出">¥3.16</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">10</td><td class="q-model" data-label="模型">qwen-<wbr>3.8-<wbr>max</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥13.46</td><td class="q-price" data-label="原厂输出">¥40.38</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">11</td><td class="q-model" data-label="模型">qwen-<wbr>image-<wbr>2.0</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">图片·张</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.24</td><td class="q-disc" data-label="Token报价">71%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">12</td><td class="q-model" data-label="模型">qwen-<wbr>image-<wbr>2.0-<wbr>pro</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">图片·张</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.6</td><td class="q-disc" data-label="Token报价">71%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">13</td><td class="q-model" data-label="模型">qwen3-<wbr>tts-<wbr>flash</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">语音·万字符</td><td class="q-price" data-label="原厂输入">¥0.8</td><td class="q-price" data-label="原厂输出">免费</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">14</td><td class="q-model" data-label="模型">qwen3-<wbr>tts-<wbr>instruct-<wbr>flash</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">语音·万字符</td><td class="q-price" data-label="原厂输入">¥0.8</td><td class="q-price" data-label="原厂输出">免费</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">15</td><td class="q-model" data-label="模型">wan-<wbr>2.2-<wbr>i2v-<wbr>flash</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥0.09</td><td class="q-price" data-label="原厂输出">¥0.45</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">16</td><td class="q-model" data-label="模型">wan-<wbr>2.2-<wbr>t2v-<wbr>plus</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥0.13</td><td class="q-price" data-label="原厂输出">¥0.67</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">17</td><td class="q-model" data-label="模型">wan-<wbr>2.6-<wbr>i2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.94</td><td class="q-disc" data-label="Token报价">38%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">18</td><td class="q-model" data-label="模型">wan-<wbr>2.6-<wbr>t2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.94</td><td class="q-disc" data-label="Token报价">38%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">19</td><td class="q-model" data-label="模型">wan-<wbr>2.7-<wbr>i2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.94</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">20</td><td class="q-model" data-label="模型">wan-<wbr>2.7-<wbr>image-<wbr>pro</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">图片·张</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.5</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">21</td><td class="q-model" data-label="模型">wan-<wbr>2.7-<wbr>r2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.94</td><td class="q-disc" data-label="Token报价">38%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">22</td><td class="q-model" data-label="模型">wan-<wbr>2.7-<wbr>t2v</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.94</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">23</td><td class="q-model" data-label="模型">z-<wbr>image</td><td class="q-vendor" data-label="厂商">阿里巴巴</td><td class="q-type" data-label="类型">图片·张</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">免费</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">TMX</span></td></tr>
+<tr class="q-group"><td colspan="7">字节跳动 (9)</td></tr>
+<tr><td class="q-num" data-label="序号">24</td><td class="q-model" data-label="模型">doubao-<wbr>seed-<wbr>2.0-<wbr>lite</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥0.56</td><td class="q-price" data-label="原厂输出">¥3.36</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr><td class="q-num" data-label="序号">25</td><td class="q-model" data-label="模型">doubao-<wbr>seed-<wbr>2.0-<wbr>pro</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥2.99</td><td class="q-price" data-label="原厂输出">¥14.95</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">26</td><td class="q-model" data-label="模型">doubao-<wbr>seed-<wbr>2.1-<wbr>pro</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥6</td><td class="q-price" data-label="原厂输出">¥30</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">TOF</span></td></tr>
+<tr><td class="q-num" data-label="序号">27</td><td class="q-model" data-label="模型">doubao-<wbr>seedream-<wbr>5.0-<wbr>lite</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">图片·张</td><td class="q-price" data-label="原厂输入">¥0.22</td><td class="q-price" data-label="原厂输出">¥0.22</td><td class="q-disc" data-label="Token报价">72%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">28</td><td class="q-model" data-label="模型">doubao-<wbr>seedream-<wbr>5.0-<wbr>pro</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">图片·张</td><td class="q-price" data-label="原厂输入">¥0.02</td><td class="q-price" data-label="原厂输出">¥0.3</td><td class="q-disc" data-label="Token报价">72%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">29</td><td class="q-model" data-label="模型">seedance-<wbr>2.0</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥0.5</td><td class="q-price" data-label="原厂输出">¥9.66</td><td class="q-disc" data-label="Token报价">74%<span class="supp-code">XLX</span></td></tr>
+<tr><td class="q-num" data-label="序号">30</td><td class="q-model" data-label="模型">seedance-<wbr>2.0-<wbr>fast</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥37</td><td class="q-price" data-label="原厂输出">¥37</td><td class="q-disc" data-label="Token报价">51%<span class="supp-code">XLX</span></td></tr>
+<tr><td class="q-num" data-label="序号">31</td><td class="q-model" data-label="模型">seedance-<wbr>2.0-<wbr>mini</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥23</td><td class="q-price" data-label="原厂输出">¥23</td><td class="q-disc" data-label="Token报价">41%<span class="supp-code">XLX</span></td></tr>
+<tr><td class="q-num" data-label="序号">32</td><td class="q-model" data-label="模型">seedance-<wbr>2.5</td><td class="q-vendor" data-label="厂商">字节跳动</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥70</td><td class="q-price" data-label="原厂输出">¥70</td><td class="q-disc" data-label="Token报价">85%<span class="supp-code">XLX</span></td></tr>
+<tr class="q-group"><td colspan="7">OpenAI (8)</td></tr>
+<tr><td class="q-num" data-label="序号">33</td><td class="q-model" data-label="模型">gpt-<wbr>5-<wbr>mini</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$0.25</td><td class="q-price" data-label="原厂输出">$2</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">SUA</span></td></tr>
+<tr><td class="q-num" data-label="序号">34</td><td class="q-model" data-label="模型">gpt-<wbr>5.5-<wbr>o3</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$15</td><td class="q-price" data-label="原厂输出">$60</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">SUA</span></td></tr>
+<tr><td class="q-num" data-label="序号">35</td><td class="q-model" data-label="模型">gpt-<wbr>5.6-<wbr>terra</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$2</td><td class="q-price" data-label="原厂输出">$12</td><td class="q-disc" data-label="Token报价">33%<span class="supp-code">XLX</span></td></tr>
+<tr><td class="q-num" data-label="序号">36</td><td class="q-model" data-label="模型">gpt-<wbr>6-<wbr>astra</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$10</td><td class="q-price" data-label="原厂输出">$50</td><td class="q-disc" data-label="Token报价">33%<span class="supp-code">XLX</span></td></tr>
+<tr><td class="q-num" data-label="序号">37</td><td class="q-model" data-label="模型">gpt-<wbr>6-<wbr>luna</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$0.1</td><td class="q-price" data-label="原厂输出">$0.5</td><td class="q-disc" data-label="Token报价">37%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">38</td><td class="q-model" data-label="模型">gpt-<wbr>6.1-<wbr>sol</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$2</td><td class="q-price" data-label="原厂输出">$10</td><td class="q-disc" data-label="Token报价">31%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">39</td><td class="q-model" data-label="模型">gpt-<wbr>6.1-<wbr>terra</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$1</td><td class="q-price" data-label="原厂输出">$5</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr><td class="q-num" data-label="序号">40</td><td class="q-model" data-label="模型">sora-<wbr>2</td><td class="q-vendor" data-label="厂商">OpenAI</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">$0.1</td><td class="q-price" data-label="原厂输出">$0.1</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr class="q-group"><td colspan="7">智谱 (7)</td></tr>
+<tr><td class="q-num" data-label="序号">41</td><td class="q-model" data-label="模型">cogvideox-<wbr>2</td><td class="q-vendor" data-label="厂商">智谱</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥0.47</td><td class="q-price" data-label="原厂输出">¥0.47</td><td class="q-disc" data-label="Token报价">22%<span class="supp-code">THR</span></td></tr>
+<tr><td class="q-num" data-label="序号">42</td><td class="q-model" data-label="模型">cogvideox-<wbr>flash</td><td class="q-vendor" data-label="厂商">智谱</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥0.07</td><td class="q-price" data-label="原厂输出">¥0.07</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">43</td><td class="q-model" data-label="模型">glm-<wbr>5</td><td class="q-vendor" data-label="厂商">智谱</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥6.73</td><td class="q-price" data-label="原厂输出">¥21.54</td><td class="q-disc" data-label="Token报价">56%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">44</td><td class="q-model" data-label="模型">glm-<wbr>5.1</td><td class="q-vendor" data-label="厂商">智谱</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥6</td><td class="q-price" data-label="原厂输出">¥24</td><td class="q-disc" data-label="Token报价">45%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">45</td><td class="q-model" data-label="模型">glm-<wbr>5.2</td><td class="q-vendor" data-label="厂商">智谱</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥9.42</td><td class="q-price" data-label="原厂输出">¥29.61</td><td class="q-disc" data-label="Token报价">41%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">46</td><td class="q-model" data-label="模型">glm-<wbr>5.3</td><td class="q-vendor" data-label="厂商">智谱</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥9.42</td><td class="q-price" data-label="原厂输出">¥29.61</td><td class="q-disc" data-label="Token报价">41%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">47</td><td class="q-model" data-label="模型">glm-<wbr>5.3-<wbr>flash</td><td class="q-vendor" data-label="厂商">智谱</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥1.01</td><td class="q-price" data-label="原厂输出">¥3.36</td><td class="q-disc" data-label="Token报价">47%<span class="supp-code">TKE</span></td></tr>
+<tr class="q-group"><td colspan="7">快手 (5)</td></tr>
+<tr><td class="q-num" data-label="序号">48</td><td class="q-model" data-label="模型">kling-<wbr>v2-<wbr>master</td><td class="q-vendor" data-label="厂商">快手</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥11.44</td><td class="q-price" data-label="原厂输出">¥11.44</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">49</td><td class="q-model" data-label="模型">kling-<wbr>v2.6</td><td class="q-vendor" data-label="厂商">快手</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥2.09</td><td class="q-price" data-label="原厂输出">¥2.09</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">50</td><td class="q-model" data-label="模型">kling-<wbr>v3-<wbr>i2v</td><td class="q-vendor" data-label="厂商">快手</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.75</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">51</td><td class="q-model" data-label="模型">kling-<wbr>v3-<wbr>omni-<wbr>t2v</td><td class="q-vendor" data-label="厂商">快手</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.75</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">52</td><td class="q-model" data-label="模型">kling-<wbr>v3-<wbr>t2v</td><td class="q-vendor" data-label="厂商">快手</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.75</td><td class="q-disc" data-label="Token报价">43%<span class="supp-code">TMX</span></td></tr>
+<tr class="q-group"><td colspan="7">月之暗面 (5)</td></tr>
+<tr><td class="q-num" data-label="序号">53</td><td class="q-model" data-label="模型">kimi-<wbr>k2.5</td><td class="q-vendor" data-label="厂商">月之暗面</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥4</td><td class="q-price" data-label="原厂输出">¥21</td><td class="q-disc" data-label="Token报价">57%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">54</td><td class="q-model" data-label="模型">kimi-<wbr>k2.6</td><td class="q-vendor" data-label="厂商">月之暗面</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥6.5</td><td class="q-price" data-label="原厂输出">¥27</td><td class="q-disc" data-label="Token报价">63%<span class="supp-code">XLX</span></td></tr>
+<tr><td class="q-num" data-label="序号">55</td><td class="q-model" data-label="模型">kimi-<wbr>k2.7-<wbr>code</td><td class="q-vendor" data-label="厂商">月之暗面</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥6.39</td><td class="q-price" data-label="原厂输出">¥26.92</td><td class="q-disc" data-label="Token报价">55%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">56</td><td class="q-model" data-label="模型">kimi-<wbr>k3</td><td class="q-vendor" data-label="厂商">月之暗面</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥20.19</td><td class="q-price" data-label="原厂输出">¥100.95</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">57</td><td class="q-model" data-label="模型">kimi-<wbr>k3.1-<wbr>pro</td><td class="q-vendor" data-label="厂商">月之暗面</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥13</td><td class="q-price" data-label="原厂输出">¥68</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr class="q-group"><td colspan="7">Anthropic (4)</td></tr>
+<tr><td class="q-num" data-label="序号">58</td><td class="q-model" data-label="模型">claude-<wbr>fable-<wbr>5-<wbr>1</td><td class="q-vendor" data-label="厂商">Anthropic</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$10</td><td class="q-price" data-label="原厂输出">$50</td><td class="q-disc" data-label="Token报价">41%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">59</td><td class="q-model" data-label="模型">claude-<wbr>haiku-<wbr>5.5</td><td class="q-vendor" data-label="厂商">Anthropic</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$0.1</td><td class="q-price" data-label="原厂输出">$0.5</td><td class="q-disc" data-label="Token报价">57%<span class="supp-code">SUA</span></td></tr>
+<tr><td class="q-num" data-label="序号">60</td><td class="q-model" data-label="模型">claude-<wbr>opus-<wbr>5.5</td><td class="q-vendor" data-label="厂商">Anthropic</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$4</td><td class="q-price" data-label="原厂输出">$20</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">61</td><td class="q-model" data-label="模型">claude-<wbr>sonnet-<wbr>5.5</td><td class="q-vendor" data-label="厂商">Anthropic</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$2</td><td class="q-price" data-label="原厂输出">$10</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr class="q-group"><td colspan="7">Google (4)</td></tr>
+<tr><td class="q-num" data-label="序号">62</td><td class="q-model" data-label="模型">gemini-<wbr>2.5-<wbr>flash</td><td class="q-vendor" data-label="厂商">Google</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$0.3</td><td class="q-price" data-label="原厂输出">$2.5</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr><td class="q-num" data-label="序号">63</td><td class="q-model" data-label="模型">gemini-<wbr>3.1-<wbr>pro-<wbr>preview</td><td class="q-vendor" data-label="厂商">Google</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$2</td><td class="q-price" data-label="原厂输出">$12</td><td class="q-disc" data-label="Token报价">33%<span class="supp-code">XLX</span></td></tr>
+<tr><td class="q-num" data-label="序号">64</td><td class="q-model" data-label="模型">gemini-<wbr>3.8-<wbr>flash</td><td class="q-vendor" data-label="厂商">Google</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$0.75</td><td class="q-price" data-label="原厂输出">$3.75</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr><td class="q-num" data-label="序号">65</td><td class="q-model" data-label="模型">veo-<wbr>3.1</td><td class="q-vendor" data-label="厂商">Google</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">$0.1</td><td class="q-price" data-label="原厂输出">$0.6</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr class="q-group"><td colspan="7">MiniMax (4)</td></tr>
+<tr><td class="q-num" data-label="序号">66</td><td class="q-model" data-label="模型">minimax-<wbr>h3</td><td class="q-vendor" data-label="厂商">MiniMax</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥0.48</td><td class="q-price" data-label="原厂输出">¥0.77</td><td class="q-disc" data-label="Token报价">27%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">67</td><td class="q-model" data-label="模型">minimax-<wbr>m2.5</td><td class="q-vendor" data-label="厂商">MiniMax</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥2.1</td><td class="q-price" data-label="原厂输出">¥8.4</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">68</td><td class="q-model" data-label="模型">minimax-<wbr>m3</td><td class="q-vendor" data-label="厂商">MiniMax</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥2.02</td><td class="q-price" data-label="原厂输出">¥8.08</td><td class="q-disc" data-label="Token报价">52%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">69</td><td class="q-model" data-label="模型">minimax-<wbr>m3.1-<wbr>flash</td><td class="q-vendor" data-label="厂商">MiniMax</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥1.01</td><td class="q-price" data-label="原厂输出">¥4.03</td><td class="q-disc" data-label="Token报价">—</td></tr>
+<tr class="q-group"><td colspan="7">Meta (3)</td></tr>
+<tr><td class="q-num" data-label="序号">70</td><td class="q-model" data-label="模型">llama-<wbr>4-<wbr>maverick</td><td class="q-vendor" data-label="厂商">Meta</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$0.2</td><td class="q-price" data-label="原厂输出">$0.6</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">SIF</span></td></tr>
+<tr><td class="q-num" data-label="序号">71</td><td class="q-model" data-label="模型">muse-<wbr>spark-<wbr>1.3</td><td class="q-vendor" data-label="厂商">Meta</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$1.25</td><td class="q-price" data-label="原厂输出">$4.25</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">72</td><td class="q-model" data-label="模型">muse-<wbr>wonder</td><td class="q-vendor" data-label="厂商">Meta</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$4</td><td class="q-price" data-label="原厂输出">$20</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr class="q-group"><td colspan="7">深度求索 (3)</td></tr>
+<tr><td class="q-num" data-label="序号">73</td><td class="q-model" data-label="模型">deepseek-<wbr>v4-<wbr>flash</td><td class="q-vendor" data-label="厂商">深度求索</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥1.02</td><td class="q-price" data-label="原厂输出">¥4.09</td><td class="q-disc" data-label="Token报价">57%<span class="supp-code">CTH</span></td></tr>
+<tr><td class="q-num" data-label="序号">74</td><td class="q-model" data-label="模型">deepseek-<wbr>v4-<wbr>pro</td><td class="q-vendor" data-label="厂商">深度求索</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥4.44</td><td class="q-price" data-label="原厂输出">¥13.33</td><td class="q-disc" data-label="Token报价">49%<span class="supp-code">ZYI</span></td></tr>
+<tr><td class="q-num" data-label="序号">75</td><td class="q-model" data-label="模型">deepseek-<wbr>v4.1-<wbr>flash</td><td class="q-vendor" data-label="厂商">深度求索</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥1.01</td><td class="q-price" data-label="原厂输出">¥4.04</td><td class="q-disc" data-label="Token报价">44%<span class="supp-code">XLX</span></td></tr>
+<tr class="q-group"><td colspan="7">腾讯 (3)</td></tr>
+<tr><td class="q-num" data-label="序号">76</td><td class="q-model" data-label="模型">hunyuan-<wbr>video-<wbr>1.5</td><td class="q-vendor" data-label="厂商">腾讯</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">¥1.68</td><td class="q-price" data-label="原厂输出">¥1.68</td><td class="q-disc" data-label="Token报价">102%</td></tr>
+<tr><td class="q-num" data-label="序号">77</td><td class="q-model" data-label="模型">hy3</td><td class="q-vendor" data-label="厂商">腾讯</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥0.87</td><td class="q-price" data-label="原厂输出">¥3.57</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr><td class="q-num" data-label="序号">78</td><td class="q-model" data-label="模型">hy4-<wbr>preview</td><td class="q-vendor" data-label="厂商">腾讯</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥5.61</td><td class="q-price" data-label="原厂输出">¥16.83</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr class="q-group"><td colspan="7">Vidu(生数/腾讯) (2)</td></tr>
+<tr><td class="q-num" data-label="序号">79</td><td class="q-model" data-label="模型">vidu-<wbr>q2</td><td class="q-vendor" data-label="厂商">Vidu(生数/腾讯)</td><td class="q-type" data-label="类型">图片·张</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.19</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TMX</span></td></tr>
+<tr><td class="q-num" data-label="序号">80</td><td class="q-model" data-label="模型">vidu-<wbr>q3-<wbr>pro</td><td class="q-vendor" data-label="厂商">Vidu(生数/腾讯)</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">免费</td><td class="q-price" data-label="原厂输出">¥0.94</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">TMX</span></td></tr>
+<tr class="q-group"><td colspan="7">xAI (2)</td></tr>
+<tr><td class="q-num" data-label="序号">81</td><td class="q-model" data-label="模型">grok-<wbr>4.7</td><td class="q-vendor" data-label="厂商">xAI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$2</td><td class="q-price" data-label="原厂输出">$6</td><td class="q-disc" data-label="Token报价">21%<span class="supp-code">TKE</span></td></tr>
+<tr><td class="q-num" data-label="序号">82</td><td class="q-model" data-label="模型">grok-<wbr>imagine-<wbr>video-<wbr>1.5-<wbr>lite</td><td class="q-vendor" data-label="厂商">xAI</td><td class="q-type" data-label="类型">视频·秒</td><td class="q-price" data-label="原厂输入">$0.02</td><td class="q-price" data-label="原厂输出">$0.14</td><td class="q-disc" data-label="Token报价">108%</td></tr>
+<tr class="q-group"><td colspan="7">小米 (2)</td></tr>
+<tr><td class="q-num" data-label="序号">83</td><td class="q-model" data-label="模型">mimo-<wbr>v2.6-<wbr>flash</td><td class="q-vendor" data-label="厂商">小米</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥0.94</td><td class="q-price" data-label="原厂输出">¥1.88</td><td class="q-disc" data-label="Token报价">64%<span class="supp-code">SAP</span></td></tr>
+<tr><td class="q-num" data-label="序号">84</td><td class="q-model" data-label="模型">mimo-<wbr>v2.6-<wbr>pro</td><td class="q-vendor" data-label="厂商">小米</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥2.93</td><td class="q-price" data-label="原厂输出">¥5.85</td><td class="q-disc" data-label="Token报价">108%</td></tr>
+<tr class="q-group"><td colspan="7">Mistral AI (1)</td></tr>
+<tr><td class="q-num" data-label="序号">85</td><td class="q-model" data-label="模型">mistral-<wbr>large-<wbr>4</td><td class="q-vendor" data-label="厂商">Mistral AI</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">$1.36</td><td class="q-price" data-label="原厂输出">$4.18</td><td class="q-disc" data-label="Token报价">62%<span class="supp-code">SUA</span></td></tr>
+<tr class="q-group"><td colspan="7">百度 (1)</td></tr>
+<tr><td class="q-num" data-label="序号">86</td><td class="q-model" data-label="模型">ernie-<wbr>5.0</td><td class="q-vendor" data-label="厂商">百度</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥9.42</td><td class="q-price" data-label="原厂输出">¥37.69</td><td class="q-disc" data-label="Token报价">57%<span class="supp-code">SUA</span></td></tr>
+<tr class="q-group"><td colspan="7">科大讯飞 (1)</td></tr>
+<tr><td class="q-num" data-label="序号">87</td><td class="q-model" data-label="模型">spark-<wbr>x2.5</td><td class="q-vendor" data-label="厂商">科大讯飞</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥1.62</td><td class="q-price" data-label="原厂输出">¥5.99</td><td class="q-disc" data-label="Token报价">108%</td></tr>
+<tr class="q-group"><td colspan="7">阶跃星辰 (1)</td></tr>
+<tr><td class="q-num" data-label="序号">88</td><td class="q-model" data-label="模型">step-<wbr>5-<wbr>preview</td><td class="q-vendor" data-label="厂商">阶跃星辰</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥6.73</td><td class="q-price" data-label="原厂输出">¥18.17</td><td class="q-disc" data-label="Token报价">108%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="pg-foot">
+    <b>报价口径</b>：Token 报价 = min(所有已确认渠道报价折扣) + 0.02，随渠道报价动态计算；角标为最低报价渠道的三字符码；未经确认的报价不参与计算、不呈现。<br>
+    <b>价格口径</b>：原厂输入 / 输出为原厂公开定价（国际 USD/1M tokens、国内 CNY/1M tokens）；图片·张、视频·秒、语音·万字符等按其计费单位标注，不折算为 Token 单价。<br>
+    <b>页面边界</b>：本页为对外报价单页版，仅呈现模型与对外报价，不展开各渠道折扣明细及内部成本数据；页面为静态 HTML，无外部依赖，可直接转发。<br>
+    <b>版本</b>：V1.1.0041 · 生成于 20261110 · 数据源：Token 热门模型价格监控（88 个热门模型）
+  </div>
+</body>
+</html>
