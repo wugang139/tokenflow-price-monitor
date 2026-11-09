@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Token 模型报价表（对外版）</title>
+<title>Token 模型报价表</title>
 <style>
 :root {
   --bg:#0d1117; --card:#161b22; --card-hover:#1c2330; --border:#30363d;
@@ -22,7 +22,7 @@ body {
 .section-title { font-size:15px; font-weight:700; margin:10px 0; color:var(--gold); display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
 .section-title span { font-size:11px; font-weight:400; color:var(--text-dim); }
 
-/* ===== 模型报价表（与主监控页 Tab 同源） ===== */
+
 .quote-table-wrap{max-width:1180px;margin:0 auto;padding:6px 2px;overflow-x:auto}
 .quote-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card,#161b22);border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.3);table-layout:fixed}
 .quote-table th{position:sticky;top:0;background:var(--header,#1f2937);color:var(--text,#e6edf3);padding:10px 12px;text-align:left;font-weight:600;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.08)}
@@ -38,10 +38,10 @@ body {
 .supp-code{display:inline-block;margin-left:2px;font-size:8px;font-weight:400;color:var(--text-dim,#8b949e);vertical-align:super;line-height:1}
 
 @media (max-width:768px){
-  /* 放开表格级裁剪：原先最后一列角标被 overflow:hidden 切掉 */
+  
   .quote-table-wrap{max-width:100%;padding:4px 0;overflow:visible}
   .quote-table{font-size:11px;overflow:visible}
-  /* 重分配列宽：最后两列留足「百分比 + 三字符角标」空间 */
+  
   .quote-table col:nth-child(1){width:5% !important}
   .quote-table col:nth-child(2){width:24% !important}
   .quote-table col:nth-child(3){width:9% !important}
@@ -74,11 +74,8 @@ body {
   background:var(--ver-bg);border:1px solid var(--ver-border);
   white-space:nowrap;box-shadow:var(--ver-shadow);
 }
-.pg-foot{max-width:1180px;margin:16px auto 0;padding:12px 14px;border-top:1px solid var(--border);
-  font-size:11.5px;line-height:1.85;color:var(--text-dim)}
-.pg-foot b{color:var(--text)}
 @media (max-width:768px){
-  /* 7 列专用列宽：合计 100%，最后一列留足「百分比 + 三字符角标」 */
+  
   .quote-table col:nth-child(1){width:5% !important}
   .quote-table col:nth-child(2){width:25% !important}
   .quote-table col:nth-child(3){width:12% !important}
@@ -87,16 +84,14 @@ body {
   .quote-table col:nth-child(6){width:15% !important}
   .quote-table col:nth-child(7){width:18% !important}
   .pg-head h1{font-size:16px}
-  .pg-foot{font-size:11px;padding:10px 4px}
 }
 </style>
 </head>
 <body>
   <div class="pg-head">
-    <h1>📋 Token 模型报价表 <span class="page-version">V1.1.0041</span></h1>
-    <div class="meta">对外单页版 · 数据基准 2026-11-08 06:30:00 · 88 个模型 · 与 Token 热门模型价格监控「模型报价」Tab 同源</div>
+    <h1>📋 Token 模型报价表 <span class="page-version">V1.1.0041.1110</span></h1>
   </div>
-  <div class="section-title" style="color:var(--gold)">📋 Token 模型报价表 <span>（原厂价 · Token 报价=min(渠道报价)+0.02 · 角标=最优采购来源）</span></div>
+  <div class="section-title" style="color:var(--gold)">📋 Token 模型报价表</div>
   <div class="quote-table-wrap"><table class="quote-table">
     <colgroup><col style="width:6%"><col style="width:28%"><col style="width:12%"><col style="width:10%"><col style="width:14%"><col style="width:14%"><col style="width:16%"></colgroup>
     <thead><tr><th>#</th><th>模型</th><th>厂商</th><th>类型</th><th>原厂输入</th><th>原厂输出</th><th>Token 报价</th></tr></thead>
@@ -210,11 +205,5 @@ body {
 <tr><td class="q-num" data-label="序号">88</td><td class="q-model" data-label="模型">step-<wbr>5-<wbr>preview</td><td class="q-vendor" data-label="厂商">阶跃星辰</td><td class="q-type" data-label="类型">文本</td><td class="q-price" data-label="原厂输入">¥6.73</td><td class="q-price" data-label="原厂输出">¥18.17</td><td class="q-disc" data-label="Token报价">108%</td></tr>
     </tbody>
   </table></div>
-  <div class="pg-foot">
-    <b>报价口径</b>：Token 报价 = min(所有已确认渠道报价折扣) + 0.02，随渠道报价动态计算；角标为最低报价渠道的三字符码；未经确认的报价不参与计算、不呈现。<br>
-    <b>价格口径</b>：原厂输入 / 输出为原厂公开定价（国际 USD/1M tokens、国内 CNY/1M tokens）；图片·张、视频·秒、语音·万字符等按其计费单位标注，不折算为 Token 单价。<br>
-    <b>页面边界</b>：本页为对外报价单页版，仅呈现模型与对外报价，不展开各渠道折扣明细及内部成本数据；页面为静态 HTML，无外部依赖，可直接转发。<br>
-    <b>版本</b>：V1.1.0041 · 生成于 20261110 · 数据源：Token 热门模型价格监控（88 个热门模型）
-  </div>
 </body>
 </html>
