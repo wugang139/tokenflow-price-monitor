@@ -236,6 +236,18 @@ body {
 }
 .platform-chip .name { color: var(--accent); font-weight: 600; }
 .platform-chip .dis { color: var(--green); margin-left: 4px; }
+/* 生产渠道品质徽标（刚哥 2026-11-25：全页面统一呈现）
+   与主监控页同映射/同配色：官/转/A/B/聚/awsb；无明确生产渠道不标。 */
+.official-key-badge {
+  display: inline-block; font-size: 9px; line-height: 1.4; font-weight: 700;
+  padding: 1px 5px; margin-left: 5px; border-radius: 4px;
+  background: linear-gradient(135deg, #d29922, #9e6d0b); color: #0d1117; vertical-align: middle;
+}
+.official-key-badge.pc-zhuan { background: linear-gradient(135deg, #3b8ce2, #1450b3); color:#fff; }
+.official-key-badge.pc-a     { background: linear-gradient(135deg, #2ea44f, #187741); color:#fff; }
+.official-key-badge.pc-b     { background: linear-gradient(135deg, #e28b3b, #b35a14); color:#fff; }
+.official-key-badge.pc-ju    { background: linear-gradient(135deg, #9b6dff, #6a3fd1); color:#fff; }
+.official-key-badge.pc-awsb  { background: linear-gradient(135deg, #ff9900, #cc7a00); color:#0d1117; }
 
 /* Modalities */
 .modalities {
@@ -970,7 +982,9 @@ const DATA = {
         "openai-api": {
           "price_usd": 0.1,
           "discount": 1.0,
-          "note": "⚠️ API 2026-09-24关闭"
+          "note": "⚠️ API 2026-09-24关闭",
+          "purchase_type": "官key",
+          "badge_source": "主库 hot_models_data.json 已确认登记 2026-11-25"
         },
         "openrouter": {
           "price_usd": null,
@@ -1049,7 +1063,9 @@ const DATA = {
         "google-vertex": {
           "price_usd": 0.1,
           "discount": 1.0,
-          "note": "Vertex AI原厂直供"
+          "note": "Vertex AI原厂直供",
+          "purchase_type": "官key",
+          "badge_source": "主库 hot_models_data.json 已确认登记 2026-11-25"
         }
       }
     },
@@ -1287,6 +1303,33 @@ const DATA = {
 };
 // ============ END DATA INJECTION ============
 
+/* 生产渠道品质徽标（刚哥 2026-11-25：全页面统一呈现）
+   数据源：model.platforms[cid].purchase_type；映射/配色与主监控页一致。 */
+const PC_MARK_MAP = {
+  '官key': {txt:'官', cls:'',        title:'官（官方授权 Key / 原厂官方渠道）'},
+  '官转':  {txt:'转', cls:'pc-zhuan', title:'官转（官转口径）'},
+  'A级':   {txt:'A',  cls:'pc-a',     title:'A 级云服务商资源'},
+  'B级':   {txt:'B',  cls:'pc-b',     title:'B 级云服务商资源'},
+  '聚合':  {txt:'聚', cls:'pc-ju',    title:'聚合平台资源'},
+  'awsb':  {txt:'awsb', cls:'pc-awsb', title:'AWS Bedrock（亚马逊云渠道）'}
+};
+function officialKeyBadge(pd) {
+  const k = pd && pd.purchase_type;
+  const m = k && PC_MARK_MAP[k];
+  return m ? ' <span class="official-key-badge ' + m.cls + '" title="' + m.title + '">' + m.txt + '</span>' : '';
+}
+/* 模型级徽标：最低折扣渠道的口径（徽章仅展示，不参与比对） */
+function modelOfficialKeyTag(m) {
+  let best = null;
+  Object.keys(m.platforms || {}).forEach(function(pid){
+    const pd = m.platforms[pid];
+    const d = pd && pd.discount;
+    if (typeof d !== 'number') return;
+    if (!best || d < best.d) best = {d:d, pd:pd};
+  });
+  return best ? officialKeyBadge(best.pd) : '';
+}
+
 (function(){
   // Header
   const models = DATA.video_models;
@@ -1391,7 +1434,7 @@ const DATA = {
       <div class="rank">${idx+1}</div>
       <div class="info">
         <div class="name">
-          ${m.name} ${tierBadge}
+          ${m.name} ${tierBadge}${modelOfficialKeyTag(m)}
           <span class="vendor">${m.vendor_cn}</span>
         </div>
         <div class="meta-line">
@@ -1491,7 +1534,7 @@ const DATA = {
       platKeys.forEach(pk => {
         const p = m.platforms[pk];
         const dis = p.discount ? (p.discount === 1.0 ? '原价' : `×${p.discount}`) : '';
-        pHtml += `<span class="platform-chip"><span class="name">${pk}</span>${dis ? '<span class="dis">' + dis + '</span>' : ''}<span style="color:var(--text-muted);margin-left:4px">${p.note || ''}</span></span>`;
+        pHtml += `<span class="platform-chip"><span class="name">${pk}</span>${dis ? '<span class="dis">' + dis + '</span>' : ''}${officialKeyBadge(p)}<span style="color:var(--text-muted);margin-left:4px">${p.note || ''}</span></span>`;
       });
       pHtml += '</div>';
       detail.innerHTML += pHtml;
