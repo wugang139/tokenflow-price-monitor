@@ -1492,7 +1492,7 @@ function modelOfficialKeyTag(m) {
       m.other_versions.forEach(v => {
         const cur = typeof v.price_cny === 'string' ? '¥' : '$';
         const num = v.price_cny || v.price_usd;
-        const unitText = v.unit.includes('second') ? '/秒' : '/次';
+        const unitText = (v.unit && v.unit.includes('second')) ? '/秒' : '/次';
         tierHtml += `
           <div class="tier-row" style="opacity:0.7">
             <div class="res" style="color:var(--purple)">${v.name}</div>
